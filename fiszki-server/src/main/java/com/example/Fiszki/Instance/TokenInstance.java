@@ -33,5 +33,6 @@ public class TokenInstance {
     }
 
     public void setServerStatus(boolean serverStatus) {
+        TokenInstance.serverStatus = serverStatus;
     }
 }
