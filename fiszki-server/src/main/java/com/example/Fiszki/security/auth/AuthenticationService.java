@@ -1,5 +1,6 @@
 package com.example.Fiszki.security.auth;
 
+import com.example.Fiszki.Instance.TokenInstance;
 import com.example.Fiszki.security.config.JwtService;
 import com.example.Fiszki.security.user.Role;
 import com.example.Fiszki.security.user.User;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-
+    private TokenInstance tokenInstance = TokenInstance.getInstance();
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -46,10 +47,13 @@ public class AuthenticationService {
                         request.getEmail(),
                         request.getPassword()
                 )
-        );
 
+        );
+        //System.out.println("Mail: "+request.getEmail());
         var user = repository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
+        System.out.println("\n\n\n\nTOKEN "+jwtToken);
+        tokenInstance.setToken(jwtToken);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 }
