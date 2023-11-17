@@ -10,12 +10,25 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class FlashcardService {
 
     private final FlashcardRepository flashcardRepository;
 
+    public FlashcardService(FlashcardRepository flashcardRepository) {
+        this.flashcardRepository = flashcardRepository;
+    }
+
     public FlashcardResponse addFlashcard(FlashcardRequest request) {
+        // Sprawdź, czy istnieje fiszka o podanym słowie
+        if (flashcardRepository.existsByWord(request.getWord())) {
+            return FlashcardResponse.builder().response("Flashcard with the given word already exists").build();
+        }
+
+        // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie
+        if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
+            return FlashcardResponse.builder().response("Flashcard with the given translated word already exists").build();
+        }
+
         Flashcard flashcard = Flashcard.builder()
                 .collectionName(request.getCollectionName())
                 .language(request.getLanguage())
