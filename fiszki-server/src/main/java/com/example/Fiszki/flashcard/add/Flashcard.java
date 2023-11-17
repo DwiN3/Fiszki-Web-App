@@ -17,6 +17,7 @@ public class Flashcard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto generating id
     private Integer id;
+    private String author;
     private String collectionName;
     private String language;
     private String category;
@@ -51,5 +52,8 @@ public class Flashcard {
 
     public String getTranslatedExample() {
         return translatedExample;
+    }
+    public String getAuthor() {
+        return author;
     }
 }

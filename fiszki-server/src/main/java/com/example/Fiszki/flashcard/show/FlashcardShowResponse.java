@@ -15,4 +15,5 @@ public class FlashcardShowResponse {
     private String translatedWord;
     private String example;
     private String translatedExample;
+    private String author;
 }

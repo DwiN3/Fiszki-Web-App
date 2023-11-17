@@ -39,6 +39,7 @@ public class FlashcardService {
                 .translatedWord(request.getTranslatedWord())
                 .example(request.getExample())
                 .translatedExample(request.getTranslatedExample())
+                .author("Kamil")
                 .build();
 
         flashcardRepository.save(flashcard);
@@ -58,6 +59,7 @@ public class FlashcardService {
                     .translatedWord(flashcard.getTranslatedWord())
                     .example(flashcard.getExample())
                     .translatedExample(flashcard.getTranslatedExample())
+                    .author(flashcard.getAuthor())
                     .build();
         } else {
             return FlashcardShowResponse.builder().build();
@@ -78,6 +80,7 @@ public class FlashcardService {
                         .translatedWord(flashcard.getTranslatedWord())
                         .example(flashcard.getExample())
                         .translatedExample(flashcard.getTranslatedExample())
+                        .author(flashcard.getAuthor())
                         .build())
                 .collect(Collectors.toList());
     }
