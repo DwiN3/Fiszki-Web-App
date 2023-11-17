@@ -7,7 +7,9 @@ import com.example.Fiszki.flashcard.show.FlashcardShowResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FlashcardService {
@@ -59,5 +61,18 @@ public class FlashcardService {
         } else {
             return FlashcardShowResponse.builder().build();
         }
+    }
+
+    public List<FlashcardShowResponse> showFlashcardsByCategory(String category) {
+        List<Flashcard> flashcards = flashcardRepository.findByCategory(category);
+
+        return flashcards.stream()
+                .map(flashcard -> FlashcardShowResponse.builder()
+                        .word(flashcard.getWord())
+                        .translatedWord(flashcard.getTranslatedWord())
+                        .example(flashcard.getExample())
+                        .translatedExample(flashcard.getTranslatedExample())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

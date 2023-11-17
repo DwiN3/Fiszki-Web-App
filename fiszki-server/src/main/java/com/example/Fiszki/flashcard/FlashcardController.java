@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/fiszki/")
 @RequiredArgsConstructor
@@ -31,6 +33,11 @@ public class FlashcardController {
         return ResponseEntity.ok(flashcardService.showFlashcardById(flashcardsId));
     }
 
+    @GetMapping("/flashcards/category/{category}")
+    public ResponseEntity<List<FlashcardShowResponse>> showFlashcardsByCategory(@PathVariable String category) {
+        List<FlashcardShowResponse> flashcards = flashcardService.showFlashcardsByCategory(category);
+        return ResponseEntity.ok(flashcards);
+    }
 
     // PRZYKŁAD: Call<FlashcardID> deleteFlashcards(@Path("flashcardsId") String flashcardsId);
 }
