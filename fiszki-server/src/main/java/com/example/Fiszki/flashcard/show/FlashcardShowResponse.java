@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FlashcardShowResponse {
+    private Integer id;
     private String word;
     private String translatedWord;
     private String example;

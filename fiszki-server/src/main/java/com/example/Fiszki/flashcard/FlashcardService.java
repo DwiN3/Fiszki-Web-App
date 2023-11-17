@@ -53,6 +53,7 @@ public class FlashcardService {
         if (flashcardOptional.isPresent()) {
             Flashcard flashcard = flashcardOptional.get();
             return FlashcardShowResponse.builder()
+                    .id(flashcard.getId())
                     .word(flashcard.getWord())
                     .translatedWord(flashcard.getTranslatedWord())
                     .example(flashcard.getExample())
@@ -63,11 +64,16 @@ public class FlashcardService {
         }
     }
 
+    public void deleteFlashcardById(Integer flashcardId) {
+        flashcardRepository.deleteById(flashcardId);
+    }
+
     public List<FlashcardShowResponse> showFlashcardsByCategory(String category) {
         List<Flashcard> flashcards = flashcardRepository.findByCategory(category);
 
         return flashcards.stream()
                 .map(flashcard -> FlashcardShowResponse.builder()
+                        .id(flashcard.getId())
                         .word(flashcard.getWord())
                         .translatedWord(flashcard.getTranslatedWord())
                         .example(flashcard.getExample())
@@ -75,4 +81,6 @@ public class FlashcardService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+
 }
