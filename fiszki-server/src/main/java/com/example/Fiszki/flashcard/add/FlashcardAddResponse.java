@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FlashcardResponse {
+public class FlashcardAddResponse {
     private String response;
 }

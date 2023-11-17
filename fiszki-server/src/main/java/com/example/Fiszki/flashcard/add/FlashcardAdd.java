@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "flashcards")
-public class Flashcard {
+public class FlashcardAdd {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto generating id

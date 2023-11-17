@@ -1,21 +1,21 @@
 package com.example.Fiszki.flashcard.show;
 
 
-public class FlashcardID {
+public class FlashcardShow {
     private String word, translatedWord, example, translatedExample, _id;
 
-    public FlashcardID() {
+    public FlashcardShow() {
 
     }
 
-    public FlashcardID(String word, String translatedWord, String example, String translatedExample) {
+    public FlashcardShow(String word, String translatedWord, String example, String translatedExample) {
         this.word = word;
         this.translatedWord = translatedWord;
         this.example = example;
         this.translatedExample = translatedExample;
     }
 
-    public FlashcardID(String _id, String word, String translatedWord, String example, String translatedExample) {
+    public FlashcardShow(String _id, String word, String translatedWord, String example, String translatedExample) {
         this.word = word;
         this.translatedWord = translatedWord;
         this.example = example;

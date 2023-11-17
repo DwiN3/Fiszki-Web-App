@@ -2,7 +2,6 @@ package com.example.Fiszki.flashcard;
 
 import com.example.Fiszki.flashcard.add.*;
 import com.example.Fiszki.flashcard.show.FlashcardShowResponse;
-import com.example.Fiszki.models.Flashcards;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ public class FlashcardController {
     private final FlashcardService flashcardService;
 
     @PostMapping("/add-flashcard")
-    public ResponseEntity<FlashcardResponse> addFlashcard (@RequestBody FlashcardRequest request) {
+    public ResponseEntity<FlashcardAddResponse> addFlashcard (@RequestBody FlashcardAddRequest request) {
         return ResponseEntity.ok(flashcardService.addFlashcard(request));
     }
 

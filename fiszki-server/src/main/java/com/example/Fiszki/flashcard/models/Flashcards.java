@@ -1,4 +1,4 @@
-package com.example.Fiszki.models;
+package com.example.Fiszki.flashcard.models;
 
 
 public class Flashcards {

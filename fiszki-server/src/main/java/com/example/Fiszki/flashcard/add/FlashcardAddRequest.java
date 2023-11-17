@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FlashcardRequest {
+public class FlashcardAddRequest {
     private String collectionName;
     private String language;
     private String category;
