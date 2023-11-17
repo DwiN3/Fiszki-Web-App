@@ -1,12 +1,6 @@
-package com.example.Fiszki.fiszkirequest;
+package com.example.Fiszki.flashcard;
 
-import com.example.Fiszki.Instance.TokenInstance;
-import com.example.Fiszki.security.auth.AuthenticationResponse;
-import com.example.Fiszki.security.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service

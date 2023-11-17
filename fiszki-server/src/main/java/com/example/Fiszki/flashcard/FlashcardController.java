@@ -1,8 +1,6 @@
-package com.example.Fiszki.fiszkirequest;
+package com.example.Fiszki.flashcard;
 
 import com.example.Fiszki.models.Flashcards;
-import com.example.Fiszki.security.auth.AuthenticationResponse;
-import com.example.Fiszki.security.auth.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
