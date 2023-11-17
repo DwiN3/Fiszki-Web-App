@@ -1,6 +1,7 @@
 package com.example.Fiszki.security.auth;
 
 import com.example.Fiszki.Instance.TokenInstance;
+import com.example.Fiszki.flashcard.add.FlashcardResponse;
 import com.example.Fiszki.security.config.JwtService;
 import com.example.Fiszki.security.user.Role;
 import com.example.Fiszki.security.user.User;
@@ -24,7 +25,7 @@ public class AuthenticationService {
 
         // Verify the existence of a user by email address in the database. - Extra
         if (repository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Użytkownik z podanym adresem e-mail już istnieje");
+            return AuthenticationResponse.builder().token("User with given e-mail already exist.").build();
         }
 
         var user = User.builder()
