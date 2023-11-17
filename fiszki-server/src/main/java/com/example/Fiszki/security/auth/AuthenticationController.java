@@ -1,6 +1,9 @@
 package com.example.Fiszki.security.auth;
 
 import com.example.Fiszki.Instance.TokenInstance;
+import com.example.Fiszki.security.auth.user.PointsRequest;
+import com.example.Fiszki.security.auth.user.UserInfoResponse;
+import com.example.Fiszki.security.auth.user.UserLVLResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,9 @@
 package com.example.Fiszki.security.auth;
 
 import com.example.Fiszki.Instance.TokenInstance;
+import com.example.Fiszki.security.auth.user.PointsRequest;
+import com.example.Fiszki.security.auth.user.UserInfoResponse;
+import com.example.Fiszki.security.auth.user.UserLVLResponse;
 import com.example.Fiszki.security.config.JwtService;
 import com.example.Fiszki.security.user.Role;
 import com.example.Fiszki.security.user.User;

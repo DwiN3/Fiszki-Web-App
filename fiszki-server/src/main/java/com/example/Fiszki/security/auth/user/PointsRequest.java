@@ -1,4 +1,4 @@
-package com.example.Fiszki.security.auth;
+package com.example.Fiszki.security.auth.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserLVLResponse {
-    private int level;
+public class PointsRequest {
     private int points;
-    private int nextLVLPoints;
+
 }

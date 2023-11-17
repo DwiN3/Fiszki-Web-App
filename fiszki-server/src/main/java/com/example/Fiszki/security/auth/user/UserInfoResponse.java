@@ -1,4 +1,4 @@
-package com.example.Fiszki.security.auth;
+package com.example.Fiszki.security.auth.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
