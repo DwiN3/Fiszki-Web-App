@@ -10,7 +10,9 @@ import com.example.Fiszki.flashcard.show.FlashcardShowResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -150,6 +152,26 @@ public class FlashcardService {
                 .collect(Collectors.toList());
 
         return flashcards;
+    }
+
+
+    public List<Map<String, Object>> showCollectionInfo(String author) {
+        List<FlashcardAdd> flashcardAdds = flashcardRepository.findByAuthor(author);
+
+        return flashcardAdds.stream()
+                .collect(Collectors.groupingBy(FlashcardAdd::getCollectionName))
+                .entrySet().stream()
+                .map(entry -> {
+                    String collectionName = entry.getKey();
+                    long flashcardsCount = entry.getValue().size();
+
+                    Map<String, Object> collectionInfo = new HashMap<>();
+                    collectionInfo.put("nameCollection", collectionName);
+                    collectionInfo.put("flashcards", flashcardsCount);
+
+                    return collectionInfo;
+                })
+                .collect(Collectors.toList());
     }
 
     @Transactional

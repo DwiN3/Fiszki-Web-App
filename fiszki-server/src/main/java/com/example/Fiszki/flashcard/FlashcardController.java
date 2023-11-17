@@ -59,6 +59,13 @@ public class FlashcardController {
         return ResponseEntity.ok(collections);
     }
 
+    @GetMapping("/collections-info")
+    public ResponseEntity<List<Map<String, Object>>> showCollectionInfo() {
+        String author = tokenInstance.getUserName();
+        List<Map<String, Object>> collectionInfo = flashcardService.showCollectionInfo(author);
+        return ResponseEntity.ok(collectionInfo);
+    }
+
     @GetMapping("/collection/{nameCollection}")
     public ResponseEntity<List<FlashcardShowResponse>> showCollectionByName(@PathVariable String nameCollection) {
         String author = tokenInstance.getUserName();
