@@ -23,9 +23,9 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
 
-        // Verify the existence of a user by email address in the database. - Extra
+        // Verify the existence of a user by email address in the database.
         if (repository.findByEmail(request.getEmail()).isPresent()) {
-            return AuthenticationResponse.builder().token("User with given e-mail already exist.").build();
+            return AuthenticationResponse.builder().response("User with given e-mail already exist.").build();
         }
 
         var user = User.builder()
@@ -38,10 +38,15 @@ public class AuthenticationService {
 
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder().response("User added successfully.").build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+
+        // Verify the existence of a user by email address in the database.
+        if (repository.findByEmail(request.getEmail()).isEmpty()) {
+            return AuthenticationResponse.builder().response("User with given e-mail does not exist.").build();
+        }
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -50,11 +55,9 @@ public class AuthenticationService {
                 )
 
         );
-        //System.out.println("Mail: "+request.getEmail());
         var user = repository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        System.out.println("\n\n\n\nTOKEN "+jwtToken);
         tokenInstance.setToken(jwtToken);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder().response(jwtToken).build();
     }
 }

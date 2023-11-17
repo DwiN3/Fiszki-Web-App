@@ -21,7 +21,7 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE) // Auto generating id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto generating id
     private Integer id;
     private String firstName;
     private String lastName;
