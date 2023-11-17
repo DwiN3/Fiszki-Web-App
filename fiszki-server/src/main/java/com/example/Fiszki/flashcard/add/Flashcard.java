@@ -1,9 +1,6 @@
 package com.example.Fiszki.flashcard.add;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Flashcard {
 
     @Id
-    @GeneratedValue // Auto generating id
+    @GeneratedValue(strategy = GenerationType.TABLE) // Auto generating id
     private Integer id;
     private String collectionName;
     private String language;
