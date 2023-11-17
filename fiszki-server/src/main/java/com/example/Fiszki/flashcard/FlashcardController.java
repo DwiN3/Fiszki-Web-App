@@ -1,5 +1,6 @@
 package com.example.Fiszki.flashcard;
 
+import com.example.Fiszki.Instance.TokenInstance;
 import com.example.Fiszki.flashcard.add.*;
 import com.example.Fiszki.flashcard.collection.FlashcardCollectionResponse;
 import com.example.Fiszki.flashcard.show.FlashcardShowResponse;
@@ -14,6 +15,7 @@ import java.util.Map;
 @RequestMapping("/flashcards/")
 @RequiredArgsConstructor
 public class FlashcardController {
+    TokenInstance tokenInstance = TokenInstance.getInstance();
 
     private final FlashcardService flashcardService;
 
@@ -43,14 +45,16 @@ public class FlashcardController {
     }
 
     @GetMapping("/collections")
-    public ResponseEntity<List<FlashcardCollectionResponse>> showAllCollection(@RequestBody FlashcardAddRequest request) {
-        List<FlashcardCollectionResponse> collections = flashcardService.showAllCollection();
+    public ResponseEntity<List<FlashcardCollectionResponse>> showAllCollection() {
+        String author = tokenInstance.getUserName();
+        List<FlashcardCollectionResponse> collections = flashcardService.showAllCollection(author);
         return ResponseEntity.ok(collections);
     }
 
-    @GetMapping("/collections/{nameCollection}")
+    @GetMapping("/collection/{nameCollection}")
     public ResponseEntity<List<FlashcardShowResponse>> showCollectionByName(@PathVariable String nameCollection) {
-        List<FlashcardShowResponse> flashcardsInCollection = flashcardService.showCollectionByName(nameCollection);
-        return ResponseEntity.ok(flashcardsInCollection);
+        String author = tokenInstance.getUserName();
+        List<FlashcardShowResponse> flashcards = flashcardService.showCollectionByName(nameCollection, author);
+        return ResponseEntity.ok(flashcards);
     }
 }

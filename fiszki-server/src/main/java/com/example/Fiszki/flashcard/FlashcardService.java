@@ -87,8 +87,7 @@ public class FlashcardService {
                 .collect(Collectors.toList());
     }
 
-    public List<FlashcardCollectionResponse> showAllCollection() {
-        String author = tokenInstance.getUserName();
+    public List<FlashcardCollectionResponse> showAllCollection(String author) {
         List<FlashcardAdd> flashcardAdds = flashcardRepository.findByAuthor(author);
 
         // Group flashcards by collection name
@@ -116,11 +115,9 @@ public class FlashcardService {
                 .collect(Collectors.toList());
     }
 
-    public List<FlashcardShowResponse> showCollectionByName(String nameCollection) {
-        String author = tokenInstance.getUserName();
-        List<FlashcardAdd> flashcardsInCollection = flashcardRepository.findByAuthorAndCollectionName(author, nameCollection);
-
-        return flashcardsInCollection.stream()
+    public List<FlashcardShowResponse> showCollectionByName(String nameCollection, String author) {
+        List<FlashcardShowResponse> flashcards = flashcardRepository.findByCollectionNameAndAuthor(nameCollection, author)
+                .stream()
                 .map(flashcardAdd -> FlashcardShowResponse.builder()
                         .id(flashcardAdd.getId())
                         .word(flashcardAdd.getWord())
@@ -130,5 +127,7 @@ public class FlashcardService {
                         .author(flashcardAdd.getAuthor())
                         .build())
                 .collect(Collectors.toList());
+
+        return flashcards;
     }
 }
