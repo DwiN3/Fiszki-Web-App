@@ -1,5 +1,9 @@
-package com.example.Fiszki.flashcard.add;
+package com.example.Fiszki.flashcard;
 
+import com.example.Fiszki.flashcard.add.Flashcard;
+import com.example.Fiszki.flashcard.add.FlashcardRequest;
+import com.example.Fiszki.flashcard.add.FlashcardResponse;
+import com.example.Fiszki.flashcard.show.FlashcardShowResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
