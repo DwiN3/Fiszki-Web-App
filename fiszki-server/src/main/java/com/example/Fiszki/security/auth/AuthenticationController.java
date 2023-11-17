@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/fiszki/auth/")
+@RequestMapping("/flashcards/auth/")
 @RequiredArgsConstructor
 public class AuthenticationController {
 

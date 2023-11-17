@@ -41,7 +41,7 @@ public class FlashcardService {
                 .translatedWord(request.getTranslatedWord())
                 .example(request.getExample())
                 .translatedExample(request.getTranslatedExample())
-                .author(tokenInstance.getUserName()) 
+                .author(tokenInstance.getUserName())
                 .build();
 
         flashcardRepository.save(flashcard);
