@@ -10,5 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserLVLResponse {
-    private UserResponse userResponse; // Add this line
+    private int level;
+    private int points;
+    private int nextLVLPoints;
 }

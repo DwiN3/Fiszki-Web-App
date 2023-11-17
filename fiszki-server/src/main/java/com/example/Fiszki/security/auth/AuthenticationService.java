@@ -28,7 +28,7 @@ public class AuthenticationService {
         }
 
         var user = User.builder()
-                .level(0)
+                .level(1)
                 .points(0)
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
@@ -65,46 +65,54 @@ public class AuthenticationService {
 
     public UserLVLResponse userLevel(AuthenticationRequest request) {
         var user = repository.findByEmail(request.getEmail()).orElseThrow();
-        var userResponse = UserResponse.builder()
+        int nextLVLPoints = calculateNextLVLPoints(user.getPoints(), user.getLevel());
+        return UserLVLResponse.builder()
                 .level(user.getLevel())
                 .points(user.getPoints())
+                .nextLVLPoints(nextLVLPoints)
                 .build();
-        return UserLVLResponse.builder().userResponse(userResponse).build();
     }
 
+
     public UserLVLResponse sendPoints(PointsRequest pointsRequest) {
-        var userEmail = tokenInstance.getToken(); // Assuming you have the user's email in the token
+        var userEmail = tokenInstance.getToken();
         var user = repository.findByEmail(userEmail).orElseThrow();
 
-        // Add points to the user
+        // Dodaj punkty do użytkownika
         user.setPoints(user.getPoints() + pointsRequest.getPoints());
 
-        // Update user level based on the points
+        // Aktualizuj poziom użytkownika na podstawie punktów
         updateLevel(user);
 
         repository.save(user);
 
-        var userResponse = UserResponse.builder()
+        int nextLVLPoints = calculateNextLVLPoints(user.getPoints(), user.getLevel());
+
+        return UserLVLResponse.builder()
                 .level(user.getLevel())
                 .points(user.getPoints())
+                .nextLVLPoints(nextLVLPoints)
                 .build();
-        return UserLVLResponse.builder().userResponse(userResponse).build();
+    }
+
+
+    private int calculateNextLVLPoints(int currentPoints, int currentLevel) {
+        int requiredPoints = calculateRequiredPoints(currentLevel);
+        return (currentLevel + 1) * requiredPoints;
+    }
+
+    private int calculateRequiredPoints(int currentLevel) {
+        // Dostosuj tę metodę zgodnie z własnymi regułami
+        return 0 + (currentLevel * 50); // Na przykład: 200 + (100 punktów za każdy kolejny poziom)
     }
 
     private void updateLevel(User user) {
-        int requiredPoints = 200;
-        int parsedRequiredPoints = requiredPoints;
-        int parsedLevel = user.getLevel();
-        int points = user.getPoints();
+        int requiredPoints = calculateRequiredPoints(user.getLevel());
+        int nextLVLPoints = (user.getLevel() + 1) * requiredPoints;
 
-        while (points >= parsedRequiredPoints) {
-            parsedLevel++;
-            points -= parsedRequiredPoints;
-            parsedRequiredPoints += 200;
+        if (user.getPoints() >= nextLVLPoints) {
+            user.setLevel(user.getLevel() + 1);
         }
-
-        user.setLevel(parsedLevel);
-        user.setPoints(points);
     }
 
     public UserInfoResponse getInfo(String userEmail) {

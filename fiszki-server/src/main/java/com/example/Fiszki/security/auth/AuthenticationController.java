@@ -25,7 +25,7 @@ public class AuthenticationController {
 
     @GetMapping("/level")
     public ResponseEntity<UserLVLResponse> userLevel() {
-        var userEmail = tokenInstance.getToken(); // Assuming you have the user's email in the token
+        var userEmail = TokenInstance.getInstance().getToken();
         var authenticationRequest = AuthenticationRequest.builder().email(userEmail).build();
         return ResponseEntity.ok(authenticationService.userLevel(authenticationRequest));
     }
