@@ -27,6 +27,8 @@ public class User implements UserDetails {
     private String lastName;
     private String email;
     private String password;
+    private int points;
+    private int level;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -44,6 +46,14 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     @Override

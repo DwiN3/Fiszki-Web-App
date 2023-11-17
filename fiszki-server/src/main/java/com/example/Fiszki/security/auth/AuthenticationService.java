@@ -28,6 +28,8 @@ public class AuthenticationService {
         }
 
         var user = User.builder()
+                .level(0)
+                .points(0)
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
                 .email(request.getEmail())
@@ -59,5 +61,61 @@ public class AuthenticationService {
         tokenInstance.setToken(request.getEmail());
         tokenInstance.setUserName(user.getUsername());
         return AuthenticationResponse.builder().response(jwtToken).build();
+    }
+
+    public UserLVLResponse userLevel(AuthenticationRequest request) {
+        var user = repository.findByEmail(request.getEmail()).orElseThrow();
+        var userResponse = UserResponse.builder()
+                .level(user.getLevel())
+                .points(user.getPoints())
+                .build();
+        return UserLVLResponse.builder().userResponse(userResponse).build();
+    }
+
+    public UserLVLResponse sendPoints(PointsRequest pointsRequest) {
+        var userEmail = tokenInstance.getToken(); // Assuming you have the user's email in the token
+        var user = repository.findByEmail(userEmail).orElseThrow();
+
+        // Add points to the user
+        user.setPoints(user.getPoints() + pointsRequest.getPoints());
+
+        // Update user level based on the points
+        updateLevel(user);
+
+        repository.save(user);
+
+        var userResponse = UserResponse.builder()
+                .level(user.getLevel())
+                .points(user.getPoints())
+                .build();
+        return UserLVLResponse.builder().userResponse(userResponse).build();
+    }
+
+    private void updateLevel(User user) {
+        int requiredPoints = 200;
+        int parsedRequiredPoints = requiredPoints;
+        int parsedLevel = user.getLevel();
+        int points = user.getPoints();
+
+        while (points >= parsedRequiredPoints) {
+            parsedLevel++;
+            points -= parsedRequiredPoints;
+            parsedRequiredPoints += 200;
+        }
+
+        user.setLevel(parsedLevel);
+        user.setPoints(points);
+    }
+
+    public UserInfoResponse getInfo(String userEmail) {
+        var user = repository.findByEmail(userEmail).orElseThrow();
+        return UserInfoResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .points(user.getPoints())
+                .level(user.getLevel())
+                .build();
     }
 }
