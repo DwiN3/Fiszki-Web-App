@@ -115,4 +115,20 @@ public class FlashcardService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public List<FlashcardShowResponse> showCollectionByName(String nameCollection) {
+        String author = tokenInstance.getUserName();
+        List<FlashcardAdd> flashcardsInCollection = flashcardRepository.findByAuthorAndCollectionName(author, nameCollection);
+
+        return flashcardsInCollection.stream()
+                .map(flashcardAdd -> FlashcardShowResponse.builder()
+                        .id(flashcardAdd.getId())
+                        .word(flashcardAdd.getWord())
+                        .translatedWord(flashcardAdd.getTranslatedWord())
+                        .example(flashcardAdd.getExample())
+                        .translatedExample(flashcardAdd.getTranslatedExample())
+                        .author(flashcardAdd.getAuthor())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }

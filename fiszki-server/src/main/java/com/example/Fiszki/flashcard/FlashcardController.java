@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/flashcards/")
@@ -45,5 +46,11 @@ public class FlashcardController {
     public ResponseEntity<List<FlashcardCollectionResponse>> showAllCollection(@RequestBody FlashcardAddRequest request) {
         List<FlashcardCollectionResponse> collections = flashcardService.showAllCollection();
         return ResponseEntity.ok(collections);
+    }
+
+    @GetMapping("/collections/{nameCollection}")
+    public ResponseEntity<List<FlashcardShowResponse>> showCollectionByName(@PathVariable String nameCollection) {
+        List<FlashcardShowResponse> flashcardsInCollection = flashcardService.showCollectionByName(nameCollection);
+        return ResponseEntity.ok(flashcardsInCollection);
     }
 }
