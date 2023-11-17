@@ -7,6 +7,7 @@ import com.example.Fiszki.flashcard.add.FlashcardAddResponse;
 import com.example.Fiszki.flashcard.collection.FlashcardCollectionResponse;
 import com.example.Fiszki.flashcard.edit.FlashcardEditRequest;
 import com.example.Fiszki.flashcard.show.FlashcardShowResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -149,5 +150,10 @@ public class FlashcardService {
                 .collect(Collectors.toList());
 
         return flashcards;
+    }
+
+    @Transactional
+    public void deleteCollectionByName(String nameCollection, String author) {
+        flashcardRepository.deleteByCollectionNameAndAuthor(nameCollection, author);
     }
 }

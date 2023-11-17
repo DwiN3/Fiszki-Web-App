@@ -11,4 +11,5 @@ public interface FlashcardRepository extends JpaRepository<FlashcardAdd, Integer
     List<FlashcardAdd> findByCategory(String category);
     List<FlashcardAdd> findByAuthor(String author);
     List<FlashcardAdd> findByCollectionNameAndAuthor(String collectionName, String author);
+    void deleteByCollectionNameAndAuthor(String collectionName, String author);
 }

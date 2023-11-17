@@ -65,4 +65,15 @@ public class FlashcardController {
         List<FlashcardShowResponse> flashcards = flashcardService.showCollectionByName(nameCollection, author);
         return ResponseEntity.ok(flashcards);
     }
+
+    @DeleteMapping("/collection/{nameCollection}")
+    public ResponseEntity<String> deleteCollectionByName(@PathVariable String nameCollection) {
+        String author = tokenInstance.getUserName();
+        try {
+            flashcardService.deleteCollectionByName(nameCollection, author);
+            return ResponseEntity.ok("Collection deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error deleting collection: " + e.getMessage());
+        }
+    }
 }
