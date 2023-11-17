@@ -3,6 +3,7 @@ package com.example.Fiszki.flashcard;
 import com.example.Fiszki.Instance.TokenInstance;
 import com.example.Fiszki.flashcard.add.*;
 import com.example.Fiszki.flashcard.collection.FlashcardCollectionResponse;
+import com.example.Fiszki.flashcard.edit.FlashcardEditRequest;
 import com.example.Fiszki.flashcard.show.FlashcardShowResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,13 @@ public class FlashcardController {
     @PostMapping("/add-flashcard")
     public ResponseEntity<FlashcardAddResponse> addFlashcard (@RequestBody FlashcardAddRequest request) {
         return ResponseEntity.ok(flashcardService.addFlashcard(request));
+    }
+
+    @PostMapping("/edit/{flashcardsId}")
+    public ResponseEntity<FlashcardAddResponse> editFlashcard(@PathVariable Integer flashcardsId,
+                                                              @RequestBody FlashcardEditRequest request) {
+        FlashcardAddResponse response = flashcardService.editFlashcard(flashcardsId, request);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/show/{flashcardsId}")

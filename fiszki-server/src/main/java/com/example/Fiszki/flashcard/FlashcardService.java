@@ -5,6 +5,7 @@ import com.example.Fiszki.flashcard.add.FlashcardAdd;
 import com.example.Fiszki.flashcard.add.FlashcardAddRequest;
 import com.example.Fiszki.flashcard.add.FlashcardAddResponse;
 import com.example.Fiszki.flashcard.collection.FlashcardCollectionResponse;
+import com.example.Fiszki.flashcard.edit.FlashcardEditRequest;
 import com.example.Fiszki.flashcard.show.FlashcardShowResponse;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,25 @@ public class FlashcardService {
         flashcardRepository.save(flashcardAdd);
 
         return FlashcardAddResponse.builder().response("Flashcard added successfully").build();
+    }
+
+    public FlashcardAddResponse editFlashcard(Integer flashcardId, FlashcardEditRequest request) {
+        Optional<FlashcardAdd> flashcardOptional = flashcardRepository.findById(flashcardId);
+
+        if (flashcardOptional.isPresent()) {
+            FlashcardAdd flashcardAdd = flashcardOptional.get();
+
+            flashcardAdd.setWord(request.getWord());
+            flashcardAdd.setTranslatedWord(request.getTranslatedWord());
+            flashcardAdd.setExample(request.getExample());
+            flashcardAdd.setTranslatedExample(request.getTranslatedExample());
+
+            flashcardRepository.save(flashcardAdd);
+
+            return FlashcardAddResponse.builder().response("Flashcard updated successfully").build();
+        } else {
+            return FlashcardAddResponse.builder().response("Flashcard not found").build();
+        }
     }
 
     public FlashcardShowResponse showFlashcardById(Integer flashcardId) {
