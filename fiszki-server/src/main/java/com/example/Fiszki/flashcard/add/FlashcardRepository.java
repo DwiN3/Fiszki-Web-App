@@ -1,4 +1,4 @@
-package com.example.Fiszki.flashcard;
+package com.example.Fiszki.flashcard.add;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

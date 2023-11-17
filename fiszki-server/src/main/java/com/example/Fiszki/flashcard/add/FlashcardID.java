@@ -1,4 +1,4 @@
-package com.example.Fiszki.flashcard;
+package com.example.Fiszki.flashcard.add;
 
 
 public class FlashcardID {

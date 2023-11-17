@@ -1,4 +1,4 @@
-package com.example.Fiszki.flashcard;
+package com.example.Fiszki.flashcard.add;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FlashcardResponse {
-    private String response;
+public class FlashcardShowRequest {
+    private Integer id;
 }

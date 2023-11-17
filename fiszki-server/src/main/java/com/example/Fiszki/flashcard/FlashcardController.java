@@ -1,5 +1,6 @@
 package com.example.Fiszki.flashcard;
 
+import com.example.Fiszki.flashcard.add.*;
 import com.example.Fiszki.models.Flashcards;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,4 +24,12 @@ public class FlashcardController {
     public ResponseEntity<FlashcardResponse> addFlashcard (@RequestBody FlashcardRequest request) {
         return ResponseEntity.ok(flashcardService.addFlashcard(request));
     }
+
+    @GetMapping("/flashcards/{flashcardsId}")
+    public ResponseEntity<FlashcardShowResponse> showFlashcard(@PathVariable Integer flashcardsId) {
+        return ResponseEntity.ok(flashcardService.showFlashcardById(flashcardsId));
+    }
+
+
+    // PRZYKŁAD: Call<FlashcardID> deleteFlashcards(@Path("flashcardsId") String flashcardsId);
 }

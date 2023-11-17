@@ -1,4 +1,4 @@
-package com.example.Fiszki.flashcard;
+package com.example.Fiszki.flashcard.add;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
