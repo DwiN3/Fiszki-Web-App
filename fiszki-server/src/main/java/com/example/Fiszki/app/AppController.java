@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/app-controller")
-public class appController {
+public class AppController {
     TokenInstance tokenInstance = TokenInstance.getInstance();
 
     @GetMapping
