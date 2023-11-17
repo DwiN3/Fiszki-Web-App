@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/fiszki/")
+@RequestMapping("/fiszki/auth/")
 @RequiredArgsConstructor
 public class AuthenticationController {
 
@@ -20,5 +20,4 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> authenticate (@RequestBody AuthenticationRequest authenticate) {
         return ResponseEntity.ok(authenticationService.authenticate(authenticate));
     }
-
 }
