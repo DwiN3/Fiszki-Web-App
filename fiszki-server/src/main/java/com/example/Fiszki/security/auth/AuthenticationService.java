@@ -1,7 +1,6 @@
 package com.example.Fiszki.security.auth;
 
 import com.example.Fiszki.Instance.TokenInstance;
-import com.example.Fiszki.flashcard.add.FlashcardResponse;
 import com.example.Fiszki.security.config.JwtService;
 import com.example.Fiszki.security.user.Role;
 import com.example.Fiszki.security.user.User;
@@ -57,9 +56,8 @@ public class AuthenticationService {
         var user = repository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
 
-        // Store user name in the tokenInstance
         tokenInstance.setToken(request.getEmail());
-        tokenInstance.setUserName(user.getUsername()); // Assuming the user object has a 'name' field
+        tokenInstance.setUserName(user.getUsername());
         return AuthenticationResponse.builder().response(jwtToken).build();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.Fiszki.flashcard;
 
 import com.example.Fiszki.flashcard.add.*;
+import com.example.Fiszki.flashcard.collection.FlashcardCollectionResponse;
 import com.example.Fiszki.flashcard.show.FlashcardShowResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,10 +35,15 @@ public class FlashcardController {
             return ResponseEntity.status(500).body("Error deleting flashcard: " + e.getMessage());
         }
     }
-
     @GetMapping("/category/{category}")
     public ResponseEntity<List<FlashcardShowResponse>> showFlashcardsByCategory(@PathVariable String category) {
         List<FlashcardShowResponse> flashcards = flashcardService.showFlashcardsByCategory(category);
         return ResponseEntity.ok(flashcards);
+    }
+
+    @GetMapping("/collections")
+    public ResponseEntity<List<FlashcardCollectionResponse>> showAllCollection(@RequestBody FlashcardAddRequest request) {
+        List<FlashcardCollectionResponse> collections = flashcardService.showAllCollection();
+        return ResponseEntity.ok(collections);
     }
 }

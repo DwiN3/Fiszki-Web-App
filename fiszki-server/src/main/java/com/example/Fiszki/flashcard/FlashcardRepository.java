@@ -9,4 +9,5 @@ public interface FlashcardRepository extends JpaRepository<FlashcardAdd, Integer
     boolean existsByWord(String word);
     boolean existsByTranslatedWord(String translatedWord);
     List<FlashcardAdd> findByCategory(String category);
+    List<FlashcardAdd> findByAuthor(String author);
 }
