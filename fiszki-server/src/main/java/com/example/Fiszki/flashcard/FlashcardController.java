@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/fiszki/")
+@RequestMapping("/flashcards/")
 @RequiredArgsConstructor
 public class FlashcardController {
 
@@ -28,12 +28,12 @@ public class FlashcardController {
         return ResponseEntity.ok(flashcardService.addFlashcard(request));
     }
 
-    @GetMapping("/flashcards/{flashcardsId}")
+    @GetMapping("/{flashcardsId}")
     public ResponseEntity<FlashcardShowResponse> showFlashcard(@PathVariable Integer flashcardsId) {
         return ResponseEntity.ok(flashcardService.showFlashcardById(flashcardsId));
     }
 
-    @GetMapping("/flashcards/category/{category}")
+    @GetMapping("/category/{category}")
     public ResponseEntity<List<FlashcardShowResponse>> showFlashcardsByCategory(@PathVariable String category) {
         List<FlashcardShowResponse> flashcards = flashcardService.showFlashcardsByCategory(category);
         return ResponseEntity.ok(flashcards);
