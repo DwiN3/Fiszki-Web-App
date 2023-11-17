@@ -42,7 +42,6 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-
         // Verify the existence of a user by email address in the database.
         if (repository.findByEmail(request.getEmail()).isEmpty()) {
             return AuthenticationResponse.builder().response("User with given e-mail does not exist.").build();
@@ -53,11 +52,14 @@ public class AuthenticationService {
                         request.getEmail(),
                         request.getPassword()
                 )
-
         );
+
         var user = repository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        tokenInstance.setToken(jwtToken);
+
+        // Store user name in the tokenInstance
+        tokenInstance.setToken(request.getEmail());
+        tokenInstance.setUserName(user.getUsername()); // Assuming the user object has a 'name' field
         return AuthenticationResponse.builder().response(jwtToken).build();
     }
 }

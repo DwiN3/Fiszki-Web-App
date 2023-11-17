@@ -1,5 +1,6 @@
 package com.example.Fiszki.flashcard;
 
+import com.example.Fiszki.Instance.TokenInstance;
 import com.example.Fiszki.flashcard.add.Flashcard;
 import com.example.Fiszki.flashcard.add.FlashcardRequest;
 import com.example.Fiszki.flashcard.add.FlashcardResponse;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public class FlashcardService {
 
     private final FlashcardRepository flashcardRepository;
+    private TokenInstance tokenInstance = TokenInstance.getInstance();
 
     public FlashcardService(FlashcardRepository flashcardRepository) {
         this.flashcardRepository = flashcardRepository;
@@ -39,7 +41,7 @@ public class FlashcardService {
                 .translatedWord(request.getTranslatedWord())
                 .example(request.getExample())
                 .translatedExample(request.getTranslatedExample())
-                .author("Kamil")
+                .author(tokenInstance.getUserName()) 
                 .build();
 
         flashcardRepository.save(flashcard);
