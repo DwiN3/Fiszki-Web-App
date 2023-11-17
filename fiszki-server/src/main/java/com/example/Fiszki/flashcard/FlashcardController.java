@@ -2,7 +2,7 @@ package com.example.Fiszki.flashcard;
 
 import com.example.Fiszki.flashcard.add.*;
 import com.example.Fiszki.flashcard.show.FlashcardShowResponse;
-import com.example.Fiszki.flashcard.models.Flashcards;
+import com.example.Fiszki.models.Flashcards;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

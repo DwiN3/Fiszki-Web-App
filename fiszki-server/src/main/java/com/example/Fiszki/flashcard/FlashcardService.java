@@ -57,7 +57,6 @@ public class FlashcardService {
                     .translatedExample(flashcard.getTranslatedExample())
                     .build();
         } else {
-            // Obsługa przypadku, gdy nie znaleziono fiszki o danym ID
             return FlashcardShowResponse.builder().build();
         }
     }
