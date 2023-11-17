@@ -1,5 +1,6 @@
 package com.example.Fiszki.models;
 
+
 public class Flashcards {
     private String collectionName, language, category, word, translatedWord, example, translatedExample;
 
