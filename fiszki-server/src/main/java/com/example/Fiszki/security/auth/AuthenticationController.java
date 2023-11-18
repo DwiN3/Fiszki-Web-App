@@ -42,7 +42,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.getInfo(userEmail));
     }
 
-    @PostMapping("/change-password")
+    @PostMapping("/password-change")
     public ResponseEntity<AuthenticationResponse> changePassword(@RequestBody ChangePasswordRequest request) {
         return ResponseEntity.ok(authenticationService.changePassword(request));
     }
