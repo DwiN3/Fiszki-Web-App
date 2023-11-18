@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FlashcardEditRequest {
     private String collectionName;
+    private String category;
     private String word;
     private String translatedWord;
     private String example;

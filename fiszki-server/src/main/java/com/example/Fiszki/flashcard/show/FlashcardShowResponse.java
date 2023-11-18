@@ -11,9 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FlashcardShowResponse {
     private Integer id;
+    private String author;
+    private String category;
     private String word;
     private String translatedWord;
     private String example;
     private String translatedExample;
-    private String author;
 }

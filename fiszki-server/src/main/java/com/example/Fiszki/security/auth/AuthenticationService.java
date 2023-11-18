@@ -193,8 +193,14 @@ public class AuthenticationService {
     }
 
 
-    public AuthenticationResponse deleteUser(String userEmail) {
+    public AuthenticationResponse deleteUser(String userEmail, String userPassword) {
         var user = repository.findByEmail(userEmail).orElseThrow();
+
+        // Weryfikacja hasła użytkownika przed usunięciem konta
+        if (!passwordEncoder.matches(userPassword, user.getPassword())) {
+            return AuthenticationResponse.builder().response("Incorrect password. User not deleted.").build();
+        }
+
         repository.delete(user);
         return AuthenticationResponse.builder().response("User deleted successfully.").build();
     }

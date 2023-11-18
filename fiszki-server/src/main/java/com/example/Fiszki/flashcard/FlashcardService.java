@@ -85,6 +85,7 @@ public class FlashcardService {
             FlashcardAdd flashcardAdd = flashcardOptional.get();
 
             flashcardAdd.setCollectionName(request.getCollectionName());
+            flashcardAdd.setCategory(request.getCategory());
             flashcardAdd.setWord(request.getWord());
             flashcardAdd.setTranslatedWord(request.getTranslatedWord());
             flashcardAdd.setExample(request.getExample());
@@ -117,11 +118,12 @@ public class FlashcardService {
             FlashcardAdd flashcardAdd = flashcardOptional.get();
             return FlashcardShowResponse.builder()
                     .id(flashcardAdd.getId())
+                    .category(flashcardAdd.getCategory())
+                    .author(flashcardAdd.getAuthor())
                     .word(flashcardAdd.getWord())
                     .translatedWord(flashcardAdd.getTranslatedWord())
                     .example(flashcardAdd.getExample())
                     .translatedExample(flashcardAdd.getTranslatedExample())
-                    .author(flashcardAdd.getAuthor())
                     .build();
         } else {
             return FlashcardShowResponse.builder().build();
@@ -138,11 +140,12 @@ public class FlashcardService {
         return flashcardAdds.stream()
                 .map(flashcardAdd -> FlashcardShowResponse.builder()
                         .id(flashcardAdd.getId())
+                        .category(flashcardAdd.getCategory())
+                        .author(flashcardAdd.getAuthor())
                         .word(flashcardAdd.getWord())
                         .translatedWord(flashcardAdd.getTranslatedWord())
                         .example(flashcardAdd.getExample())
                         .translatedExample(flashcardAdd.getTranslatedExample())
-                        .author(flashcardAdd.getAuthor())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -159,11 +162,12 @@ public class FlashcardService {
                     List<FlashcardShowResponse> flashcards = entry.getValue().stream()
                             .map(flashcardAdd -> FlashcardShowResponse.builder()
                                     .id(flashcardAdd.getId())
+                                    .category(flashcardAdd.getCategory())
+                                    .author(flashcardAdd.getAuthor())
                                     .word(flashcardAdd.getWord())
                                     .translatedWord(flashcardAdd.getTranslatedWord())
                                     .example(flashcardAdd.getExample())
                                     .translatedExample(flashcardAdd.getTranslatedExample())
-                                    .author(flashcardAdd.getAuthor())
                                     .build())
                             .collect(Collectors.toList());
 
@@ -180,11 +184,12 @@ public class FlashcardService {
                 .stream()
                 .map(flashcardAdd -> FlashcardShowResponse.builder()
                         .id(flashcardAdd.getId())
+                        .category(flashcardAdd.getCategory())
+                        .author(flashcardAdd.getAuthor())
                         .word(flashcardAdd.getWord())
                         .translatedWord(flashcardAdd.getTranslatedWord())
                         .example(flashcardAdd.getExample())
                         .translatedExample(flashcardAdd.getTranslatedExample())
-                        .author(flashcardAdd.getAuthor())
                         .build())
                 .collect(Collectors.toList());
 
