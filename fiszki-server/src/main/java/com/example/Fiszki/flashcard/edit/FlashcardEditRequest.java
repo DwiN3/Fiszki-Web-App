@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FlashcardEditRequest {
+    private String collectionName;
     private String word;
     private String translatedWord;
     private String example;
