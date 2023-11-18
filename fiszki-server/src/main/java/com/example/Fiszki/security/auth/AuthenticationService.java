@@ -1,6 +1,7 @@
 package com.example.Fiszki.security.auth;
 
 import com.example.Fiszki.Instance.TokenInstance;
+import com.example.Fiszki.security.auth.user.ChangePasswordRequest;
 import com.example.Fiszki.security.auth.user.PointsRequest;
 import com.example.Fiszki.security.auth.user.UserInfoResponse;
 import com.example.Fiszki.security.auth.user.UserLVLResponse;
@@ -128,6 +129,27 @@ public class AuthenticationService {
                 .points(user.getPoints())
                 .level(user.getLevel())
                 .build();
+    }
+
+    public AuthenticationResponse changePassword(ChangePasswordRequest request) {
+        var userEmail = tokenInstance.getToken();
+        var user = repository.findByEmail(userEmail).orElseThrow();
+
+        // Verify current password
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            return AuthenticationResponse.builder().response("Current password is incorrect.").build();
+        }
+
+        // Verify if the new passwords match
+        if (!request.getNew_password().equals(request.getRe_new_password())) {
+            return AuthenticationResponse.builder().response("New passwords do not match.").build();
+        }
+
+        // Update the user's password
+        user.setPassword(passwordEncoder.encode(request.getNew_password()));
+        repository.save(user);
+
+        return AuthenticationResponse.builder().response("Password changed successfully.").build();
     }
 
     public AuthenticationResponse deleteUser(String userEmail) {

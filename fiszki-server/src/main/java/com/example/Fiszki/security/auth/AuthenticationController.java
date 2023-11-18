@@ -1,6 +1,7 @@
 package com.example.Fiszki.security.auth;
 
 import com.example.Fiszki.Instance.TokenInstance;
+import com.example.Fiszki.security.auth.user.ChangePasswordRequest;
 import com.example.Fiszki.security.auth.user.PointsRequest;
 import com.example.Fiszki.security.auth.user.UserInfoResponse;
 import com.example.Fiszki.security.auth.user.UserLVLResponse;
@@ -43,6 +44,12 @@ public class AuthenticationController {
         var userEmail = tokenInstance.getToken();
         return ResponseEntity.ok(authenticationService.getInfo(userEmail));
     }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<AuthenticationResponse> changePassword(@RequestBody ChangePasswordRequest request) {
+        return ResponseEntity.ok(authenticationService.changePassword(request));
+    }
+
 
     @DeleteMapping("/delete-user")
     public ResponseEntity<AuthenticationResponse> deleteUser() {
