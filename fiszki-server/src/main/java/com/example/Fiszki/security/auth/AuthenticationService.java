@@ -129,4 +129,10 @@ public class AuthenticationService {
                 .level(user.getLevel())
                 .build();
     }
+
+    public AuthenticationResponse deleteUser(String userEmail) {
+        var user = repository.findByEmail(userEmail).orElseThrow();
+        repository.delete(user);
+        return AuthenticationResponse.builder().response("User deleted successfully.").build();
+    }
 }

@@ -43,4 +43,10 @@ public class AuthenticationController {
         var userEmail = tokenInstance.getToken();
         return ResponseEntity.ok(authenticationService.getInfo(userEmail));
     }
+
+    @DeleteMapping("/delete-user")
+    public ResponseEntity<AuthenticationResponse> deleteUser() {
+        var userEmail = tokenInstance.getToken();
+        return ResponseEntity.ok(authenticationService.deleteUser(userEmail));
+    }
 }
