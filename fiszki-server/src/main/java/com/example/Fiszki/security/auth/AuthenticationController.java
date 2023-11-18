@@ -47,6 +47,10 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.changePassword(request));
     }
 
+    @PostMapping("/process-password-change")
+    public ResponseEntity<AuthenticationResponse> processPasswordChange(@RequestBody ChangePasswordFromLinkRequest request) {
+        return ResponseEntity.ok(authenticationService.changePasswordLink(request));
+    }
 
     @DeleteMapping("/delete-user")
     public ResponseEntity<AuthenticationResponse> deleteUser(@RequestBody DeleteRequest request) {

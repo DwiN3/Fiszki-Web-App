@@ -1,10 +1,7 @@
 package com.example.Fiszki.security.auth;
 
 import com.example.Fiszki.Instance.TokenInstance;
-import com.example.Fiszki.security.auth.user.ChangePasswordRequest;
-import com.example.Fiszki.security.auth.user.PointsRequest;
-import com.example.Fiszki.security.auth.user.UserInfoResponse;
-import com.example.Fiszki.security.auth.user.UserLVLResponse;
+import com.example.Fiszki.security.auth.user.*;
 import com.example.Fiszki.security.config.JwtService;
 import com.example.Fiszki.security.user.Role;
 import com.example.Fiszki.security.user.User;
@@ -192,6 +189,33 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().response("Password changed successfully.").build();
     }
 
+    public AuthenticationResponse changePasswordLink(ChangePasswordFromLinkRequest request) {
+        // Verify the existence of a user by email address in the database.
+        Optional<User> optionalUser = repository.findByEmail(request.getEmail());
+
+        if (optionalUser.isEmpty()) {
+            return AuthenticationResponse.builder().response("User not found.").build();
+        }
+
+        var user = optionalUser.get();
+
+        // Validate the new password fields
+        if (request.getNew_password().isEmpty() || request.getNew_password().length() < 5) {
+            return AuthenticationResponse.builder().response("Invalid new password.").build();
+        }
+
+        if (!request.getNew_password().equals(request.getRe_new_password())) {
+            return AuthenticationResponse.builder().response("New passwords do not match.").build();
+        }
+
+        // Update the user's password
+        user.setPassword(passwordEncoder.encode(request.getNew_password()));
+        repository.save(user);
+
+        return AuthenticationResponse.builder().response("Password changed successfully.").build();
+    }
+
+
 
     public AuthenticationResponse deleteUser(String userEmail, String userPassword) {
         var user = repository.findByEmail(userEmail).orElseThrow();
@@ -204,4 +228,5 @@ public class AuthenticationService {
         repository.delete(user);
         return AuthenticationResponse.builder().response("User deleted successfully.").build();
     }
+
 }
