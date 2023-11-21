@@ -1,6 +1,6 @@
-package com.example.Fiszki.flashcard.collection;
+package com.example.Fiszki.flashcards.request;
 
-import com.example.Fiszki.flashcard.show.FlashcardShowResponse;
+import com.example.Fiszki.flashcards.response.FlashcardShowResponse;
 import lombok.*;
 
 import java.util.List;

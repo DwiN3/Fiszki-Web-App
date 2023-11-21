@@ -1,4 +1,4 @@
-package com.example.Fiszki.flashcard.show;
+package com.example.Fiszki.flashcards.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FlashcardShowResponse {
-    private Integer id;
-    private String author;
+public class FlashcardAddRequest {
+    private String collectionName;
+    private String language;
     private String category;
     private String word;
     private String translatedWord;

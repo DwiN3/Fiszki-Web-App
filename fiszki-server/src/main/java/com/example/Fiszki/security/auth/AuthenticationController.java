@@ -1,7 +1,8 @@
 package com.example.Fiszki.security.auth;
 
 import com.example.Fiszki.Instance.TokenInstance;
-import com.example.Fiszki.security.auth.user.*;
+import com.example.Fiszki.security.auth.request.*;
+import com.example.Fiszki.security.auth.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,12 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register (@RequestBody RegisterRequest request) {
+    public ResponseEntity<UserInfoResponse> register (@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticate (@RequestBody AuthenticationRequest authenticate) {
+    public ResponseEntity<UserInfoResponse> authenticate (@RequestBody AuthenticationRequest authenticate) {
         return ResponseEntity.ok(authenticationService.authenticate(authenticate));
     }
 
@@ -37,23 +38,23 @@ public class AuthenticationController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity<UserInfoResponse> getUserInfo() {
+    public ResponseEntity<UserDateResponse> getUserInfo() {
         var userEmail = tokenInstance.getToken();
         return ResponseEntity.ok(authenticationService.getInfo(userEmail));
     }
 
     @PostMapping("/password-change")
-    public ResponseEntity<AuthenticationResponse> changePassword(@RequestBody ChangePasswordRequest request) {
+    public ResponseEntity<UserInfoResponse> changePassword(@RequestBody ChangePasswordRequest request) {
         return ResponseEntity.ok(authenticationService.changePassword(request));
     }
 
     @PostMapping("/process-password-change")
-    public ResponseEntity<AuthenticationResponse> processPasswordChange(@RequestBody ChangePasswordFromLinkRequest request) {
+    public ResponseEntity<UserInfoResponse> processPasswordChange(@RequestBody ChangePasswordFromLinkRequest request) {
         return ResponseEntity.ok(authenticationService.changePasswordLink(request));
     }
 
     @DeleteMapping("/delete-user")
-    public ResponseEntity<AuthenticationResponse> deleteUser(@RequestBody DeleteRequest request) {
+    public ResponseEntity<UserInfoResponse> deleteUser(@RequestBody DeleteRequest request) {
         var userEmail = tokenInstance.getToken();
         return ResponseEntity.ok(authenticationService.deleteUser(userEmail, request.getPassword()));
     }

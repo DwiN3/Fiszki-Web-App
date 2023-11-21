@@ -1,4 +1,4 @@
-package com.example.Fiszki.flashcard.show;
+package com.example.Fiszki.flashcards.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

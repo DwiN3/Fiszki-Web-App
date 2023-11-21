@@ -1,4 +1,4 @@
-package com.example.Fiszki.security.auth;
+package com.example.Fiszki.security.auth.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
-
+public class ChangePasswordRequest {
     private String email;
     private String password;
-
+    private String new_password;
+    private String re_new_password;
 }

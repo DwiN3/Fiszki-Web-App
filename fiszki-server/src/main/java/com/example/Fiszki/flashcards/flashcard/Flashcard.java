@@ -1,4 +1,4 @@
-package com.example.Fiszki.flashcard.add;
+package com.example.Fiszki.flashcards.flashcard;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "flashcards")
-public class FlashcardAdd {
+public class Flashcard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto generating id

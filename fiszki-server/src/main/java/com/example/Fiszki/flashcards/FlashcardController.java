@@ -1,10 +1,11 @@
-package com.example.Fiszki.flashcard;
+package com.example.Fiszki.flashcards;
 
 import com.example.Fiszki.Instance.TokenInstance;
-import com.example.Fiszki.flashcard.add.*;
-import com.example.Fiszki.flashcard.collection.FlashcardCollectionResponse;
-import com.example.Fiszki.flashcard.edit.FlashcardEditRequest;
-import com.example.Fiszki.flashcard.show.FlashcardShowResponse;
+import com.example.Fiszki.flashcards.request.FlashcardAddRequest;
+import com.example.Fiszki.flashcards.request.FlashcardCollectionResponse;
+import com.example.Fiszki.flashcards.request.FlashcardEditRequest;
+import com.example.Fiszki.flashcards.response.FlashcardInfoResponse;
+import com.example.Fiszki.flashcards.response.FlashcardShowResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,14 +22,14 @@ public class FlashcardController {
     private final FlashcardService flashcardService;
 
     @PostMapping("/add-flashcard")
-    public ResponseEntity<FlashcardAddResponse> addFlashcard (@RequestBody FlashcardAddRequest request) {
+    public ResponseEntity<FlashcardInfoResponse> addFlashcard (@RequestBody FlashcardAddRequest request) {
         return ResponseEntity.ok(flashcardService.addFlashcard(request));
     }
 
     @PostMapping("/edit/{flashcardsId}")
-    public ResponseEntity<FlashcardAddResponse> editFlashcard(@PathVariable Integer flashcardsId,
-                                                              @RequestBody FlashcardEditRequest request) {
-        FlashcardAddResponse response = flashcardService.editFlashcard(flashcardsId, request);
+    public ResponseEntity<FlashcardInfoResponse> editFlashcard(@PathVariable Integer flashcardsId,
+                                                               @RequestBody FlashcardEditRequest request) {
+        FlashcardInfoResponse response = flashcardService.editFlashcard(flashcardsId, request);
         return ResponseEntity.ok(response);
     }
 

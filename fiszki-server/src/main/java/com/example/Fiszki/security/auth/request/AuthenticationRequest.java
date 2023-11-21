@@ -1,4 +1,4 @@
-package com.example.Fiszki.security.auth.user;
+package com.example.Fiszki.security.auth.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PointsRequest {
-    private int points;
+public class AuthenticationRequest {
+
+    private String email;
+    private String password;
 
 }

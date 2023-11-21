@@ -1,4 +1,4 @@
-package com.example.Fiszki.security.auth.user;
+package com.example.Fiszki.security.auth.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfoResponse {
+public class UserDateResponse {
 
     private Integer id;
     private String firstName;

@@ -1,4 +1,4 @@
-package com.example.Fiszki.security.auth.user;
+package com.example.Fiszki.security.auth.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeleteRequest {
-    private String password;
+public class UserLVLResponse {
+    private int level;
+    private int points;
+    private int nextLVLPoints;
 }

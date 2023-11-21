@@ -1,12 +1,13 @@
-package com.example.Fiszki.flashcard;
+package com.example.Fiszki.flashcards;
 
 import com.example.Fiszki.Instance.TokenInstance;
-import com.example.Fiszki.flashcard.add.FlashcardAdd;
-import com.example.Fiszki.flashcard.add.FlashcardAddRequest;
-import com.example.Fiszki.flashcard.add.FlashcardAddResponse;
-import com.example.Fiszki.flashcard.collection.FlashcardCollectionResponse;
-import com.example.Fiszki.flashcard.edit.FlashcardEditRequest;
-import com.example.Fiszki.flashcard.show.FlashcardShowResponse;
+import com.example.Fiszki.flashcards.flashcard.Flashcard;
+import com.example.Fiszki.flashcards.flashcard.FlashcardRepository;
+import com.example.Fiszki.flashcards.request.FlashcardAddRequest;
+import com.example.Fiszki.flashcards.response.FlashcardInfoResponse;
+import com.example.Fiszki.flashcards.request.FlashcardCollectionResponse;
+import com.example.Fiszki.flashcards.request.FlashcardEditRequest;
+import com.example.Fiszki.flashcards.response.FlashcardShowResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -26,33 +27,33 @@ public class FlashcardService {
         this.flashcardRepository = flashcardRepository;
     }
 
-    public FlashcardAddResponse addFlashcard(FlashcardAddRequest request) {
+    public FlashcardInfoResponse addFlashcard(FlashcardAddRequest request) {
 
         // Sprawdź, czy wszystkie wymagane pola są ustawione
         if (isNullOrEmpty(request.getCollectionName()) || isNullOrEmpty(request.getLanguage()) ||
                 isNullOrEmpty(request.getCategory()) || isNullOrEmpty(request.getWord()) ||
                 isNullOrEmpty(request.getTranslatedWord()) || isNullOrEmpty(request.getExample()) ||
                 isNullOrEmpty(request.getTranslatedExample())) {
-            return FlashcardAddResponse.builder().response("All fields must be filled").build();
+            return FlashcardInfoResponse.builder().response("All fields must be filled").build();
         }
 
         // Sprawdź, czy istnieje fiszka o podanym słowie
         if (flashcardRepository.existsByWord(request.getWord())) {
-            return FlashcardAddResponse.builder().response("Flashcard with the given word already exists").build();
+            return FlashcardInfoResponse.builder().response("Flashcard with the given word already exists").build();
         }
 
         // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie
         if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
-            return FlashcardAddResponse.builder().response("Flashcard with the given translated word already exists").build();
+            return FlashcardInfoResponse.builder().response("Flashcard with the given translated word already exists").build();
         }
 
         // Sprawdź, czy w polach collectionName, language, category, word i translatedWord występuje tylko jedno słowo
         if (!isSingleWord(request.getCollectionName()) || !isSingleWord(request.getLanguage()) ||
                 !isSingleWord(request.getCategory())) {
-            return FlashcardAddResponse.builder().response("Fields not a single word").build();
+            return FlashcardInfoResponse.builder().response("Fields not a single word").build();
         }
 
-        FlashcardAdd flashcardAdd = FlashcardAdd.builder()
+        Flashcard flashcard = Flashcard.builder()
                 .collectionName(request.getCollectionName())
                 .language(request.getLanguage())
                 .category(request.getCategory())
@@ -63,39 +64,39 @@ public class FlashcardService {
                 .author(tokenInstance.getUserName())
                 .build();
 
-        flashcardRepository.save(flashcardAdd);
+        flashcardRepository.save(flashcard);
 
-        return FlashcardAddResponse.builder().response("Flashcard added successfully").build();
+        return FlashcardInfoResponse.builder().response("Flashcard added successfully").build();
     }
 
-    public FlashcardAddResponse editFlashcard(Integer flashcardId, FlashcardEditRequest request) {
+    public FlashcardInfoResponse editFlashcard(Integer flashcardId, FlashcardEditRequest request) {
         // Sprawdź, czy wszystkie wymagane pola są ustawione
         if (!isSingleWord(request.getCollectionName())) {
-            return FlashcardAddResponse.builder().response("All fields must be filled").build();
+            return FlashcardInfoResponse.builder().response("All fields must be filled").build();
         }
 
         // Sprawdź, czy w polach word i translatedWord występuje tylko jedno słowo
         if (!isSingleWord(request.getWord()) || !isSingleWord(request.getTranslatedWord())) {
-            return FlashcardAddResponse.builder().response("Fields word and translatedWord must contain a single word").build();
+            return FlashcardInfoResponse.builder().response("Fields word and translatedWord must contain a single word").build();
         }
 
-        Optional<FlashcardAdd> flashcardOptional = flashcardRepository.findById(flashcardId);
+        Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
 
         if (flashcardOptional.isPresent()) {
-            FlashcardAdd flashcardAdd = flashcardOptional.get();
+            Flashcard flashcard = flashcardOptional.get();
 
-            flashcardAdd.setCollectionName(request.getCollectionName());
-            flashcardAdd.setCategory(request.getCategory());
-            flashcardAdd.setWord(request.getWord());
-            flashcardAdd.setTranslatedWord(request.getTranslatedWord());
-            flashcardAdd.setExample(request.getExample());
-            flashcardAdd.setTranslatedExample(request.getTranslatedExample());
+            flashcard.setCollectionName(request.getCollectionName());
+            flashcard.setCategory(request.getCategory());
+            flashcard.setWord(request.getWord());
+            flashcard.setTranslatedWord(request.getTranslatedWord());
+            flashcard.setExample(request.getExample());
+            flashcard.setTranslatedExample(request.getTranslatedExample());
 
-            flashcardRepository.save(flashcardAdd);
+            flashcardRepository.save(flashcard);
 
-            return FlashcardAddResponse.builder().response("Flashcard updated successfully").build();
+            return FlashcardInfoResponse.builder().response("Flashcard updated successfully").build();
         } else {
-            return FlashcardAddResponse.builder().response("Flashcard not found").build();
+            return FlashcardInfoResponse.builder().response("Flashcard not found").build();
         }
     }
 
@@ -112,18 +113,18 @@ public class FlashcardService {
 
     public FlashcardShowResponse showFlashcardById(Integer flashcardId) {
         // Tutaj możesz wykorzystać metody z FlashcardRepository do pobrania fiszki na podstawie ID
-        Optional<FlashcardAdd> flashcardOptional = flashcardRepository.findById(flashcardId);
+        Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
 
         if (flashcardOptional.isPresent()) {
-            FlashcardAdd flashcardAdd = flashcardOptional.get();
+            Flashcard flashcard = flashcardOptional.get();
             return FlashcardShowResponse.builder()
-                    .id(flashcardAdd.getId())
-                    .category(flashcardAdd.getCategory())
-                    .author(flashcardAdd.getAuthor())
-                    .word(flashcardAdd.getWord())
-                    .translatedWord(flashcardAdd.getTranslatedWord())
-                    .example(flashcardAdd.getExample())
-                    .translatedExample(flashcardAdd.getTranslatedExample())
+                    .id(flashcard.getId())
+                    .category(flashcard.getCategory())
+                    .author(flashcard.getAuthor())
+                    .word(flashcard.getWord())
+                    .translatedWord(flashcard.getTranslatedWord())
+                    .example(flashcard.getExample())
+                    .translatedExample(flashcard.getTranslatedExample())
                     .build();
         } else {
             return FlashcardShowResponse.builder().build();
@@ -135,39 +136,39 @@ public class FlashcardService {
     }
 
     public List<FlashcardShowResponse> showFlashcardsByCategory(String category) {
-        List<FlashcardAdd> flashcardAdds = flashcardRepository.findByCategory(category);
+        List<Flashcard> flashcards = flashcardRepository.findByCategory(category);
 
-        return flashcardAdds.stream()
-                .map(flashcardAdd -> FlashcardShowResponse.builder()
-                        .id(flashcardAdd.getId())
-                        .category(flashcardAdd.getCategory())
-                        .author(flashcardAdd.getAuthor())
-                        .word(flashcardAdd.getWord())
-                        .translatedWord(flashcardAdd.getTranslatedWord())
-                        .example(flashcardAdd.getExample())
-                        .translatedExample(flashcardAdd.getTranslatedExample())
+        return flashcards.stream()
+                .map(flashcard -> FlashcardShowResponse.builder()
+                        .id(flashcard.getId())
+                        .category(flashcard.getCategory())
+                        .author(flashcard.getAuthor())
+                        .word(flashcard.getWord())
+                        .translatedWord(flashcard.getTranslatedWord())
+                        .example(flashcard.getExample())
+                        .translatedExample(flashcard.getTranslatedExample())
                         .build())
                 .collect(Collectors.toList());
     }
 
     public List<FlashcardCollectionResponse> showAllCollection(String author) {
-        List<FlashcardAdd> flashcardAdds = flashcardRepository.findByAuthor(author);
+        List<Flashcard> flashcardAdds = flashcardRepository.findByAuthor(author);
 
         // Group flashcards by collection name
         return flashcardAdds.stream()
-                .collect(Collectors.groupingBy(FlashcardAdd::getCollectionName))
+                .collect(Collectors.groupingBy(Flashcard::getCollectionName))
                 .entrySet().stream()
                 .map(entry -> {
                     String collectionName = entry.getKey();
                     List<FlashcardShowResponse> flashcards = entry.getValue().stream()
-                            .map(flashcardAdd -> FlashcardShowResponse.builder()
-                                    .id(flashcardAdd.getId())
-                                    .category(flashcardAdd.getCategory())
-                                    .author(flashcardAdd.getAuthor())
-                                    .word(flashcardAdd.getWord())
-                                    .translatedWord(flashcardAdd.getTranslatedWord())
-                                    .example(flashcardAdd.getExample())
-                                    .translatedExample(flashcardAdd.getTranslatedExample())
+                            .map(flashcard -> FlashcardShowResponse.builder()
+                                    .id(flashcard.getId())
+                                    .category(flashcard.getCategory())
+                                    .author(flashcard.getAuthor())
+                                    .word(flashcard.getWord())
+                                    .translatedWord(flashcard.getTranslatedWord())
+                                    .example(flashcard.getExample())
+                                    .translatedExample(flashcard.getTranslatedExample())
                                     .build())
                             .collect(Collectors.toList());
 
@@ -182,14 +183,14 @@ public class FlashcardService {
     public List<FlashcardShowResponse> showCollectionByName(String nameCollection, String author) {
         List<FlashcardShowResponse> flashcards = flashcardRepository.findByCollectionNameAndAuthor(nameCollection, author)
                 .stream()
-                .map(flashcardAdd -> FlashcardShowResponse.builder()
-                        .id(flashcardAdd.getId())
-                        .category(flashcardAdd.getCategory())
-                        .author(flashcardAdd.getAuthor())
-                        .word(flashcardAdd.getWord())
-                        .translatedWord(flashcardAdd.getTranslatedWord())
-                        .example(flashcardAdd.getExample())
-                        .translatedExample(flashcardAdd.getTranslatedExample())
+                .map(flashcard -> FlashcardShowResponse.builder()
+                        .id(flashcard.getId())
+                        .category(flashcard.getCategory())
+                        .author(flashcard.getAuthor())
+                        .word(flashcard.getWord())
+                        .translatedWord(flashcard.getTranslatedWord())
+                        .example(flashcard.getExample())
+                        .translatedExample(flashcard.getTranslatedExample())
                         .build())
                 .collect(Collectors.toList());
 
@@ -198,10 +199,10 @@ public class FlashcardService {
 
 
     public List<Map<String, Object>> showCollectionInfo(String author) {
-        List<FlashcardAdd> flashcardAdds = flashcardRepository.findByAuthor(author);
+        List<Flashcard> flashcards = flashcardRepository.findByAuthor(author);
 
-        return flashcardAdds.stream()
-                .collect(Collectors.groupingBy(FlashcardAdd::getCollectionName))
+        return flashcards.stream()
+                .collect(Collectors.groupingBy(Flashcard::getCollectionName))
                 .entrySet().stream()
                 .map(entry -> {
                     String collectionName = entry.getKey();
