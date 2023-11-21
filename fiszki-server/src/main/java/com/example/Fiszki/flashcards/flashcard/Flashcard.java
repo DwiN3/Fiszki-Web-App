@@ -19,7 +19,6 @@ public class Flashcard {
     private Integer id;
     private String author;
     private String collectionName;
-    private String language;
     private String category;
     private String word;
     private String translatedWord;
@@ -28,10 +27,6 @@ public class Flashcard {
 
     public String getCollectionName() {
         return collectionName;
-    }
-
-    public String getLanguage() {
-        return language;
     }
 
     public String getCategory() {

@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDateResponse {
-
     private Integer id;
     private String firstName;
     private String lastName;

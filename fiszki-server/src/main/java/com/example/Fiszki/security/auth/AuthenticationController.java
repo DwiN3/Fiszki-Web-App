@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/flashcards/auth/")
 @RequiredArgsConstructor
 public class AuthenticationController {
-    TokenInstance tokenInstance = TokenInstance.getInstance();
-
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
@@ -26,21 +24,18 @@ public class AuthenticationController {
     }
 
     @GetMapping("/level")
-    public ResponseEntity<UserLVLResponse> userLevel() {
-        var userEmail = TokenInstance.getInstance().getToken();
-        var authenticationRequest = AuthenticationRequest.builder().email(userEmail).build();
-        return ResponseEntity.ok(authenticationService.userLevel(authenticationRequest));
+    public ResponseEntity<UserLevelResponse> userLevel() {
+        return ResponseEntity.ok(authenticationService.userLevel());
     }
 
     @PutMapping("/points")
-    public ResponseEntity<UserLVLResponse> sendPoints(@RequestBody PointsRequest pointsRequest) {
+    public ResponseEntity<UserLevelResponse> sendPoints(@RequestBody PointsRequest pointsRequest) {
         return ResponseEntity.ok(authenticationService.sendPoints(pointsRequest));
     }
 
     @GetMapping("/info")
     public ResponseEntity<UserDateResponse> getUserInfo() {
-        var userEmail = tokenInstance.getToken();
-        return ResponseEntity.ok(authenticationService.getInfo(userEmail));
+        return ResponseEntity.ok(authenticationService.getInfo());
     }
 
     @PostMapping("/password-change")
@@ -54,8 +49,7 @@ public class AuthenticationController {
     }
 
     @DeleteMapping("/delete-user")
-    public ResponseEntity<UserInfoResponse> deleteUser(@RequestBody DeleteRequest request) {
-        var userEmail = tokenInstance.getToken();
-        return ResponseEntity.ok(authenticationService.deleteUser(userEmail, request.getPassword()));
+    public ResponseEntity<UserInfoResponse> deleteUser(@RequestBody UserDeleteRequest request) {
+        return ResponseEntity.ok(authenticationService.deleteUser(request.getPassword()));
     }
 }

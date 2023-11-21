@@ -5,9 +5,8 @@ import com.example.Fiszki.flashcards.flashcard.Flashcard;
 import com.example.Fiszki.flashcards.flashcard.FlashcardRepository;
 import com.example.Fiszki.flashcards.request.FlashcardAddRequest;
 import com.example.Fiszki.flashcards.response.FlashcardInfoResponse;
-import com.example.Fiszki.flashcards.request.FlashcardCollectionResponse;
-import com.example.Fiszki.flashcards.request.FlashcardEditRequest;
-import com.example.Fiszki.flashcards.response.FlashcardShowResponse;
+import com.example.Fiszki.flashcards.response.FlashcardCollectionResponse;
+import com.example.Fiszki.flashcards.response.FlashcardReturnResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,7 @@ public class FlashcardService {
     public FlashcardInfoResponse addFlashcard(FlashcardAddRequest request) {
 
         // Sprawdź, czy wszystkie wymagane pola są ustawione
-        if (isNullOrEmpty(request.getCollectionName()) || isNullOrEmpty(request.getLanguage()) ||
+        if (isNullOrEmpty(request.getCollectionName()) ||
                 isNullOrEmpty(request.getCategory()) || isNullOrEmpty(request.getWord()) ||
                 isNullOrEmpty(request.getTranslatedWord()) || isNullOrEmpty(request.getExample()) ||
                 isNullOrEmpty(request.getTranslatedExample())) {
@@ -48,14 +47,13 @@ public class FlashcardService {
         }
 
         // Sprawdź, czy w polach collectionName, language, category, word i translatedWord występuje tylko jedno słowo
-        if (!isSingleWord(request.getCollectionName()) || !isSingleWord(request.getLanguage()) ||
+        if (!isSingleWord(request.getCollectionName()) ||
                 !isSingleWord(request.getCategory())) {
             return FlashcardInfoResponse.builder().response("Fields not a single word").build();
         }
 
         Flashcard flashcard = Flashcard.builder()
                 .collectionName(request.getCollectionName())
-                .language(request.getLanguage())
                 .category(request.getCategory())
                 .word(request.getWord())
                 .translatedWord(request.getTranslatedWord())
@@ -69,7 +67,7 @@ public class FlashcardService {
         return FlashcardInfoResponse.builder().response("Flashcard added successfully").build();
     }
 
-    public FlashcardInfoResponse editFlashcard(Integer flashcardId, FlashcardEditRequest request) {
+    public FlashcardInfoResponse editFlashcard(Integer flashcardId, FlashcardAddRequest request) {
         // Sprawdź, czy wszystkie wymagane pola są ustawione
         if (!isSingleWord(request.getCollectionName())) {
             return FlashcardInfoResponse.builder().response("All fields must be filled").build();
@@ -78,6 +76,16 @@ public class FlashcardService {
         // Sprawdź, czy w polach word i translatedWord występuje tylko jedno słowo
         if (!isSingleWord(request.getWord()) || !isSingleWord(request.getTranslatedWord())) {
             return FlashcardInfoResponse.builder().response("Fields word and translatedWord must contain a single word").build();
+        }
+
+        // Sprawdź, czy istnieje fiszka o podanym słowie
+        if (flashcardRepository.existsByWord(request.getWord())) {
+            return FlashcardInfoResponse.builder().response("Flashcard with the given word already exists").build();
+        }
+
+        // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie
+        if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
+            return FlashcardInfoResponse.builder().response("Flashcard with the given translated word already exists").build();
         }
 
         Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
@@ -111,13 +119,13 @@ public class FlashcardService {
     }
 
 
-    public FlashcardShowResponse showFlashcardById(Integer flashcardId) {
+    public FlashcardReturnResponse showFlashcardById(Integer flashcardId) {
         // Tutaj możesz wykorzystać metody z FlashcardRepository do pobrania fiszki na podstawie ID
         Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
 
         if (flashcardOptional.isPresent()) {
             Flashcard flashcard = flashcardOptional.get();
-            return FlashcardShowResponse.builder()
+            return FlashcardReturnResponse.builder()
                     .id(flashcard.getId())
                     .category(flashcard.getCategory())
                     .author(flashcard.getAuthor())
@@ -127,19 +135,29 @@ public class FlashcardService {
                     .translatedExample(flashcard.getTranslatedExample())
                     .build();
         } else {
-            return FlashcardShowResponse.builder().build();
+            return FlashcardReturnResponse.builder().build();
         }
     }
 
-    public void deleteFlashcardById(Integer flashcardId) {
-        flashcardRepository.deleteById(flashcardId);
-    }
+    public FlashcardInfoResponse deleteFlashcardById(Integer flashcardId) {
+        Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
 
-    public List<FlashcardShowResponse> showFlashcardsByCategory(String category) {
+        if (flashcardOptional.isPresent()) {
+            flashcardRepository.deleteById(flashcardId);
+            return FlashcardInfoResponse.builder()
+                    .response("Flashcard deleted successfully.")
+                    .build();
+        } else {
+            return FlashcardInfoResponse.builder()
+                    .response("Flashcard not found or could not be deleted.")
+                    .build();
+        }
+    }
+    public List<FlashcardReturnResponse> showFlashcardsByCategory(String category) {
         List<Flashcard> flashcards = flashcardRepository.findByCategory(category);
 
         return flashcards.stream()
-                .map(flashcard -> FlashcardShowResponse.builder()
+                .map(flashcard -> FlashcardReturnResponse.builder()
                         .id(flashcard.getId())
                         .category(flashcard.getCategory())
                         .author(flashcard.getAuthor())
@@ -151,7 +169,8 @@ public class FlashcardService {
                 .collect(Collectors.toList());
     }
 
-    public List<FlashcardCollectionResponse> showAllCollection(String author) {
+    public List<FlashcardCollectionResponse> showAllCollection() {
+        String author = tokenInstance.getUserName();
         List<Flashcard> flashcardAdds = flashcardRepository.findByAuthor(author);
 
         // Group flashcards by collection name
@@ -160,8 +179,8 @@ public class FlashcardService {
                 .entrySet().stream()
                 .map(entry -> {
                     String collectionName = entry.getKey();
-                    List<FlashcardShowResponse> flashcards = entry.getValue().stream()
-                            .map(flashcard -> FlashcardShowResponse.builder()
+                    List<FlashcardReturnResponse> flashcards = entry.getValue().stream()
+                            .map(flashcard -> FlashcardReturnResponse.builder()
                                     .id(flashcard.getId())
                                     .category(flashcard.getCategory())
                                     .author(flashcard.getAuthor())
@@ -180,10 +199,11 @@ public class FlashcardService {
                 .collect(Collectors.toList());
     }
 
-    public List<FlashcardShowResponse> showCollectionByName(String nameCollection, String author) {
-        List<FlashcardShowResponse> flashcards = flashcardRepository.findByCollectionNameAndAuthor(nameCollection, author)
+    public List<FlashcardReturnResponse> showCollectionByName(String nameCollection) {
+        String author = tokenInstance.getUserName();
+        List<FlashcardReturnResponse> flashcards = flashcardRepository.findByCollectionNameAndAuthor(nameCollection, author)
                 .stream()
-                .map(flashcard -> FlashcardShowResponse.builder()
+                .map(flashcard -> FlashcardReturnResponse.builder()
                         .id(flashcard.getId())
                         .category(flashcard.getCategory())
                         .author(flashcard.getAuthor())
@@ -198,7 +218,8 @@ public class FlashcardService {
     }
 
 
-    public List<Map<String, Object>> showCollectionInfo(String author) {
+    public List<Map<String, Object>> showCollectionInfo() {
+        String author = tokenInstance.getUserName();
         List<Flashcard> flashcards = flashcardRepository.findByAuthor(author);
 
         return flashcards.stream()
@@ -217,8 +238,17 @@ public class FlashcardService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public void deleteCollectionByName(String nameCollection, String author) {
-        flashcardRepository.deleteByCollectionNameAndAuthor(nameCollection, author);
+    public FlashcardInfoResponse deleteCollectionByName(String nameCollection) {
+        String author = tokenInstance.getUserName();
+        List<Flashcard> flashcardsToDelete = flashcardRepository.findByCollectionNameAndAuthor(nameCollection, author);
+
+        if (!flashcardsToDelete.isEmpty()) {
+            // Delete all flashcards from the collection created by the author
+            flashcardRepository.deleteAll(flashcardsToDelete);
+
+            return FlashcardInfoResponse.builder().response("The collection was successfully deleted").build();
+        } else {
+            return FlashcardInfoResponse.builder().response("Failure to delete the collection").build();
+        }
     }
 }

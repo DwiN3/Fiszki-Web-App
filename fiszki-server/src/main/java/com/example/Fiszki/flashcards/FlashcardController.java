@@ -1,11 +1,9 @@
 package com.example.Fiszki.flashcards;
 
-import com.example.Fiszki.Instance.TokenInstance;
 import com.example.Fiszki.flashcards.request.FlashcardAddRequest;
-import com.example.Fiszki.flashcards.request.FlashcardCollectionResponse;
-import com.example.Fiszki.flashcards.request.FlashcardEditRequest;
+import com.example.Fiszki.flashcards.response.FlashcardCollectionResponse;
 import com.example.Fiszki.flashcards.response.FlashcardInfoResponse;
-import com.example.Fiszki.flashcards.response.FlashcardShowResponse;
+import com.example.Fiszki.flashcards.response.FlashcardReturnResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +15,6 @@ import java.util.Map;
 @RequestMapping("/flashcards/")
 @RequiredArgsConstructor
 public class FlashcardController {
-    TokenInstance tokenInstance = TokenInstance.getInstance();
-
     private final FlashcardService flashcardService;
 
     @PostMapping("/add-flashcard")
@@ -27,61 +23,41 @@ public class FlashcardController {
     }
 
     @PostMapping("/edit/{flashcardsId}")
-    public ResponseEntity<FlashcardInfoResponse> editFlashcard(@PathVariable Integer flashcardsId,
-                                                               @RequestBody FlashcardEditRequest request) {
-        FlashcardInfoResponse response = flashcardService.editFlashcard(flashcardsId, request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<FlashcardInfoResponse> editFlashcard(@PathVariable Integer flashcardsId, @RequestBody FlashcardAddRequest request) {
+        return ResponseEntity.ok(flashcardService.editFlashcard(flashcardsId, request));
     }
 
     @GetMapping("/show/{flashcardsId}")
-    public ResponseEntity<FlashcardShowResponse> showFlashcard(@PathVariable Integer flashcardsId) {
+    public ResponseEntity<FlashcardReturnResponse> showFlashcard(@PathVariable Integer flashcardsId) {
         return ResponseEntity.ok(flashcardService.showFlashcardById(flashcardsId));
     }
 
-    @DeleteMapping("/delete/{flashcardsId}")
-    public ResponseEntity<String> deleteFlashcardById(@PathVariable Integer flashcardsId) {
-        try {
-            flashcardService.deleteFlashcardById(flashcardsId);
-            return ResponseEntity.ok("Flashcard deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error deleting flashcard: " + e.getMessage());
-        }
+    @DeleteMapping("/delete/{flashcardId}")
+    public ResponseEntity<FlashcardInfoResponse> deleteFlashcardById(@PathVariable Integer flashcardId) {
+        return ResponseEntity.ok(flashcardService.deleteFlashcardById(flashcardId));
     }
     @GetMapping("/category/{category}")
-    public ResponseEntity<List<FlashcardShowResponse>> showFlashcardsByCategory(@PathVariable String category) {
-        List<FlashcardShowResponse> flashcards = flashcardService.showFlashcardsByCategory(category);
-        return ResponseEntity.ok(flashcards);
+    public ResponseEntity<List<FlashcardReturnResponse>> showFlashcardsByCategory(@PathVariable String category) {
+        return ResponseEntity.ok(flashcardService.showFlashcardsByCategory(category));
     }
 
     @GetMapping("/collections")
     public ResponseEntity<List<FlashcardCollectionResponse>> showAllCollection() {
-        String author = tokenInstance.getUserName();
-        List<FlashcardCollectionResponse> collections = flashcardService.showAllCollection(author);
-        return ResponseEntity.ok(collections);
+        return ResponseEntity.ok(flashcardService.showAllCollection());
     }
 
     @GetMapping("/collections-info")
     public ResponseEntity<List<Map<String, Object>>> showCollectionInfo() {
-        String author = tokenInstance.getUserName();
-        List<Map<String, Object>> collectionInfo = flashcardService.showCollectionInfo(author);
-        return ResponseEntity.ok(collectionInfo);
+        return ResponseEntity.ok(flashcardService.showCollectionInfo());
     }
 
     @GetMapping("/collection/{nameCollection}")
-    public ResponseEntity<List<FlashcardShowResponse>> showCollectionByName(@PathVariable String nameCollection) {
-        String author = tokenInstance.getUserName();
-        List<FlashcardShowResponse> flashcards = flashcardService.showCollectionByName(nameCollection, author);
-        return ResponseEntity.ok(flashcards);
+    public ResponseEntity<List<FlashcardReturnResponse>> showCollectionByName(@PathVariable String nameCollection) {
+        return ResponseEntity.ok(flashcardService.showCollectionByName(nameCollection));
     }
 
     @DeleteMapping("/collection/{nameCollection}")
-    public ResponseEntity<String> deleteCollectionByName(@PathVariable String nameCollection) {
-        String author = tokenInstance.getUserName();
-        try {
-            flashcardService.deleteCollectionByName(nameCollection, author);
-            return ResponseEntity.ok("Collection deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error deleting collection: " + e.getMessage());
-        }
+    public ResponseEntity<FlashcardInfoResponse> deleteCollectionByName(@PathVariable String nameCollection) {
+        return ResponseEntity.ok(flashcardService.deleteCollectionByName(nameCollection));
     }
 }

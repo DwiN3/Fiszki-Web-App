@@ -1,4 +1,4 @@
-package com.example.Fiszki.flashcards.request;
+package com.example.Fiszki.security.auth.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FlashcardShowRequest {
-    private Integer id;
+public class UserLevelResponse {
+    private int level;
+    private int points;
+    private int nextLVLPoints;
 }

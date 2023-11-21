@@ -12,7 +12,5 @@ public class AppController {
     TokenInstance tokenInstance = TokenInstance.getInstance();
 
     @GetMapping
-    public ResponseEntity<String> sayHello() {
-        return ResponseEntity.ok("Twój token to: "+tokenInstance.getToken());
-    }
+    public ResponseEntity<String> sayHello() {return ResponseEntity.ok("Hello");}
 }

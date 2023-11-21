@@ -85,10 +85,12 @@ public class AuthenticationService {
         return UserInfoResponse.builder().response(jwtToken).build();
     }
 
-    public UserLVLResponse userLevel(AuthenticationRequest request) {
-        var user = repository.findByEmail(request.getEmail()).orElseThrow();
+    // W AuthenticationService
+    public UserLevelResponse userLevel() {
+        var userEmail = TokenInstance.getInstance().getToken();
+        var user = repository.findByEmail(userEmail).orElseThrow();
         int nextLVLPoints = calculateNextLVLPoints(user.getPoints(), user.getLevel());
-        return UserLVLResponse.builder()
+        return UserLevelResponse.builder()
                 .level(user.getLevel())
                 .points(user.getPoints())
                 .nextLVLPoints(nextLVLPoints)
@@ -96,7 +98,7 @@ public class AuthenticationService {
     }
 
 
-    public UserLVLResponse sendPoints(PointsRequest pointsRequest) {
+    public UserLevelResponse sendPoints(PointsRequest pointsRequest) {
         var userEmail = tokenInstance.getToken();
         var user = repository.findByEmail(userEmail).orElseThrow();
 
@@ -107,7 +109,7 @@ public class AuthenticationService {
 
         int nextLVLPoints = calculateNextLVLPoints(user.getPoints(), user.getLevel());
 
-        return UserLVLResponse.builder()
+        return UserLevelResponse.builder()
                 .level(user.getLevel())
                 .points(user.getPoints())
                 .nextLVLPoints(nextLVLPoints)
@@ -133,7 +135,8 @@ public class AuthenticationService {
         }
     }
 
-    public UserDateResponse getInfo(String userEmail) {
+    public UserDateResponse getInfo() {
+        var userEmail = TokenInstance.getInstance().getToken();
         var user = repository.findByEmail(userEmail).orElseThrow();
         return UserDateResponse.builder()
                 .id(user.getId())
@@ -218,7 +221,8 @@ public class AuthenticationService {
 
 
 
-    public UserInfoResponse deleteUser(String userEmail, String userPassword) {
+    public UserInfoResponse deleteUser(String userPassword) {
+        var userEmail = tokenInstance.getToken();
         var user = repository.findByEmail(userEmail).orElseThrow();
 
         // Weryfikacja hasła użytkownika przed usunięciem konta

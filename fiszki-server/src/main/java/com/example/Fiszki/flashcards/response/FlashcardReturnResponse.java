@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FlashcardShowResponse {
+public class FlashcardReturnResponse {
     private Integer id;
     private String author;
     private String category;
