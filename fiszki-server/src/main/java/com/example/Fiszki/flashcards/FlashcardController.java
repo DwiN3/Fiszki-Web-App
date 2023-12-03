@@ -1,6 +1,7 @@
 package com.example.Fiszki.flashcards;
 
 import com.example.Fiszki.flashcards.request.FlashcardAddRequest;
+import com.example.Fiszki.flashcards.request.FlashcardCategoryLimitRequest;
 import com.example.Fiszki.flashcards.response.FlashcardCollectionResponse;
 import com.example.Fiszki.flashcards.response.FlashcardInfoResponse;
 import com.example.Fiszki.flashcards.response.FlashcardReturnResponse;
@@ -39,6 +40,11 @@ public class FlashcardController {
     @GetMapping("/category/{category}")
     public ResponseEntity<List<FlashcardReturnResponse>> showFlashcardsByCategory(@PathVariable String category) {
         return ResponseEntity.ok(flashcardService.showFlashcardsByCategory(category));
+    }
+
+    @GetMapping("/category-limit/{category}")
+    public ResponseEntity<List<FlashcardReturnResponse>> showFlashcardsByCategoryWithLimit(@RequestBody FlashcardCategoryLimitRequest request, @PathVariable String category) {
+        return ResponseEntity.ok(flashcardService.showFlashcardsByCategoryWithLimit(request,category));
     }
 
     @GetMapping("/collections")

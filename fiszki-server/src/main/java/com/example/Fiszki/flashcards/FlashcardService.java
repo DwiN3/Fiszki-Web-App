@@ -4,6 +4,7 @@ import com.example.Fiszki.Instance.TokenInstance;
 import com.example.Fiszki.flashcards.flashcard.Flashcard;
 import com.example.Fiszki.flashcards.flashcard.FlashcardRepository;
 import com.example.Fiszki.flashcards.request.FlashcardAddRequest;
+import com.example.Fiszki.flashcards.request.FlashcardCategoryLimitRequest;
 import com.example.Fiszki.flashcards.response.FlashcardInfoResponse;
 import com.example.Fiszki.flashcards.response.FlashcardCollectionResponse;
 import com.example.Fiszki.flashcards.response.FlashcardReturnResponse;
@@ -155,6 +156,27 @@ public class FlashcardService {
     }
     public List<FlashcardReturnResponse> showFlashcardsByCategory(String category) {
         List<Flashcard> flashcards = flashcardRepository.findByCategory(category);
+
+        return flashcards.stream()
+                .map(flashcard -> FlashcardReturnResponse.builder()
+                        .id(flashcard.getId())
+                        .category(flashcard.getCategory())
+                        .author(flashcard.getAuthor())
+                        .word(flashcard.getWord())
+                        .translatedWord(flashcard.getTranslatedWord())
+                        .example(flashcard.getExample())
+                        .translatedExample(flashcard.getTranslatedExample())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public List<FlashcardReturnResponse> showFlashcardsByCategoryWithLimit(FlashcardCategoryLimitRequest request, String category) {
+        List<Flashcard> flashcards = flashcardRepository.findByCategory(category);
+
+        int limit = request.getLimit();
+        if (limit > 0 && limit < flashcards.size()) {
+            flashcards = flashcards.subList(0, limit);
+        }
 
         return flashcards.stream()
                 .map(flashcard -> FlashcardReturnResponse.builder()
