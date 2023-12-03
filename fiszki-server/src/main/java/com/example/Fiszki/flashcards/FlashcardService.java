@@ -11,10 +11,7 @@ import com.example.Fiszki.flashcards.response.FlashcardReturnResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -172,6 +169,7 @@ public class FlashcardService {
 
     public List<FlashcardReturnResponse> showFlashcardsByCategoryWithLimit(FlashcardCategoryLimitRequest request, String category) {
         List<Flashcard> flashcards = flashcardRepository.findByCategory(category);
+        Collections.shuffle(flashcards);
 
         int limit = request.getLimit();
         if (limit > 0 && limit < flashcards.size()) {
