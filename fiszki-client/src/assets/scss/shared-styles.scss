@@ -3,3 +3,19 @@
     background: #00a6fb;
     background: linear-gradient(0deg, #00a6fb 0%, #0066a1 70%);
 }
+
+@mixin button
+{
+    padding: 10px 25px;
+    border: 0;
+    border-radius: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+@mixin unactive-button
+{
+    cursor: default;
+    color: gainsboro;
+}

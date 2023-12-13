@@ -30,7 +30,7 @@
                         [(ngModel)]="password"
                     >
                 </div>
-                <button type="submit">Zaloguj się</button>
+                <button [ngClass]="form.valid === true ? null : 'unactive'" type="submit">Zaloguj się</button>
             </form>
         </div>
         <a href="#">Załóż konto</a>

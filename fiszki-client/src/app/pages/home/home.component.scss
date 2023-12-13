@@ -25,7 +25,7 @@
         font-size: 15px;
         color: white;
         text-decoration: none;
-        font-family: 'Montserrat', sans-serif;
+        font-family: base.$main-font;
         margin-top: 10px;
     }
 
@@ -40,7 +40,7 @@
 
     p
     {
-        font-family: 'Montserrat', sans-serif;
+        font-family: base.$main-font;
         color: #00446b;
         font-size: 20px;
     }
@@ -84,7 +84,7 @@
     width: 300px;
     display: flex;
     justify-content: center;
-    font-family: 'Montserrat', sans-serif;
+    font-family: base.$main-font;
 
     form
     {
@@ -121,12 +121,12 @@
     button
     {
         margin-top: 10px;
-        padding: 10px 25px;
-        border: 0;
-        border-radius: 10px;
-        border-radius: 10px;
-        cursor: pointer;
-        text-transform: uppercase;
+        @include shared-styles.button;
+    }
+
+    .unactive
+    {
+        @include shared-styles.unactive-button;
     }
 
     label
