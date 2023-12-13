@@ -1,69 +1,42 @@
-# Node.js
-node_modules/
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# Angular
-dist/
-*.log
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
 
-# IDE (np. Visual Studio Code)
-.vscode/
-
-# Cache i pliki tymczasowe
-*.log
-*.tmp
-*.temp
-*.swp
-Thumbs.db
-Desktop.ini
-
-# Katalog testów
-e2e/coverage/
-
-# Katalogi do zignorowania
-.tmp/
-.temp/
-tmp/
-temp/
-logs/
-
-# Pliki konfiguracyjne
-*.config.js
-*.config.ts
-
-# Pliki środowiskowe
-.env
-.env.prod
-.env.dev
-
-# Pliki wygenerowane podczas budowy
-*.js
-*.js.map
-*.d.ts
-
-# Pliki do zignorowania w przypadku TypeScript
-*.tsbuildinfo
-
-# Pliki do zignorowania w przypadku Webpack
-webpack-stats.json
-
-# Pliki projektu
-*.iml
-*.log
-*.swp
-*.DS_Store
-
-# Plik yarn.lock
-yarn.lock
-
-# Pliky związanego projektu NestJS
-/dist/
-/tmp/
-/*.js
-/node_modules/
-/*.pem
-/*.pid
-/*.log
-*.log
-.env
-.DS_Store
+# Node
+/node_modules
 npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db

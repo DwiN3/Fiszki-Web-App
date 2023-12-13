@@ -1,0 +1,138 @@
+@use '../../../assets/scss/base';
+@use '../../../assets/scss/shared-styles.scss';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Pacifico&display=swap');
+
+.wrapper
+{
+    width: 100%;
+    height: 100vh;
+    @include shared-styles.background-gradient;
+}
+
+.box
+{
+    width: 90%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    a
+    {
+        font-size: 15px;
+        color: white;
+        text-decoration: none;
+        font-family: 'Montserrat', sans-serif;
+        margin-top: 10px;
+    }
+
+    h3
+    {
+        font-family: 'Pacifico', cursive;
+        color: #00446b;
+        font-size: 50px;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+    }
+
+    p
+    {
+        font-family: 'Montserrat', sans-serif;
+        color: #00446b;
+        font-size: 20px;
+    }
+}
+
+.flags
+{
+
+    position: relative;
+    margin-top: 20px;
+
+    img
+    {
+        width: 70px;
+        margin: 10px;
+    }
+
+    .flag-1
+    {
+        position: absolute;
+        top: -10px;
+        left: -100px;
+    }
+
+    .flag-3
+    {
+        position: absolute;
+        top: -10px;
+        right: -100px;
+    }
+
+    .flag-2
+    {
+        width: 80px;
+    }
+
+}
+
+.form-box
+{
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+
+    form
+    {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    div
+    {
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        padding: 5px;
+    }
+
+    input
+    {
+        border: 2px solid #005485;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    input:focus
+    {
+        outline: none !important;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #b7e1fa;
+    }
+
+    button
+    {
+        margin-top: 10px;
+        padding: 10px 25px;
+        border: 0;
+        border-radius: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+
+    label
+    {
+        margin-left: 10px;
+        color: #00446b;
+    }
+
+}
