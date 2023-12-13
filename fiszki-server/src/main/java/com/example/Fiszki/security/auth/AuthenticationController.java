@@ -52,4 +52,9 @@ public class AuthenticationController {
     public ResponseEntity<UserInfoResponse> deleteUser(@RequestBody UserDeleteRequest request) {
         return ResponseEntity.ok(authenticationService.deleteUser(request.getPassword()));
     }
+
+    @PostMapping("/access")
+    public ResponseEntity<TokenValidityResponse> access(@RequestBody TokenValidityRequest tokenValidityRequest) {
+        return ResponseEntity.ok(authenticationService.checkAccess(tokenValidityRequest));
+    }
 }

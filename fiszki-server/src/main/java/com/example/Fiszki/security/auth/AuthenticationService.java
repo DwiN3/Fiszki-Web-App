@@ -234,4 +234,13 @@ public class AuthenticationService {
         return UserInfoResponse.builder().response("User deleted successfully.").build();
     }
 
+    public TokenValidityResponse checkAccess(TokenValidityRequest tokenValidityRequest) {
+        String token = tokenValidityRequest.getToken();
+
+        // Verify the token using JwtService
+        boolean isValidToken = jwtService.validateToken(token);
+
+        // Use a boolean field in TokenValidityResponse to represent access
+        return TokenValidityResponse.builder().access(isValidToken).build();
+    }
 }
