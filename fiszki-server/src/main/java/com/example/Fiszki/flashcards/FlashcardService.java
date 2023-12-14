@@ -24,45 +24,47 @@ public class FlashcardService {
         this.flashcardRepository = flashcardRepository;
     }
 
-    public FlashcardInfoResponse addFlashcard(FlashcardAddRequest request) {
+    public FlashcardInfoResponse addFlashcard(FlashcardAddRequest request) throws AppException {
+        try {
+            // Sprawdź, czy wszystkie wymagane pola są ustawione
+            if (isNullOrEmpty(request.getCollectionName()) ||
+                    isNullOrEmpty(request.getCategory()) || isNullOrEmpty(request.getWord()) ||
+                    isNullOrEmpty(request.getTranslatedWord()) || isNullOrEmpty(request.getExample()) ||
+                    isNullOrEmpty(request.getTranslatedExample())) {
+                throw new AppException("All fields must be filled");
+            }
 
-        // Sprawdź, czy wszystkie wymagane pola są ustawione
-        if (isNullOrEmpty(request.getCollectionName()) ||
-                isNullOrEmpty(request.getCategory()) || isNullOrEmpty(request.getWord()) ||
-                isNullOrEmpty(request.getTranslatedWord()) || isNullOrEmpty(request.getExample()) ||
-                isNullOrEmpty(request.getTranslatedExample())) {
-            return FlashcardInfoResponse.builder().response("All fields must be filled").build();
+            // Sprawdź, czy istnieje fiszka o podanym słowie
+            if (flashcardRepository.existsByWord(request.getWord())) {
+                throw new AppException("Flashcard with the given word already exists");
+            }
+
+            // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie
+            if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
+                throw new AppException("Flashcard with the given translated word already exists");
+            }
+
+            // Sprawdź, czy w polach collectionName, language, category, word i translatedWord występuje tylko jedno słowo
+            if (!isSingleWord(request.getCollectionName()) || !isSingleWord(request.getCategory())) {
+                throw new AppException("Fields not a single word");
+            }
+
+            Flashcard flashcard = Flashcard.builder()
+                    .collectionName(request.getCollectionName())
+                    .category(request.getCategory())
+                    .word(request.getWord())
+                    .translatedWord(request.getTranslatedWord())
+                    .example(request.getExample())
+                    .translatedExample(request.getTranslatedExample())
+                    .author(tokenInstance.getUserName())
+                    .build();
+
+            flashcardRepository.save(flashcard);
+
+            return FlashcardInfoResponse.builder().response("Flashcard added successfully").build();
+        } catch (Exception e) {
+            throw new AppException(e.getMessage());
         }
-
-        // Sprawdź, czy istnieje fiszka o podanym słowie
-        if (flashcardRepository.existsByWord(request.getWord())) {
-            return FlashcardInfoResponse.builder().response("Flashcard with the given word already exists").build();
-        }
-
-        // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie
-        if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
-            return FlashcardInfoResponse.builder().response("Flashcard with the given translated word already exists").build();
-        }
-
-        // Sprawdź, czy w polach collectionName, language, category, word i translatedWord występuje tylko jedno słowo
-        if (!isSingleWord(request.getCollectionName()) ||
-                !isSingleWord(request.getCategory())) {
-            return FlashcardInfoResponse.builder().response("Fields not a single word").build();
-        }
-
-        Flashcard flashcard = Flashcard.builder()
-                .collectionName(request.getCollectionName())
-                .category(request.getCategory())
-                .word(request.getWord())
-                .translatedWord(request.getTranslatedWord())
-                .example(request.getExample())
-                .translatedExample(request.getTranslatedExample())
-                .author(tokenInstance.getUserName())
-                .build();
-
-        flashcardRepository.save(flashcard);
-
-        return FlashcardInfoResponse.builder().response("Flashcard added successfully").build();
     }
 
     public FlashcardInfoResponse editFlashcard(Integer flashcardId, FlashcardAddRequest request) {
