@@ -33,7 +33,14 @@ public class FlashcardController {
 
     @PostMapping("/edit/{flashcardsId}")
     public ResponseEntity<FlashcardInfoResponse> editFlashcard(@PathVariable Integer flashcardsId, @RequestBody FlashcardAddRequest request) {
-        return ResponseEntity.ok(flashcardService.editFlashcard(flashcardsId, request));
+        try {
+            FlashcardInfoResponse response = flashcardService.editFlashcard(flashcardsId, request);
+            return ResponseEntity.ok(response);
+        } catch (AppException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FlashcardInfoResponse.builder().response(e.getMessage()).build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(FlashcardInfoResponse.builder().response("Internal server error: " + e.getMessage()).build());
+        }
     }
 
     @GetMapping("/show/{flashcardsId}")

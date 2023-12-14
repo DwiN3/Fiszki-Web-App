@@ -67,44 +67,42 @@ public class FlashcardService {
         }
     }
 
-    public FlashcardInfoResponse editFlashcard(Integer flashcardId, FlashcardAddRequest request) {
-        // Sprawdź, czy wszystkie wymagane pola są ustawione
-        if (!isSingleWord(request.getCollectionName())) {
-            return FlashcardInfoResponse.builder().response("All fields must be filled").build();
-        }
+    public FlashcardInfoResponse editFlashcard(Integer flashcardId, FlashcardAddRequest request) throws AppException {
+        try {
+            // Sprawdź, czy wszystkie wymagane pola są ustawione
+            if (!isSingleWord(request.getCollectionName())) {
+                throw new AppException("All fields must be filled");
+            }
+            // Sprawdź, czy w polach word i translatedWord występuje tylko jedno słowo
+            if (!isSingleWord(request.getWord()) || !isSingleWord(request.getTranslatedWord())) {
+                throw new AppException("Fields word and translatedWord must contain a single word");
+            }
+            // Sprawdź, czy istnieje fiszka o podanym słowie
+            if (flashcardRepository.existsByWord(request.getWord())) {
+                throw new AppException("Flashcard with the given word already exists");
+            }
+            // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie
+            if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
+                throw new AppException("Flashcard with the given translated word already exists");
+            }
+            Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
+            if (flashcardOptional.isPresent()) {
+                Flashcard flashcard = flashcardOptional.get();
 
-        // Sprawdź, czy w polach word i translatedWord występuje tylko jedno słowo
-        if (!isSingleWord(request.getWord()) || !isSingleWord(request.getTranslatedWord())) {
-            return FlashcardInfoResponse.builder().response("Fields word and translatedWord must contain a single word").build();
-        }
+                flashcard.setCollectionName(request.getCollectionName());
+                flashcard.setCategory(request.getCategory());
+                flashcard.setWord(request.getWord());
+                flashcard.setTranslatedWord(request.getTranslatedWord());
+                flashcard.setExample(request.getExample());
+                flashcard.setTranslatedExample(request.getTranslatedExample());
+                flashcardRepository.save(flashcard);
 
-        // Sprawdź, czy istnieje fiszka o podanym słowie
-        if (flashcardRepository.existsByWord(request.getWord())) {
-            return FlashcardInfoResponse.builder().response("Flashcard with the given word already exists").build();
-        }
-
-        // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie
-        if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
-            return FlashcardInfoResponse.builder().response("Flashcard with the given translated word already exists").build();
-        }
-
-        Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
-
-        if (flashcardOptional.isPresent()) {
-            Flashcard flashcard = flashcardOptional.get();
-
-            flashcard.setCollectionName(request.getCollectionName());
-            flashcard.setCategory(request.getCategory());
-            flashcard.setWord(request.getWord());
-            flashcard.setTranslatedWord(request.getTranslatedWord());
-            flashcard.setExample(request.getExample());
-            flashcard.setTranslatedExample(request.getTranslatedExample());
-
-            flashcardRepository.save(flashcard);
-
-            return FlashcardInfoResponse.builder().response("Flashcard updated successfully").build();
-        } else {
-            return FlashcardInfoResponse.builder().response("Flashcard not found").build();
+                return FlashcardInfoResponse.builder().response("Flashcard updated successfully").build();
+            } else {
+                throw new AppException("Flashcard not found");
+            }
+        } catch (Exception e) {
+            throw new AppException(e.getMessage());
         }
     }
 
