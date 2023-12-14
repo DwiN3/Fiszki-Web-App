@@ -4,8 +4,11 @@ import com.example.Fiszki.Instance.TokenInstance;
 import com.example.Fiszki.security.auth.request.*;
 import com.example.Fiszki.security.auth.response.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.security.core.AuthenticationException;
 
 @RestController
 @RequestMapping("/flashcards/auth/")
@@ -15,12 +18,33 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<UserInfoResponse> register (@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authenticationService.register(request));
+        UserInfoResponse response = authenticationService.register(request);
+        if (response.getResponse().equals("Invalid registration request.")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } else if (response.getResponse().equals("User with given e-mail already exists.")) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        }
+        return ResponseEntity.ok(response);
     }
 
+
     @PostMapping("/login")
-    public ResponseEntity<UserInfoResponse> authenticate (@RequestBody AuthenticationRequest authenticate) {
-        return ResponseEntity.ok(authenticationService.authenticate(authenticate));
+    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authenticate) {
+        try {
+            UserInfoResponse response = authenticationService.authenticate(authenticate);
+            if (response == null) {
+                // Zwrócenie informacji o braku użytkownika z podanym e-mail w bazie
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with given e-mail does not exist.");
+            }
+            // Pomyślne logowanie
+            return ResponseEntity.ok(response);
+        } catch (AuthenticationException e) {
+            // Obsługa błędu autentykacji
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication error: " + e.getMessage());
+        } catch (OtherException e) {
+            // Obsługa innych błędów
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Other error: " + e.getMessage());
+        }
     }
 
     @GetMapping("/level")
