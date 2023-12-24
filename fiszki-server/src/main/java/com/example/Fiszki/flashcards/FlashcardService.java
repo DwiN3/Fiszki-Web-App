@@ -8,9 +8,11 @@ import com.example.Fiszki.flashcards.request.FlashcardCategoryLimitRequest;
 import com.example.Fiszki.flashcards.response.FlashcardInfoResponse;
 import com.example.Fiszki.flashcards.response.FlashcardCollectionResponse;
 import com.example.Fiszki.flashcards.response.FlashcardReturnResponse;
+import com.example.Fiszki.security.auth.response.OtherException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import javax.print.attribute.standard.MediaSize;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,85 +26,86 @@ public class FlashcardService {
         this.flashcardRepository = flashcardRepository;
     }
 
-    public FlashcardInfoResponse addFlashcard(FlashcardAddRequest request) {
+    public FlashcardInfoResponse addFlashcard(FlashcardAddRequest request) throws OtherException {
+        try {
+            // Sprawdź, czy wszystkie wymagane pola są ustawione
+            if (isNullOrEmpty(request.getCollectionName()) ||
+                    isNullOrEmpty(request.getCategory()) || isNullOrEmpty(request.getWord()) ||
+                    isNullOrEmpty(request.getTranslatedWord()) || isNullOrEmpty(request.getExample()) ||
+                    isNullOrEmpty(request.getTranslatedExample())) {
+                throw new OtherException("All fields must be filled");
+            }
 
-        // Sprawdź, czy wszystkie wymagane pola są ustawione
-        if (isNullOrEmpty(request.getCollectionName()) ||
-                isNullOrEmpty(request.getCategory()) || isNullOrEmpty(request.getWord()) ||
-                isNullOrEmpty(request.getTranslatedWord()) || isNullOrEmpty(request.getExample()) ||
-                isNullOrEmpty(request.getTranslatedExample())) {
-            return FlashcardInfoResponse.builder().response("All fields must be filled").build();
-        }
+            // Sprawdź, czy istnieje fiszka o podanym słowie
+            if (flashcardRepository.existsByWord(request.getWord())) {
+                throw new OtherException("Flashcard with the given word already exists");
+            }
 
-        // Sprawdź, czy istnieje fiszka o podanym słowie
-        if (flashcardRepository.existsByWord(request.getWord())) {
-            return FlashcardInfoResponse.builder().response("Flashcard with the given word already exists").build();
-        }
+            // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie
+            if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
+                throw new OtherException("Flashcard with the given translated word already exists");
+            }
 
-        // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie
-        if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
-            return FlashcardInfoResponse.builder().response("Flashcard with the given translated word already exists").build();
-        }
+            // Sprawdź, czy w polach collectionName, language, category, word i translatedWord występuje tylko jedno słowo
+            if (!isSingleWord(request.getCollectionName()) || !isSingleWord(request.getCategory())) {
+                throw new OtherException("Fields not a single word");
+            }
 
-        // Sprawdź, czy w polach collectionName, language, category, word i translatedWord występuje tylko jedno słowo
-        if (!isSingleWord(request.getCollectionName()) ||
-                !isSingleWord(request.getCategory())) {
-            return FlashcardInfoResponse.builder().response("Fields not a single word").build();
-        }
-
-        Flashcard flashcard = Flashcard.builder()
-                .collectionName(request.getCollectionName())
-                .category(request.getCategory())
-                .word(request.getWord())
-                .translatedWord(request.getTranslatedWord())
-                .example(request.getExample())
-                .translatedExample(request.getTranslatedExample())
-                .author(tokenInstance.getUserName())
-                .build();
-
-        flashcardRepository.save(flashcard);
-
-        return FlashcardInfoResponse.builder().response("Flashcard added successfully").build();
-    }
-
-    public FlashcardInfoResponse editFlashcard(Integer flashcardId, FlashcardAddRequest request) {
-        // Sprawdź, czy wszystkie wymagane pola są ustawione
-        if (!isSingleWord(request.getCollectionName())) {
-            return FlashcardInfoResponse.builder().response("All fields must be filled").build();
-        }
-
-        // Sprawdź, czy w polach word i translatedWord występuje tylko jedno słowo
-        if (!isSingleWord(request.getWord()) || !isSingleWord(request.getTranslatedWord())) {
-            return FlashcardInfoResponse.builder().response("Fields word and translatedWord must contain a single word").build();
-        }
-
-        // Sprawdź, czy istnieje fiszka o podanym słowie
-        if (flashcardRepository.existsByWord(request.getWord())) {
-            return FlashcardInfoResponse.builder().response("Flashcard with the given word already exists").build();
-        }
-
-        // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie
-        if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
-            return FlashcardInfoResponse.builder().response("Flashcard with the given translated word already exists").build();
-        }
-
-        Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
-
-        if (flashcardOptional.isPresent()) {
-            Flashcard flashcard = flashcardOptional.get();
-
-            flashcard.setCollectionName(request.getCollectionName());
-            flashcard.setCategory(request.getCategory());
-            flashcard.setWord(request.getWord());
-            flashcard.setTranslatedWord(request.getTranslatedWord());
-            flashcard.setExample(request.getExample());
-            flashcard.setTranslatedExample(request.getTranslatedExample());
+            Flashcard flashcard = Flashcard.builder()
+                    .collectionName(request.getCollectionName())
+                    .category(request.getCategory())
+                    .word(request.getWord())
+                    .translatedWord(request.getTranslatedWord())
+                    .example(request.getExample())
+                    .translatedExample(request.getTranslatedExample())
+                    .author(tokenInstance.getUserName())
+                    .build();
 
             flashcardRepository.save(flashcard);
 
-            return FlashcardInfoResponse.builder().response("Flashcard updated successfully").build();
-        } else {
-            return FlashcardInfoResponse.builder().response("Flashcard not found").build();
+            return FlashcardInfoResponse.builder().response("Flashcard added successfully").build();
+        } catch (Exception e) {
+            throw new OtherException(e.getMessage());
+        }
+    }
+
+    public FlashcardInfoResponse editFlashcard(Integer flashcardId, FlashcardAddRequest request) throws OtherException {
+        try {
+            // Sprawdź, czy wszystkie wymagane pola są ustawione
+            if (!isSingleWord(request.getCollectionName())) {
+                throw new OtherException("All fields must be filled");
+            }
+            // Sprawdź, czy w polach word i translatedWord występuje tylko jedno słowo
+            if (!isSingleWord(request.getWord()) || !isSingleWord(request.getTranslatedWord())) {
+                throw new OtherException("Fields word and translatedWord must contain a single word");
+            }
+
+            // Sprawdź, czy istnieje fiszka o podanym słowie
+            if (flashcardRepository.existsByWord(request.getWord())) {
+                throw new OtherException("Flashcard with the given word already exists");
+            }
+            // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie
+            if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
+                throw new OtherException("Flashcard with the given translated word already exists");
+            }
+            Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
+            if (flashcardOptional.isPresent()) {
+                Flashcard flashcard = flashcardOptional.get();
+
+                flashcard.setCollectionName(request.getCollectionName());
+                flashcard.setCategory(request.getCategory());
+                flashcard.setWord(request.getWord());
+                flashcard.setTranslatedWord(request.getTranslatedWord());
+                flashcard.setExample(request.getExample());
+                flashcard.setTranslatedExample(request.getTranslatedExample());
+                flashcardRepository.save(flashcard);
+
+                return FlashcardInfoResponse.builder().response("Flashcard updated successfully").build();
+            } else {
+                throw new OtherException("Flashcard not found");
+            }
+        } catch (Exception e) {
+            throw new OtherException(e.getMessage());
         }
     }
 
@@ -137,20 +140,21 @@ public class FlashcardService {
         }
     }
 
-    public FlashcardInfoResponse deleteFlashcardById(Integer flashcardId) {
-        Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
+    public FlashcardInfoResponse deleteFlashcardById(Integer flashcardId) throws OtherException {
+        try {
+            Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
 
-        if (flashcardOptional.isPresent()) {
-            flashcardRepository.deleteById(flashcardId);
-            return FlashcardInfoResponse.builder()
-                    .response("Flashcard deleted successfully.")
-                    .build();
-        } else {
-            return FlashcardInfoResponse.builder()
-                    .response("Flashcard not found or could not be deleted.")
-                    .build();
+            if (flashcardOptional.isPresent()) {
+                flashcardRepository.deleteById(flashcardId);
+                return FlashcardInfoResponse.builder().response("Flashcard deleted successfully.").build();
+            } else {
+                throw new OtherException("Flashcard not found or could not be deleted.");
+            }
+        } catch (Exception e) {
+            throw new OtherException(e.getMessage());
         }
     }
+
     public List<FlashcardReturnResponse> showFlashcardsByCategory(String category) {
         List<Flashcard> flashcards = flashcardRepository.findByCategory(category);
 
@@ -258,17 +262,21 @@ public class FlashcardService {
                 .collect(Collectors.toList());
     }
 
-    public FlashcardInfoResponse deleteCollectionByName(String nameCollection) {
-        String author = tokenInstance.getUserName();
-        List<Flashcard> flashcardsToDelete = flashcardRepository.findByCollectionNameAndAuthor(nameCollection, author);
+    public FlashcardInfoResponse deleteCollectionByName(String nameCollection) throws OtherException {
+        try {
+            String author = tokenInstance.getUserName();
+            List<Flashcard> flashcardsToDelete = flashcardRepository.findByCollectionNameAndAuthor(nameCollection, author);
 
-        if (!flashcardsToDelete.isEmpty()) {
-            // Delete all flashcards from the collection created by the author
-            flashcardRepository.deleteAll(flashcardsToDelete);
+            if (!flashcardsToDelete.isEmpty()) {
+                // Delete all flashcards from the collection created by the author
+                flashcardRepository.deleteAll(flashcardsToDelete);
 
-            return FlashcardInfoResponse.builder().response("The collection was successfully deleted").build();
-        } else {
-            return FlashcardInfoResponse.builder().response("Failure to delete the collection").build();
+                return FlashcardInfoResponse.builder().response("Collection deleted successfully.").build();
+            } else {
+                throw new OtherException("Collection not found or could not be deleted.");
+            }
+        } catch (Exception e) {
+            throw new OtherException(e.getMessage());
         }
     }
 }

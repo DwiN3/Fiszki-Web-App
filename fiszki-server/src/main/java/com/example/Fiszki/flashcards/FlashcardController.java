@@ -5,7 +5,9 @@ import com.example.Fiszki.flashcards.request.FlashcardCategoryLimitRequest;
 import com.example.Fiszki.flashcards.response.FlashcardCollectionResponse;
 import com.example.Fiszki.flashcards.response.FlashcardInfoResponse;
 import com.example.Fiszki.flashcards.response.FlashcardReturnResponse;
+import com.example.Fiszki.security.auth.response.OtherException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,13 +21,27 @@ public class FlashcardController {
     private final FlashcardService flashcardService;
 
     @PostMapping("/add-flashcard")
-    public ResponseEntity<FlashcardInfoResponse> addFlashcard (@RequestBody FlashcardAddRequest request) {
-        return ResponseEntity.ok(flashcardService.addFlashcard(request));
+    public ResponseEntity<FlashcardInfoResponse> addFlashcard(@RequestBody FlashcardAddRequest request) {
+        try {
+            FlashcardInfoResponse response = flashcardService.addFlashcard(request);
+            return ResponseEntity.ok(response);
+        } catch (OtherException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FlashcardInfoResponse.builder().response(e.getMessage()).build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(FlashcardInfoResponse.builder().response(e.getMessage()).build());
+        }
     }
 
     @PostMapping("/edit/{flashcardsId}")
     public ResponseEntity<FlashcardInfoResponse> editFlashcard(@PathVariable Integer flashcardsId, @RequestBody FlashcardAddRequest request) {
-        return ResponseEntity.ok(flashcardService.editFlashcard(flashcardsId, request));
+        try {
+            FlashcardInfoResponse response = flashcardService.editFlashcard(flashcardsId, request);
+            return ResponseEntity.ok(response);
+        } catch (OtherException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FlashcardInfoResponse.builder().response(e.getMessage()).build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(FlashcardInfoResponse.builder().response( e.getMessage()).build());
+        }
     }
 
     @GetMapping("/show/{flashcardsId}")
@@ -35,7 +51,14 @@ public class FlashcardController {
 
     @DeleteMapping("/delete/{flashcardId}")
     public ResponseEntity<FlashcardInfoResponse> deleteFlashcardById(@PathVariable Integer flashcardId) {
-        return ResponseEntity.ok(flashcardService.deleteFlashcardById(flashcardId));
+        try {
+            FlashcardInfoResponse response = flashcardService.deleteFlashcardById(flashcardId);
+            return ResponseEntity.ok(response);
+        } catch (OtherException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FlashcardInfoResponse.builder().response(e.getMessage()).build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(FlashcardInfoResponse.builder().response(e.getMessage()).build());
+        }
     }
     @GetMapping("/category/{category}")
     public ResponseEntity<List<FlashcardReturnResponse>> showFlashcardsByCategory(@PathVariable String category) {
@@ -64,6 +87,13 @@ public class FlashcardController {
 
     @DeleteMapping("/collection/{nameCollection}")
     public ResponseEntity<FlashcardInfoResponse> deleteCollectionByName(@PathVariable String nameCollection) {
-        return ResponseEntity.ok(flashcardService.deleteCollectionByName(nameCollection));
+        try {
+            FlashcardInfoResponse response = flashcardService.deleteCollectionByName(nameCollection);
+            return ResponseEntity.ok(response);
+        } catch (OtherException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FlashcardInfoResponse.builder().response(e.getMessage()).build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(FlashcardInfoResponse.builder().response(e.getMessage()).build());
+        }
     }
 }

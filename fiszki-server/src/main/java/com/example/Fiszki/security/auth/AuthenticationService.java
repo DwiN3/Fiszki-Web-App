@@ -26,22 +26,10 @@ public class AuthenticationService {
 
     public UserInfoResponse register(RegisterRequest request) {
         // Sprawdzenie pustych pól
-        if (request.getFirstname().isEmpty() || request.getLastname().isEmpty() ||
-                request.getEmail().isEmpty() || request.getPassword().isEmpty()) {
-            return UserInfoResponse.builder().response("All fields must be filled in.").build();
+        if (!isValidRegistrationRequest(request)) {
+            return UserInfoResponse.builder().response("Invalid registration request.").build();
         }
 
-        // Sprawdzenie poprawności adresu e-mail
-        if (!isValidEmail(request.getEmail())) {
-            return UserInfoResponse.builder().response("Invalid email address.").build();
-        }
-
-        // Sprawdzenie minimalnej długości hasła
-        if (request.getPassword().length() < 5) {
-            return UserInfoResponse.builder().response("Password must be at least 5 characters long.").build();
-        }
-
-        // Weryfikacja istnienia użytkownika o podanym adresie e-mail w bazie danych.
         if (repository.findByEmail(request.getEmail()).isPresent()) {
             return UserInfoResponse.builder().response("User with given e-mail already exists.").build();
         }
@@ -60,29 +48,46 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return UserInfoResponse.builder().response("User added successfully.").build();
     }
+
+    private boolean isValidRegistrationRequest(RegisterRequest request) {
+        if (request.getFirstname().isEmpty() || request.getLastname().isEmpty() ||
+                request.getEmail().isEmpty() || request.getPassword().isEmpty()) {
+            return false;
+        }
+
+        // Sprawdzenie poprawności adresu e-mail
+        if (!isValidEmail(request.getEmail())) {
+            return false;
+        }
+
+        // Sprawdzenie minimalnej długości hasła
+        return request.getPassword().length() >= 5;
+    }
+
     private boolean isValidEmail(String email) {
         return email != null && email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
     }
 
     public UserInfoResponse authenticate(AuthenticationRequest request) {
         // Verify the existence of a user by email address in the database.
-        if (repository.findByEmail(request.getEmail()).isEmpty()) {
-            return UserInfoResponse.builder().response("User with given e-mail does not exist.").build();
+        var userOptional = repository.findByEmail(request.getEmail());
+        if (userOptional.isPresent()) {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+
+            var user = repository.findByEmail(request.getEmail()).orElseThrow();
+            var jwtToken = jwtService.generateToken(user);
+
+            tokenInstance.setToken(request.getEmail());
+            tokenInstance.setUserName(user.getUsername());
+            return UserInfoResponse.builder().response(jwtToken).build();
+        } else {
+            return null;
         }
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-
-        var user = repository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-
-        tokenInstance.setToken(request.getEmail());
-        tokenInstance.setUserName(user.getUsername());
-        return UserInfoResponse.builder().response(jwtToken).build();
     }
 
     // W AuthenticationService
@@ -151,17 +156,18 @@ public class AuthenticationService {
     public UserInfoResponse changePassword(ChangePasswordRequest request) {
         var userEmail = tokenInstance.getToken();
 
-        // Sprawdzenie pustego pola nowego hasła
-        if (request.getNew_password().isEmpty()) {
-            return UserInfoResponse.builder().response("New password cannot be empty.").build();
-        }
-
         // Pobranie użytkownika z bazy danych
-        Optional<User> optionalUser = repository.findByEmail(userEmail);
+        var optionalUser = repository.findByEmail(request.getEmail());
 
         // Sprawdzenie, czy użytkownik istnieje
         if (optionalUser.isEmpty()) {
-            return UserInfoResponse.builder().response("User not found.").build();
+            System.out.println(optionalUser);
+            return UserInfoResponse.builder().response("User with given e-mail does not exist.").build();
+        }
+
+        // Sprawdzenie pustego pola nowego hasła
+        if (request.getNew_password().isEmpty()) {
+            return UserInfoResponse.builder().response("New password cannot be empty.").build();
         }
 
         var user = optionalUser.get();
@@ -195,17 +201,17 @@ public class AuthenticationService {
 
     public UserInfoResponse changePasswordLink(ChangePasswordFromLinkRequest request) {
         // Verify the existence of a user by email address in the database.
-        Optional<User> optionalUser = repository.findByEmail(request.getEmail());
+        var optionalUser = repository.findByEmail(request.getEmail());
 
         if (optionalUser.isEmpty()) {
-            return UserInfoResponse.builder().response("User not found.").build();
+            return UserInfoResponse.builder().response("User with given e-mail does not exist.").build();
         }
 
         var user = optionalUser.get();
 
         // Validate the new password fields
         if (request.getNew_password().isEmpty() || request.getNew_password().length() < 5) {
-            return UserInfoResponse.builder().response("Invalid new password.").build();
+            return UserInfoResponse.builder().response("New password must be at least 5 characters long.").build();
         }
 
         if (!request.getNew_password().equals(request.getRe_new_password())) {
@@ -218,8 +224,6 @@ public class AuthenticationService {
 
         return UserInfoResponse.builder().response("Password changed successfully.").build();
     }
-
-
 
     public UserInfoResponse deleteUser(String userPassword) {
         var userEmail = tokenInstance.getToken();
