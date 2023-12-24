@@ -17,7 +17,7 @@
                         name="email"
                         required
                         email
-                        [(ngModel)]="email"
+                        [(ngModel)]="userData.email"
                     >
                 </div>
                 <div>
@@ -27,13 +27,13 @@
                         placeholder="hasło"
                         name="password"
                         required
-                        [(ngModel)]="password"
+                        [(ngModel)]="userData.password"
                     >
                 </div>
                 <button [ngClass]="form.valid === true ? null : 'unactive'" type="submit">Zaloguj się</button>
             </form>
         </div>
-        <a href="#">Załóż konto</a>
+        <a [routerLink]="['register']">Załóż konto</a>
         <a href="#">Resetowanie hasła</a>
         <p class="error" *ngIf="error">{{this.error}}</p>
     </div>

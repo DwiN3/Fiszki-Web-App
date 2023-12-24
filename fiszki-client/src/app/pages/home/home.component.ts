@@ -14,8 +14,7 @@ export class HomeComponent implements OnDestroy{
   @ViewChild('form') loginForm : NgForm | null = null;
   error : string | null = null;
   subscription : Subscription | null = null;
-  email : string = '';
-  password : string = '';
+  userData : BaseUserModel = new BaseUserModel('', '');
 
   constructor(private accountService : AccountService){}
 
@@ -42,8 +41,7 @@ export class HomeComponent implements OnDestroy{
       if(this.loginForm?.valid === false)
         return
 
-      const userData = new BaseUserModel(this.email, this.password);
-      this.accountService.Login(userData)
+      this.accountService.Login(this.userData)
         .subscribe(resData => {
             localStorage.setItem('token', JSON.stringify(resData.response).replace(/"/g, ''));
           }, error => {

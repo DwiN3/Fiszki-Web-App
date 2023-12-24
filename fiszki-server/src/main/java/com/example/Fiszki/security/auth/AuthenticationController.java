@@ -27,6 +27,8 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } else if (response.getResponse().equals("User with given e-mail already exists.")) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        } else if (response.getResponse().equals("Repeated password is different from the password.")) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         }
         return ResponseEntity.ok(response);
     }

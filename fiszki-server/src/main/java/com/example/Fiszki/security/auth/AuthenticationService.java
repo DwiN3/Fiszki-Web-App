@@ -30,6 +30,10 @@ public class AuthenticationService {
             return UserInfoResponse.builder().response("Invalid registration request.").build();
         }
 
+        if (!request.getPassword().equals(request.getPasswordRepeated())){
+            return UserInfoResponse.builder().response("Repeated password is different from the password.").build();
+        }
+
         if (repository.findByEmail(request.getEmail()).isPresent()) {
             return UserInfoResponse.builder().response("User with given e-mail already exists.").build();
         }
