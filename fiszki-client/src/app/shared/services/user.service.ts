@@ -10,6 +10,6 @@ export class AccountService
 
     Login(userData : BaseUserModel)
     {
-        return this.http.post<BaseUserModel>(this.url + 'login', userData);
+        return this.http.post<any>(this.url + 'login', userData);
     }
 }

@@ -1,7 +1,7 @@
 <div class="wrapper">
     <div class="box">
         <h3>Fiszki</h3>
-        <p>skuteczna nauka słówek</p>
+        <p class="p-header">skuteczna nauka słówek</p>
         <div class="flags">
             <img class="flag-1" src="../../../assets/images/sweden.png">
             <img class="flag-2" src="../../../assets/images/poland.png">
@@ -35,5 +35,6 @@
         </div>
         <a href="#">Załóż konto</a>
         <a href="#">Resetowanie hasła</a>
+        <p class="error" *ngIf="error">{{this.error}}</p>
     </div>
 </div>

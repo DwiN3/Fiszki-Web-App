@@ -42,8 +42,12 @@
     p
     {
         font-family: base.$main-font;
-        color: #00446b;
+    }
+
+    .p-header
+    {
         font-size: 20px;
+        color: #00446b;
     }
 }
 
@@ -136,4 +140,10 @@
         color: #00446b;
     }
 
+}
+
+.error
+{
+    color: red;
+    margin-top: 5px;
 }
