@@ -10,6 +10,8 @@ import { RegisterComponent } from './pages/register/register.component';
 import { PlaceholderDirective } from './shared/ui/alert/directive/placeholder.directive';
 import { UserHomeComponent } from './pages/user/pages/user-home/user-home.component';
 import { UserPageModule } from './pages/user/user-page.module';
+import { LoaderComponent } from './shared/ui/loader/loader.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,7 @@ import { UserPageModule } from './pages/user/user-page.module';
     FormsModule,
     HttpClientModule,
     UserPageModule,
+    SharedModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

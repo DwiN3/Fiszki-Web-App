@@ -1,20 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlertComponent } from './ui/alert/alert.component';
-import { PlaceholderDirective } from './ui/alert/directive/placeholder.directive';
+import { LoaderComponent } from './ui/loader/loader.component';
 
 @NgModule({
   declarations: [
     AlertComponent,
-    PlaceholderDirective,
-    AlertComponent,
+    LoaderComponent,
   ],
   imports: [
     CommonModule,
   ],
   exports: [
-    PlaceholderDirective,
     AlertComponent,
+    LoaderComponent,
   ],
 })
 export class SharedModule {}
