@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-user-page',
+  selector: 'app-user',
   templateUrl: './user-page.component.html',
 })
-export class UserPageComponent {
+export class UserComponent {
  
 
 

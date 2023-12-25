@@ -1,7 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { SharedModule } from "src/app/shared/shared.module";
-import { UserRoutingModule } from "./user-page-routing.module";
+import { UserRoutingModule } from "./user-routing.module";
 
 @NgModule({
     declarations:[],
@@ -9,7 +8,8 @@ import { UserRoutingModule } from "./user-page-routing.module";
         CommonModule,
         UserRoutingModule,
     ],
+
     providers: []
 })
 
-export class UserPageModule {}
+export class UserModule {}

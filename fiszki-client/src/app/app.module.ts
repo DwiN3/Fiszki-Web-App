@@ -8,10 +8,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from './pages/register/register.component';
 import { PlaceholderDirective } from './shared/ui/alert/directive/placeholder.directive';
-import { UserHomeComponent } from './pages/user/pages/user-home/user-home.component';
-import { UserPageModule } from './pages/user/user-page.module';
+import { UserModule } from './pages/user/user.module';
 import { LoaderComponent } from './shared/ui/loader/loader.component';
-import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -19,15 +17,14 @@ import { SharedModule } from './shared/shared.module';
     HomeComponent,
     RegisterComponent,
     PlaceholderDirective,
-    UserHomeComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    UserPageModule,
-    SharedModule,
+    UserModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
