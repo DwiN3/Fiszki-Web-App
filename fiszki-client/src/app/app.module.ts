@@ -7,12 +7,14 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from './pages/register/register.component';
+import { PlaceholderDirective } from './shared/ui/alert/directive/placeholder.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    RegisterComponent
+    RegisterComponent,
+    PlaceholderDirective,
   ],
   imports: [
     BrowserModule,
