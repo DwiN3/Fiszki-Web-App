@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { distinctUntilChanged, Observable, Subscription } from 'rxjs';
 import { BaseUserModel } from 'src/app/shared/models/base-user.model';
 import { AccountService } from 'src/app/shared/services/user.service';
@@ -16,7 +17,7 @@ export class HomeComponent implements OnDestroy{
   subscription : Subscription | null = null;
   userData : BaseUserModel = new BaseUserModel('', '');
 
-  constructor(private accountService : AccountService){}
+  constructor(private accountService : AccountService, private router : Router){}
 
   ngAfterViewInit(): void 
   {
@@ -44,6 +45,7 @@ export class HomeComponent implements OnDestroy{
       this.accountService.Login(this.userData)
         .subscribe(resData => {
             localStorage.setItem('token', JSON.stringify(resData.response).replace(/"/g, ''));
+            this.router.navigate(['user']);
           }, error => {
             this.error = error.error.response;
           });

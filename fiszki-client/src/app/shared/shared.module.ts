@@ -9,7 +9,9 @@ import { PlaceholderDirective } from './ui/alert/directive/placeholder.directive
     PlaceholderDirective,
     AlertComponent,
   ],
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+  ],
   exports: [
     PlaceholderDirective,
     AlertComponent,
