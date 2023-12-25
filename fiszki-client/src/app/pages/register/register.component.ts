@@ -54,7 +54,7 @@ export class RegisterComponent implements OnDestroy{
         this.alertData.title = "Pomyslnie założono konto!"
         this.ShowAlert();
       }, err => {
-        console.log(err);
+        this.error = err.error.response;
       })
   }
 

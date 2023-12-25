@@ -30,7 +30,9 @@ public class AuthenticationService {
             return UserInfoResponse.builder().response("Invalid registration request.").build();
         }
 
-        if (!request.getPassword().trim().equals(request.getPasswordRepeated().trim())){
+        if (!request.getPassword().equals(request.getRepeatedPassword())){
+            System.out.println("Password: " + request.getPassword());
+            System.out.println("Repeated Password: " + request.getRepeatedPassword());
             return UserInfoResponse.builder().response("Repeated password is different from the password.").build();
         }
 
