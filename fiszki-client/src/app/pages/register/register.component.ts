@@ -22,7 +22,7 @@ export class RegisterComponent implements OnDestroy{
   alertSub : Subscription | null = null;
   alertData : AlertModel = new AlertModel('', '', '');
 
-  constructor(private accountService : AccountService,private componentFactoryResolver : ComponentFactoryResolver){}
+  constructor(private accountService : AccountService, private componentFactoryResolver : ComponentFactoryResolver){}
 
   ngAfterViewInit(): void 
   {
