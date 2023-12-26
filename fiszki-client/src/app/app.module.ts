@@ -10,6 +10,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { PlaceholderDirective } from './shared/ui/alert/directive/placeholder.directive';
 import { UserModule } from './pages/user/user.module';
 import { LoaderComponent } from './shared/ui/loader/loader.component';
+import { HomeGuard } from './pages/home/services/home-guard';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { LoaderComponent } from './shared/ui/loader/loader.component';
     HttpClientModule,
     UserModule,
   ],
-  providers: [],
+  providers: [HomeGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

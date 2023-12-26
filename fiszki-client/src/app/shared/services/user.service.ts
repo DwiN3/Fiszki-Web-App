@@ -18,4 +18,15 @@ export class AccountService
     {
         return this.http.post<any>(this.url + 'register', userData);
     }
+
+    CheckTokenValidity()
+    {
+        const token = localStorage.getItem('token');
+
+        const headers = new HttpHeaders({
+            'Authorization' : `Bearer ${token}`
+        })
+
+        return this.http.post<any>(this.url + 'access', { token : token}, {headers : headers});
+    }
 }
