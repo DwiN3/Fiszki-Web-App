@@ -1,0 +1,11 @@
+@use '../../../../assets/scss/shared-styles.scss';
+
+.box
+{
+    @include shared-styles.logo;
+}
+
+.flags
+{
+    @include shared-styles.flags;
+}

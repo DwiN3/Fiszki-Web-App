@@ -1,0 +1,9 @@
+@use '../../../../../assets/scss/shared-styles.scss';
+
+.wrapper
+{
+    width: 100%;
+    height: calc(100vh - 60px);
+    min-height: 500px;
+    @include shared-styles.background-gradient;
+}

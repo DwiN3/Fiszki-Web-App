@@ -11,6 +11,7 @@ import { PlaceholderDirective } from './shared/ui/alert/directive/placeholder.di
 import { UserModule } from './pages/user/user.module';
 import { LoaderComponent } from './shared/ui/loader/loader.component';
 import { HomeGuard } from './pages/home/services/home-guard';
+import { LogoComponent } from './shared/ui/logo/logo.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { HomeGuard } from './pages/home/services/home-guard';
     RegisterComponent,
     PlaceholderDirective,
     LoaderComponent,
+    LogoComponent,
   ],
   imports: [
     BrowserModule,
