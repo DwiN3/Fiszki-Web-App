@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/shared/services/auth-guard.service';
 import { UserHomeComponent } from './pages/user-home/user-home.component';
-import { UserSettingsComponent } from './pages/user-settings/user-settings.component';
+import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { UserComponent } from './user.component';
 
 const routes : Routes = 
@@ -17,8 +17,8 @@ const routes : Routes =
                 component: UserHomeComponent,
             },
             {
-                path: 'settings',
-                component: UserSettingsComponent,
+                path: 'profile',
+                component: UserProfileComponent,
             }
         ] 
     },
