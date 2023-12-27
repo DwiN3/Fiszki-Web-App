@@ -7,8 +7,8 @@ import { UserHomeComponent } from "./pages/user-home/user-home.component";
 import { AuthGuard } from "src/app/shared/services/auth-guard.service";
 import { SharedModule } from "src/app/shared/shared.module";
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
-import { UserInfoComponent } from './pages/user-profile/components/user-info/user-info.component';
-import { UserLevelComponent } from './pages/user-profile/components/user-level/user-level.component';
+import { UserLevelResolver } from "./services/user-level-resolver";
+import { LevelDirective } from "./pages/user-profile/directives/level-status";
 
 @NgModule({
     declarations:[
@@ -16,8 +16,7 @@ import { UserLevelComponent } from './pages/user-profile/components/user-level/u
         UserComponent,
         UserHomeComponent,
         UserProfileComponent,
-        UserInfoComponent,
-        UserLevelComponent,
+        LevelDirective,
     ],
     imports: [
         CommonModule,
@@ -30,6 +29,7 @@ import { UserLevelComponent } from './pages/user-profile/components/user-level/u
     providers: [
         AuthGuard,
         UserComponent,
+        UserLevelResolver,
     ]
 })
 

@@ -2,9 +2,9 @@
 <div class="wrapper">
     <div class="box">
         <h4 *ngIf="currentUser">Witaj {{currentUser.firstName}}!</h4>
-        <div><a>Nauka</a></div>
-        <div><a [routerLink]="['profile']">Dodaj Fiszki</a></div>
-        <div><a [routerLink]="['profile']">Twój profil</a></div>
+        <div class="item"><a>Nauka</a></div>
+        <div class="item"><a [routerLink]="['profile']">Dodaj Fiszki</a></div>
+        <div class="item"><a [routerLink]="['profile']">Twój profil</a></div>
         <h4 (click)="LogOut()">Wyloguj sie</h4>
     </div>
 </div>

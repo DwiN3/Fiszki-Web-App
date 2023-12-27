@@ -19,7 +19,7 @@ export class UserHomeComponent implements OnInit{
   ngOnInit(): void {
     this.userService.GetUserInfo()
       .subscribe(res => {
-        this.currentUser = res;
+        this.currentUser = new BaseCurrentUserModel(res.firstName, res.lastName);
       }, err => {
         console.log(err)
       })
