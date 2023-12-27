@@ -3,7 +3,15 @@
 .wrapper
 {
     width: 100%;
-    height: calc(100vh - 60px);
-    min-height: 500px;
-    @include shared-styles.background-gradient;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.box
+{
+    h2{
+        cursor: pointer;
+    }
 }

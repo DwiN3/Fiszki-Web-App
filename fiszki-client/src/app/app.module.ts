@@ -12,6 +12,7 @@ import { UserModule } from './pages/user/user.module';
 import { LoaderComponent } from './shared/ui/loader/loader.component';
 import { HomeGuard } from './pages/home/services/home-guard';
 import { LogoComponent } from './shared/ui/logo/logo.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -19,14 +20,13 @@ import { LogoComponent } from './shared/ui/logo/logo.component';
     HomeComponent,
     RegisterComponent,
     PlaceholderDirective,
-    LoaderComponent,
-    LogoComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    SharedModule,
     UserModule,
   ],
   providers: [HomeGuard],

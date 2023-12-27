@@ -29,4 +29,9 @@ export class AccountService
 
         return this.http.post<any>(this.url + 'access', { token : token}, {headers : headers});
     }
+
+    LogOut() : void
+    {
+        localStorage.removeItem('token');
+    }
 }

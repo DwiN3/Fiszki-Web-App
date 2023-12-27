@@ -6,6 +6,7 @@ import { NavbarComponent } from './core/navbar/navbar.component';
 import { UserSettingsComponent } from "./pages/user-settings/user-settings.component";
 import { UserHomeComponent } from "./pages/user-home/user-home.component";
 import { AuthGuard } from "src/app/shared/services/auth-guard.service";
+import { SharedModule } from "src/app/shared/shared.module";
 
 @NgModule({
     declarations:[
@@ -17,6 +18,7 @@ import { AuthGuard } from "src/app/shared/services/auth-guard.service";
     imports: [
         CommonModule,
         UserRoutingModule,
+        SharedModule
     ],
     exports: [
         

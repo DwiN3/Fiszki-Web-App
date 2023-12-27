@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AccountService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-user-home',
@@ -6,5 +8,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./user-home.component.scss']
 })
 export class UserHomeComponent {
+
+  constructor(private accountService : AccountService, private router : Router){}
+
+  LogOut() : void
+  {
+    this.accountService.LogOut();
+    this.router.navigate(['']);
+  }
 
 }
