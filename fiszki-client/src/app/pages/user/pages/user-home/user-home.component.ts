@@ -20,10 +20,11 @@ export class UserHomeComponent implements OnInit{
     this.userService.GetUserInfo()
       .subscribe(res => {
         this.currentUser = new BaseCurrentUserModel(res.firstName, res.lastName);
+        this.isLoading =  false;
       }, err => {
         console.log(err)
+        this.isLoading =  false;
       })
-      this.isLoading =  false;
   }
 
   LogOut() : void

@@ -72,7 +72,9 @@ public class FlashcardController {
 
     @GetMapping("/collections")
     public ResponseEntity<List<FlashcardCollectionResponse>> showAllCollection() {
-        return ResponseEntity.ok(flashcardService.showAllCollection());
+        List<FlashcardCollectionResponse> list = flashcardService.showAllCollection();
+        System.out.println(list);
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/collections-info")

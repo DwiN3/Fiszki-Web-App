@@ -5,20 +5,19 @@ import { FlashcardCollectionModel } from "src/app/shared/models/flashcards-colle
 @Injectable({providedIn : 'root'})
 export class UserCollectionService
 {
-    url = 'http://localhost:8080/flashcards/collections-info';
-    token : string | null = localStorage.getItem('token');
-    headers : HttpHeaders = new HttpHeaders(
-            {
-                'Authorization' : `Bearer ${this.token}`,
-                'Content-Type': 'application/json'
-            }
-        )
-
+    url = 'http://localhost:8080/flashcards/collections';
 
     constructor(private http : HttpClient){}
 
     GetCollections()
     {
-        return this.http.get<FlashcardCollectionModel[]>(this.url, {headers : this.headers});
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        });
+
+        return this.http.get(this.url, {headers : headers});
     }
+
 }
