@@ -6,9 +6,10 @@ import { NavbarComponent } from './core/navbar/navbar.component';
 import { UserHomeComponent } from "./pages/user-home/user-home.component";
 import { AuthGuard } from "src/app/shared/services/auth-guard.service";
 import { SharedModule } from "src/app/shared/shared.module";
-import { UserProfileComponent } from './pages/user-profile/user-profile.component';
+import { UserProfileComponent } from './pages/user-profile-router/pages/user-profile/user-profile.component';
 import { UserLevelResolver } from "./services/user-level-resolver";
-import { LevelDirective } from "./pages/user-profile/directives/level-status";
+import { LevelDirective } from "./pages/user-profile-router/pages/user-profile/directives/level-status";
+import { UserProfileRouterComponent } from './pages/user-profile-router/user-profile-router.component';
 
 @NgModule({
     declarations:[
@@ -17,6 +18,7 @@ import { LevelDirective } from "./pages/user-profile/directives/level-status";
         UserHomeComponent,
         UserProfileComponent,
         LevelDirective,
+        UserProfileRouterComponent,
     ],
     imports: [
         CommonModule,

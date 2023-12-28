@@ -1,7 +1,7 @@
 import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserLevelModel } from '../../models/user-level.model';
-import { UserService } from '../../services/user.service';
+import { UserLevelModel } from '../../../../models/user-level.model';
+import { UserService } from '../../../../services/user.service';
 
 @Component({
   selector: 'app-user-profile',
