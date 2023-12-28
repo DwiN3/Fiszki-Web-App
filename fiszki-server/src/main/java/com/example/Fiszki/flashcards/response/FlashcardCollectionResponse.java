@@ -7,6 +7,6 @@ import java.util.List;
 @Getter
 @Builder
 public class FlashcardCollectionResponse {
-    private String name_kit;
+    private String kitName;
     private List<FlashcardReturnResponse> flashcards;
 }

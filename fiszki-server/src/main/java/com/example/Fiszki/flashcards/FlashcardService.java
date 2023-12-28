@@ -216,7 +216,7 @@ public class FlashcardService {
                             .collect(Collectors.toList());
 
                     return FlashcardCollectionResponse.builder()
-                            .name_kit(collectionName)
+                            .kitName(collectionName)
                             .flashcards(flashcards)
                             .build();
                 })

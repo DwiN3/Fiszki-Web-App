@@ -1,0 +1,41 @@
+@use '../../../../../../../assets/scss/base';
+@use '../../../../../../../assets/scss/shared-styles';
+
+.wrapper
+{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: base.$main-font;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: base.$secondary-color;
+
+    h3
+    {
+        padding: 40px;
+    }
+}
+
+.carousel-box
+{
+    width: 80%;
+    height: 250px;
+    background-color: base.$primary-color;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.carousel
+{
+    height: 100%;
+    width: 2000px;
+    display: flex;
+
+    div
+    {
+        height: 100%;
+        width: 200px;
+    }
+}

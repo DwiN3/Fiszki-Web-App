@@ -10,6 +10,7 @@ import { UserProfileComponent } from './pages/user-profile-router/pages/user-pro
 import { UserLevelResolver } from "./services/user-level-resolver";
 import { LevelDirective } from "./pages/user-profile-router/pages/user-profile/directives/level-status";
 import { UserProfileRouterComponent } from './pages/user-profile-router/user-profile-router.component';
+import { UserCollectionsComponent } from './pages/user-profile-router/pages/user-collections/user-collections.component';
 
 @NgModule({
     declarations:[
@@ -19,6 +20,7 @@ import { UserProfileRouterComponent } from './pages/user-profile-router/user-pro
         UserProfileComponent,
         LevelDirective,
         UserProfileRouterComponent,
+        UserCollectionsComponent,
     ],
     imports: [
         CommonModule,

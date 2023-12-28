@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/shared/services/auth-guard.service';
 import { UserHomeComponent } from './pages/user-home/user-home.component';
+import { UserCollectionsComponent } from './pages/user-profile-router/pages/user-collections/user-collections.component';
 import { UserProfileComponent } from './pages/user-profile-router/pages/user-profile/user-profile.component';
 import { UserProfileRouterComponent } from './pages/user-profile-router/user-profile-router.component';
 import { UserLevelResolver } from './services/user-level-resolver';
@@ -27,6 +28,10 @@ const routes : Routes =
                         path: '',
                         resolve : { levelInfo : UserLevelResolver},
                         component: UserProfileComponent,
+                    },
+                    {
+                        path: 'collections',
+                        component: UserCollectionsComponent,
                     }
                 ]
             }
