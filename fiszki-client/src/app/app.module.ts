@@ -9,10 +9,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from './pages/register/register.component';
 import { PlaceholderDirective } from './shared/ui/alert/directive/placeholder.directive';
 import { UserModule } from './pages/user/user.module';
-import { LoaderComponent } from './shared/ui/loader/loader.component';
 import { HomeGuard } from './pages/home/services/home-guard';
-import { LogoComponent } from './shared/ui/logo/logo.component';
 import { SharedModule } from './shared/shared.module';
+import { StoreModule } from '@ngrx/store';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -28,6 +28,8 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     SharedModule,
     UserModule,
+    StoreModule.forRoot({}, {}),
+    FontAwesomeModule,
   ],
   providers: [HomeGuard],
   bootstrap: [AppComponent]

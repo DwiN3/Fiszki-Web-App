@@ -1,8 +1,17 @@
 <div class="wrapper">
     <h3>Twoje Zestawy</h3>
     <div class="carousel-box">
+        <div class="controls">
+            <div class="arrow left" (click)="DecrementPage()">
+                <fa-icon [icon]="faArrowLeft"></fa-icon>
+            </div>
+            <div class="arrow right" (click)="IncrementPage()">
+                <fa-icon [icon]="faArrowRight"></fa-icon>
+            </div>
+        </div>
         <div class="carousel">
             
         </div>
     </div>
+    <div>{{currentPage}}</div>
 </div>
