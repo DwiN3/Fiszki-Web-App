@@ -1,6 +1,6 @@
 <div class="wrapper">
     <h3>Twoje Zestawy</h3>
-    <div class="carousel-box">
+    <div class="carousel-wrapper">
         <div class="controls">
             <div class="arrow left" (click)="DecrementPage()">
                 <fa-icon [icon]="faArrowLeft"></fa-icon>
@@ -9,8 +9,15 @@
                 <fa-icon [icon]="faArrowRight"></fa-icon>
             </div>
         </div>
-        <div class="carousel">
-            
+        <div class="carousel-box">
+            <div class="carousel">
+                <app-collection/>
+                <app-collection/>
+                <app-collection/>
+                <app-collection/>
+                <app-collection/>
+                <app-collection/>
+            </div>
         </div>
     </div>
     <div>{{currentPage}}</div>

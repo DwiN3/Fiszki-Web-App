@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-collection',
@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./collection.component.scss']
 })
 export class CollectionComponent {
+    @Input() collectionName : string = '';
+    @Input() flashcardsQuantity : number = 0;
 
 }
