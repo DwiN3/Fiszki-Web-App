@@ -18,15 +18,30 @@ public class Flashcard {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto generating id
     private Integer id;
     private String author;
-    private String collectionName;
+
+//    private String collectionName;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "collection_id")
+    private FlashcardCollection collection;
+
     private String category;
     private String word;
     private String translatedWord;
     private String example;
     private String translatedExample;
 
-    public String getCollectionName() {
-        return collectionName;
+//    public String getCollectionName() {
+//        return collectionName;
+//    }
+
+
+    public FlashcardCollection getCollection() {
+        return collection;
+    }
+
+    public void setCollection(FlashcardCollection collection) {
+        this.collection = collection;
     }
 
     public String getCategory() {
@@ -52,3 +67,4 @@ public class Flashcard {
         return author;
     }
 }
+
