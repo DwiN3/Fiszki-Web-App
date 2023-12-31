@@ -5,6 +5,7 @@ import { UserCollectionService } from 'src/app/pages/user/services/user-collecti
 import { CarouselState } from './store/carousel.state';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { decrementPage, incrementPage } from './store/carousel.actions';
+import { CarouselSettingsService } from './services/carousel-settings.service';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class UserCollectionsComponent implements OnInit{
   
   currentPage : number = 0;
   collectionQuantity : number = 0;
+  pagesQuantity : number = 0;
 
   constructor(private userCollectionService : UserCollectionService, private store : Store<{carousel : CarouselState}>){}
 
@@ -29,14 +31,15 @@ export class UserCollectionsComponent implements OnInit{
     this.carousel$
       .subscribe(data => {
         this.currentPage = data.currentPage;
-        this.collectionQuantity = data.collectionQuantity;
+        this.collectionQuantity = data.collectionQuantity
+        this.pagesQuantity = data.pageQuantity;
       })
   }
 
  
   IncrementPage()
   {
-    if(this.currentPage >= this.collectionQuantity - 1)
+    if(this.currentPage >= this.pagesQuantity)
       return
     this.store.dispatch(incrementPage())
   }

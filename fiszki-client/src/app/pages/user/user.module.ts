@@ -15,6 +15,7 @@ import { StoreModule } from "@ngrx/store";
 import { carouselFeatureKey, carouselReducer } from "./pages/user-profile-router/pages/user-collections/store/carousel.reducer";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { CollectionComponent } from './pages/user-profile-router/pages/user-collections/components/collection/collection.component';
+import { CarouselDirective } from "./pages/user-profile-router/pages/user-collections/directives/carousel.directive";
 
 @NgModule({
     declarations:[
@@ -26,6 +27,7 @@ import { CollectionComponent } from './pages/user-profile-router/pages/user-coll
         UserProfileRouterComponent,
         UserCollectionsComponent,
         CollectionComponent,
+        CarouselDirective,
     ],
     imports: [
         CommonModule,
@@ -35,7 +37,7 @@ import { CollectionComponent } from './pages/user-profile-router/pages/user-coll
         FontAwesomeModule,
     ],
     exports: [
-        
+        CarouselDirective,
     ],
     providers: [
         AuthGuard,

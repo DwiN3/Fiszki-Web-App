@@ -37,6 +37,10 @@
     overflow: hidden;
 }
 
+.carousel-box::-webkit-scrollbar{
+    display: none;
+}
+
 .controls
 {
     height: 100%;
@@ -62,6 +66,13 @@
     cursor: pointer;
 }
 
+.unactive
+{
+    background-color: #eeeeee;
+    color: #dddddd;
+    cursor: default;
+}
+
 .left
 {
     left: 0;
@@ -85,16 +96,21 @@
 .carousel
 {
     height: 100%;
-    width: 1600px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-
+    justify-content: space-between;
     position: absolute;
+    transition: all ease-in-out 0.5s;
+}
 
-    div
+@media(max-width : base.$medium)
+{
+    .carousel-box
     {
-        height: 100%;
-        width: 200px;
+        overflow: scroll;
+    }
+
+    .controls{
+        display: none;
     }
 }
