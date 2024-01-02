@@ -313,14 +313,22 @@ public class FlashcardService {
                 .collect(Collectors.toList());
     }
 
+
     public FlashcardInfoResponse deleteCollectionByName(String nameCollection) throws OtherException {
         try {
-            String author = tokenInstance.getUserName();
-            List<Flashcard> flashcardsToDelete = flashcardRepository.findByCollection_CollectionNameAndAuthor(nameCollection, author);
+            Optional<FlashcardCollection> collectionToDelete = collectionRepository.findByCollectionName(nameCollection);
 
-            if (!flashcardsToDelete.isEmpty()) {
-                // Delete all flashcards from the collection created by the author
+            if (collectionToDelete.isPresent()) {
+                FlashcardCollection collection = collectionToDelete.get();
+
+                // Pobierz wszystkie fiszki z kolekcji
+                List<Flashcard> flashcardsToDelete = flashcardRepository.findByCollection(collection);
+
+                // Usuń wszystkie fiszki
                 flashcardRepository.deleteAll(flashcardsToDelete);
+
+                // Usuń kolekcję
+                collectionRepository.delete(collection);
 
                 return FlashcardInfoResponse.builder().response("Collection deleted successfully.").build();
             } else {
