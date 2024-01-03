@@ -12,6 +12,11 @@ export const resetPage = createAction(
     'resetPage',
 )
 
+export const setCollectionQuantity = createAction(
+    'setCollectionQuantity',
+    props<{quantity : number}>()
+)
+
 export const setElementsToDisplay = createAction(
     'setElementsToDisplay',
     props<{value : number, pageQuantity : number}>()

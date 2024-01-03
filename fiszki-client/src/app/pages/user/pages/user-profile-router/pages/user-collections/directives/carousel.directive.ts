@@ -29,13 +29,14 @@ export class CarouselDirective implements OnInit, OnDestroy
                 this.elementsToDisplay = data.elementsToDisplay;
                 this.HandlePageChange();
             });
-
-        const carouselSettings = carouselSettingsService.SetQuantity(this.elementsQuantity);
-        
-        this.store.dispatch(setElementsToDisplay({value : carouselSettings.elementsToDisplay, pageQuantity : carouselSettings.pageQuantity})); 
     }
     
     ngOnInit(): void {
+
+        const carouselSettings = this.carouselSettingsService.SetQuantity(this.elementsQuantity);
+        
+        this.store.dispatch(setElementsToDisplay({value : carouselSettings.elementsToDisplay, pageQuantity : carouselSettings.pageQuantity})); 
+
         this.SetWidth();
         this.SetStyle();
     }

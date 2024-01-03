@@ -11,14 +11,11 @@
         </div>
         <div class="carousel-box">
             <div class="carousel" carousel>
-                <app-collection/>
-                <app-collection/>
-                <app-collection/>
-                <app-collection/>
-                <app-collection/>
-                <app-collection/>
-                <app-collection/>
-                <app-collection/>
+                <app-collection 
+                    *ngFor="let collection of flashcardsCollection"
+                    [collectionName]="collection.collectionName"
+                    [flashcardsQuantity]="collection.flashcardsQuantity"
+                />
             </div>
         </div>
     </div>

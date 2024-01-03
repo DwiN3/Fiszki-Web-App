@@ -17,7 +17,7 @@ export class UserCollectionService
             'Content-Type': 'application/json',
         });
 
-        return this.http.get(this.url, {headers : headers});
+        return this.http.get<any>(this.url, {headers : headers});
     }
 
 }

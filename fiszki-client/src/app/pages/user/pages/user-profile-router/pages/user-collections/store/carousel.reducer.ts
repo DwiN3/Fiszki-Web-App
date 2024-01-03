@@ -1,5 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
-import { decrementPage, incrementPage, resetPage, setElementsToDisplay } from "./carousel.actions";
+import { Action } from "rxjs/internal/scheduler/Action";
+import { decrementPage, incrementPage, resetPage, setCollectionQuantity, setElementsToDisplay } from "./carousel.actions";
 import { initialState } from "./carousel.state";
 
 export const carouselFeatureKey = 'carousel';
@@ -22,6 +23,12 @@ const _carouselReducer = createReducer(
         return{
             ...state,
             currentPage: 0,
+        }
+    }),
+    on(setCollectionQuantity, (state, action) => {
+        return{
+            ...state,
+            collectionQuantity : action.quantity
         }
     }),
     on(setElementsToDisplay, (state, action) => {
