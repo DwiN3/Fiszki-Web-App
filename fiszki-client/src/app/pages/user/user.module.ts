@@ -16,6 +16,13 @@ import { carouselFeatureKey, carouselReducer } from "./pages/user-profile-router
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { CollectionComponent } from './pages/user-profile-router/pages/user-collections/components/collection/collection.component';
 import { CarouselDirective } from "./pages/user-profile-router/pages/user-collections/directives/carousel.directive";
+import { LearningPageComponent } from './pages/learning-page/learning-page.component';
+import { LearningPageSettingsComponent } from './pages/learning-page/pages/learning-page-settings/learning-page-settings.component';
+import { FormsModule } from "@angular/forms";
+import { gameSettingFeautureKey, gameSettingsReducer } from "./pages/learning-page/store/game-settings.reducer";
+import { CategoriesPageComponent } from './pages/learning-page/pages/categories-page/categories-page.component';
+import { CategoriesItemComponent } from './pages/learning-page/pages/categories-page/components/categories-item/categories-item.component';
+import { GamePageComponent } from './pages/learning-page/pages/game-page/game-page.component';
 
 @NgModule({
     declarations:[
@@ -28,13 +35,20 @@ import { CarouselDirective } from "./pages/user-profile-router/pages/user-collec
         UserCollectionsComponent,
         CollectionComponent,
         CarouselDirective,
+        LearningPageComponent,
+        LearningPageSettingsComponent,
+        CategoriesPageComponent,
+        CategoriesItemComponent,
+        GamePageComponent,
     ],
     imports: [
         CommonModule,
         UserRoutingModule,
         SharedModule,
         StoreModule.forFeature(carouselFeatureKey, carouselReducer),
+        StoreModule.forFeature(gameSettingFeautureKey, gameSettingsReducer),
         FontAwesomeModule,
+        FormsModule,
     ],
     exports: [
         CarouselDirective,

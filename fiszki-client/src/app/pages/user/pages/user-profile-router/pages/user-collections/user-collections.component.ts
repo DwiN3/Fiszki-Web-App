@@ -5,7 +5,6 @@ import { UserCollectionService } from 'src/app/pages/user/services/user-collecti
 import { CarouselState } from './store/carousel.state';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { decrementPage, incrementPage, setCollectionQuantity } from './store/carousel.actions';
-import { CarouselSettingsService } from './services/carousel-settings.service';
 import { FlashcardCollectionModel } from './models/flashcard-collection.model';
 
 
