@@ -74,9 +74,14 @@ public class FlashcardController {
 
     @GetMapping("/collections")
     public ResponseEntity<List<FlashcardCollectionResponse>> showAllCollection() {
-        List<FlashcardCollectionResponse> list = flashcardService.showAllCollection();
-        System.out.println(list);
-        return ResponseEntity.ok(list);
+        try {
+            List<FlashcardCollectionResponse> collections = flashcardService.showAllCollection();
+            return ResponseEntity.ok(collections);
+        } catch (OtherException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body((List<FlashcardCollectionResponse>) FlashcardInfoResponse.builder().response(e.getMessage()).build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body((List<FlashcardCollectionResponse>) FlashcardInfoResponse.builder().response(e.getMessage()).build());
+        }
     }
 
     @GetMapping("/collections-info")
