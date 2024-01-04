@@ -23,9 +23,10 @@ export class CategoriesPageComponent {
 
   SetCategory(index : number) : void
   {
+    const category = this.categories[index].categoryName
+    this.store.dispatch(setCollection({ collectionName : ''}))
     this.store.dispatch(setLimit({limit : this.limit}))
-    this.store.dispatch(setCategory({category : this.categories[index].categoryName}));
-    this.store.dispatch(setCollection({collectionName : ''}));
+    this.store.dispatch(setCategory({category : category}));
     this.router.navigate(['user/learning/game'])
   }
   

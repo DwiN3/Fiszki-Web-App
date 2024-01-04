@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { faRepeat, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { setLanguage, setLearningMode } from '../../store/game-settings.action';
 import { GameSettingsState } from '../../store/game.state';
 
@@ -16,6 +16,7 @@ export class LearningPageSettingsComponent implements OnInit{
   faArrowRight = faArrowRight;
 
   gameSettings$! : Observable<GameSettingsState>
+  private gameSettingsSubscription: Subscription | undefined;
 
   selectedMode : string = '';
   polishFirst : boolean | null = null; 
@@ -25,11 +26,18 @@ export class LearningPageSettingsComponent implements OnInit{
   ngOnInit(): void 
   {
     this.gameSettings$ = this.store.select('gameSettings');
-    this.gameSettings$
+    this.gameSettingsSubscription = this.gameSettings$
       .subscribe(data => {
         this.selectedMode = data.learningMode;
         this.polishFirst = data.polishFirst;
       })
+  }
+
+  ngOnDestroy(): void 
+  {
+    if (this.gameSettingsSubscription) {
+      this.gameSettingsSubscription.unsubscribe();
+    }
   }
 
   ChangeLanguage() : void

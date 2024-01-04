@@ -23,6 +23,7 @@ import { gameSettingFeautureKey, gameSettingsReducer } from "./pages/learning-pa
 import { CategoriesPageComponent } from './pages/learning-page/pages/categories-page/categories-page.component';
 import { CategoriesItemComponent } from './pages/learning-page/pages/categories-page/components/categories-item/categories-item.component';
 import { GamePageComponent } from './pages/learning-page/pages/game-page/game-page.component';
+import { LearningModeComponent } from './pages/learning-page/pages/game-page/components/learning-mode/learning-mode.component';
 
 @NgModule({
     declarations:[
@@ -40,6 +41,7 @@ import { GamePageComponent } from './pages/learning-page/pages/game-page/game-pa
         CategoriesPageComponent,
         CategoriesItemComponent,
         GamePageComponent,
+        LearningModeComponent,
     ],
     imports: [
         CommonModule,

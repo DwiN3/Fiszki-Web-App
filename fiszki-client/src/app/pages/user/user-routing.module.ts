@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/shared/services/auth-guard.service';
 import { LearningPageComponent } from './pages/learning-page/learning-page.component';
 import { CategoriesPageComponent } from './pages/learning-page/pages/categories-page/categories-page.component';
+import { GamePageComponent } from './pages/learning-page/pages/game-page/game-page.component';
 import { LearningPageSettingsComponent } from './pages/learning-page/pages/learning-page-settings/learning-page-settings.component';
 import { UserHomeComponent } from './pages/user-home/user-home.component';
 import { UserCollectionsComponent } from './pages/user-profile-router/pages/user-collections/user-collections.component';
@@ -53,7 +54,7 @@ const routes : Routes =
                     },
                     {
                         path : 'game',
-                        component: LearningPageSettingsComponent
+                        component: GamePageComponent,
                     },
                 ]
             }
