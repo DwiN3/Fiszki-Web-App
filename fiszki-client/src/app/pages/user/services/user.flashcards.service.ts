@@ -19,6 +19,7 @@ export class FlashcardService
         const headers = new HttpHeaders({
             'Authorization' : `Bearer ${token}`
         })
-        return this.http.get<any>(this.url + categoryName, { headers : headers})
+        console.log(headers)
+        return this.http.get<any>(this.url + 'category/' + categoryName, { headers : headers})
     }
 }

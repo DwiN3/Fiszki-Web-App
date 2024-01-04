@@ -12,7 +12,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @Configuration
@@ -22,6 +23,24 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer()
+    {
+            return new WebMvcConfigurer()
+            {
+                public void addCorsMappings(final CorsRegistry registry)
+                {
+                    registry
+                            .addMapping("/**")
+                            .allowedOrigins("http://localhost:4200")
+                            .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
+                            .allowedHeaders("*")
+                            .allowCredentials(true)
+                            .maxAge(3600);
+                }
+            };
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
