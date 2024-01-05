@@ -18,9 +18,18 @@ public class FlashcardCollection {
     private Integer id;
 
     private String collectionName;
+    private String author;
 
     public Integer getId() {
         return id;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public void setId(Integer id) {
