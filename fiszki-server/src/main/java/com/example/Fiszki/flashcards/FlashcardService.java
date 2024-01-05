@@ -5,18 +5,18 @@ import com.example.Fiszki.flashcards.flashcard.CollectionRepository;
 import com.example.Fiszki.flashcards.flashcard.Flashcard;
 import com.example.Fiszki.flashcards.flashcard.FlashcardCollection;
 import com.example.Fiszki.flashcards.flashcard.FlashcardRepository;
+import com.example.Fiszki.flashcards.request.CollectionAddRequest;
 import com.example.Fiszki.flashcards.request.FlashcardAddRequest;
 import com.example.Fiszki.flashcards.request.FlashcardCategoryLimitRequest;
-import com.example.Fiszki.flashcards.response.FlashcardInfoResponse;
 import com.example.Fiszki.flashcards.response.FlashcardCollectionResponse;
+import com.example.Fiszki.flashcards.response.FlashcardInfoResponse;
 import com.example.Fiszki.flashcards.response.FlashcardReturnResponse;
 import com.example.Fiszki.security.auth.response.OtherException;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import javax.print.attribute.standard.MediaSize;
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 @Service
 public class FlashcardService {
@@ -55,9 +55,20 @@ public class FlashcardService {
                 throw new OtherException("Fields not a single word");
             }
 
-            // Pobierz kolekcję na podstawie nazwy
-            FlashcardCollection collection = collectionRepository.findByCollectionName(request.getCollectionName())
-                    .orElseThrow(() -> new OtherException("Collection not found"));
+            // Pobierz kolekcję na podstawie nazwy i autora
+            List<FlashcardCollection> collections = collectionRepository.findByCollectionNameAndAuthor(request.getCollectionName(), tokenInstance.getUserName());
+
+            if (collections.isEmpty()) {
+                // Obsłuż sytuację, gdy kolekcja nie istnieje
+                throw new OtherException("Collection not found");
+            }
+
+            if (collections.size() > 1) {
+                // Obsłuż sytuację, gdy istnieje więcej niż jedna kolekcja o danej nazwie dla tego autora
+                throw new OtherException("Multiple collections with the same name exist for this user");
+            }
+
+            FlashcardCollection collection = collections.get(0);
 
             Flashcard flashcard = Flashcard.builder()
                     .collection(collection)
@@ -77,12 +88,39 @@ public class FlashcardService {
         }
     }
 
+    public FlashcardInfoResponse addCollection(CollectionAddRequest request) throws OtherException {
+        try {
+            // Sprawdź, czy nazwa kolekcji nie jest pusta
+            if (isNullOrEmpty(request.getCollectionName())) {
+                throw new OtherException("Collection name must be provided");
+            }
+
+            // Sprawdź, czy kolekcja o podanej nazwie już istnieje
+            if (collectionRepository.existsByCollectionNameAndAuthor(request.getCollectionName(), tokenInstance.getUserName())) {
+                throw new OtherException("Collection with the given name already exists for this user");
+            }
+
+            // Utwórz nową kolekcję przypisaną do autora
+            FlashcardCollection newCollection = FlashcardCollection.builder()
+                    .collectionName(request.getCollectionName())
+                    .author(tokenInstance.getUserName())
+                    .build();
+
+            collectionRepository.save(newCollection);
+
+            return FlashcardInfoResponse.builder().response("Collection added successfully").build();
+        } catch (Exception e) {
+            throw new OtherException(e.getMessage());
+        }
+    }
+
     public FlashcardInfoResponse editFlashcard(Integer flashcardId, FlashcardAddRequest request) throws OtherException {
         try {
             // Sprawdź, czy wszystkie wymagane pola są ustawione
             if (!isSingleWord(request.getCollectionName())) {
                 throw new OtherException("All fields must be filled");
             }
+
             // Sprawdź, czy w polach word i translatedWord występuje tylko jedno słowo
             if (!isSingleWord(request.getWord()) || !isSingleWord(request.getTranslatedWord())) {
                 throw new OtherException("Fields word and translatedWord must contain a single word");
@@ -96,11 +134,28 @@ public class FlashcardService {
             if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
                 throw new OtherException("Flashcard with the given translated word already exists");
             }
+
             Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
             if (flashcardOptional.isPresent()) {
                 Flashcard flashcard = flashcardOptional.get();
 
-                flashcard.setCollection(FlashcardCollection.builder().collectionName(request.getCollectionName()).build());
+                // Pobierz kolekcję na podstawie nazwy i autora
+                List<FlashcardCollection> collections = collectionRepository.findByCollectionNameAndAuthor(request.getCollectionName(), tokenInstance.getUserName());
+
+                if (collections.isEmpty()) {
+                    // Obsłuż sytuację, gdy kolekcja nie istnieje
+                    throw new OtherException("Collection not found");
+                }
+
+                if (collections.size() > 1) {
+                    // Obsłuż sytuację, gdy istnieje więcej niż jedna kolekcja o danej nazwie dla tego autora
+                    throw new OtherException("Multiple collections with the same name exist for this user");
+                }
+
+                FlashcardCollection collection = collections.get(0);
+
+                // Aktualizuj fiszkę
+                flashcard.setCollection(collection);
                 flashcard.setCategory(request.getCategory());
                 flashcard.setWord(request.getWord());
                 flashcard.setTranslatedWord(request.getTranslatedWord());
@@ -117,6 +172,7 @@ public class FlashcardService {
         }
     }
 
+
     //Funkcja sprawdza czy napis jest pusty lub null
     private boolean isNullOrEmpty(String str) {
         return str == null || str.trim().isEmpty();
@@ -129,7 +185,7 @@ public class FlashcardService {
 
 
     public FlashcardReturnResponse showFlashcardById(Integer flashcardId) {
-        // Tutaj możesz wykorzystać metody z FlashcardRepository do pobrania fiszki na podstawie ID
+        // Pobranie fiszki na podstawie ID
         Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
 
         if (flashcardOptional.isPresent()) {
@@ -270,22 +326,21 @@ public class FlashcardService {
                 .collect(Collectors.toList());
     }
 
-
     public FlashcardInfoResponse deleteCollectionByName(String nameCollection) throws OtherException {
         try {
-            Optional<FlashcardCollection> collectionToDelete = collectionRepository.findByCollectionName(nameCollection);
+            // Pobierz zalogowanego użytkownika
+            String loggedInUsername = tokenInstance.getUserName();
 
-            if (collectionToDelete.isPresent()) {
-                FlashcardCollection collection = collectionToDelete.get();
+            // Pobierz kolekcję na podstawie nazwy i autora
+            List<FlashcardCollection> collectionsToDelete = collectionRepository.findByCollectionNameAndAuthor(nameCollection, loggedInUsername);
 
-                // Pobierz wszystkie fiszki z kolekcji
-                List<Flashcard> flashcardsToDelete = flashcardRepository.findByCollection(collection);
-
-                // Usuń wszystkie fiszki
-                flashcardRepository.deleteAll(flashcardsToDelete);
-
-                // Usuń kolekcję
-                collectionRepository.delete(collection);
+            if (!collectionsToDelete.isEmpty()) {
+                // Usuń kolekcje i związane z nimi fiszki
+                for (FlashcardCollection collection : collectionsToDelete) {
+                    List<Flashcard> flashcardsToDelete = flashcardRepository.findByCollection(collection);
+                    flashcardRepository.deleteAll(flashcardsToDelete);
+                    collectionRepository.delete(collection);
+                }
 
                 return FlashcardInfoResponse.builder().response("Collection deleted successfully.").build();
             } else {
@@ -295,4 +350,5 @@ public class FlashcardService {
             throw new OtherException(e.getMessage());
         }
     }
+
 }
