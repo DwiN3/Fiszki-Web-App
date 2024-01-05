@@ -1,7 +1,9 @@
 package com.example.Fiszki.flashcards;
 
 import com.example.Fiszki.Instance.TokenInstance;
+import com.example.Fiszki.flashcards.flashcard.CollectionRepository;
 import com.example.Fiszki.flashcards.flashcard.Flashcard;
+import com.example.Fiszki.flashcards.flashcard.FlashcardCollection;
 import com.example.Fiszki.flashcards.flashcard.FlashcardRepository;
 import com.example.Fiszki.flashcards.request.FlashcardAddRequest;
 import com.example.Fiszki.flashcards.request.FlashcardCategoryLimitRequest;
@@ -20,10 +22,12 @@ import java.util.stream.Collectors;
 public class FlashcardService {
 
     private final FlashcardRepository flashcardRepository;
+    private final CollectionRepository collectionRepository;
     private TokenInstance tokenInstance = TokenInstance.getInstance();
 
-    public FlashcardService(FlashcardRepository flashcardRepository) {
+    public FlashcardService(FlashcardRepository flashcardRepository, CollectionRepository collectionRepository) {
         this.flashcardRepository = flashcardRepository;
+        this.collectionRepository = collectionRepository;
     }
 
     public FlashcardInfoResponse addFlashcard(FlashcardAddRequest request) throws OtherException {
@@ -51,8 +55,12 @@ public class FlashcardService {
                 throw new OtherException("Fields not a single word");
             }
 
+            // Pobierz kolekcję na podstawie nazwy
+            FlashcardCollection collection = collectionRepository.findByCollectionName(request.getCollectionName())
+                    .orElseThrow(() -> new OtherException("Collection not found"));
+
             Flashcard flashcard = Flashcard.builder()
-                    .collectionName(request.getCollectionName())
+                    .collection(collection)
                     .category(request.getCategory())
                     .word(request.getWord())
                     .translatedWord(request.getTranslatedWord())
@@ -92,7 +100,7 @@ public class FlashcardService {
             if (flashcardOptional.isPresent()) {
                 Flashcard flashcard = flashcardOptional.get();
 
-                flashcard.setCollectionName(request.getCollectionName());
+                flashcard.setCollection(FlashcardCollection.builder().collectionName(request.getCollectionName()).build());
                 flashcard.setCategory(request.getCategory());
                 flashcard.setWord(request.getWord());
                 flashcard.setTranslatedWord(request.getTranslatedWord());
@@ -136,7 +144,7 @@ public class FlashcardService {
                     .translatedExample(flashcard.getTranslatedExample())
                     .build();
         } else {
-            return FlashcardReturnResponse.builder().build();
+            return null;
         }
     }
 
@@ -199,7 +207,7 @@ public class FlashcardService {
 
         // Group flashcards by collection name
         return flashcardAdds.stream()
-                .collect(Collectors.groupingBy(Flashcard::getCollectionName))
+                .collect(Collectors.groupingBy(flashcard -> flashcard.getCollection().getCollectionName()))
                 .entrySet().stream()
                 .map(entry -> {
                     String collectionName = entry.getKey();
@@ -216,17 +224,19 @@ public class FlashcardService {
                             .collect(Collectors.toList());
 
                     return FlashcardCollectionResponse.builder()
-                            .kitName(collectionName)
+                            .name_kit(collectionName)
                             .flashcards(flashcards)
                             .build();
                 })
                 .collect(Collectors.toList());
     }
 
+
     public List<FlashcardReturnResponse> showCollectionByName(String nameCollection) {
         String author = tokenInstance.getUserName();
-        List<FlashcardReturnResponse> flashcards = flashcardRepository.findByCollectionNameAndAuthor(nameCollection, author)
-                .stream()
+        List<Flashcard> flashcards = flashcardRepository.findByCollection_CollectionNameAndAuthor(nameCollection, author);
+
+        return flashcards.stream()
                 .map(flashcard -> FlashcardReturnResponse.builder()
                         .id(flashcard.getId())
                         .category(flashcard.getCategory())
@@ -237,8 +247,6 @@ public class FlashcardService {
                         .translatedExample(flashcard.getTranslatedExample())
                         .build())
                 .collect(Collectors.toList());
-
-        return flashcards;
     }
 
 
@@ -247,7 +255,7 @@ public class FlashcardService {
         List<Flashcard> flashcards = flashcardRepository.findByAuthor(author);
 
         return flashcards.stream()
-                .collect(Collectors.groupingBy(Flashcard::getCollectionName))
+                .collect(Collectors.groupingBy(flashcard -> flashcard.getCollection().getCollectionName()))
                 .entrySet().stream()
                 .map(entry -> {
                     String collectionName = entry.getKey();
@@ -262,14 +270,22 @@ public class FlashcardService {
                 .collect(Collectors.toList());
     }
 
+
     public FlashcardInfoResponse deleteCollectionByName(String nameCollection) throws OtherException {
         try {
-            String author = tokenInstance.getUserName();
-            List<Flashcard> flashcardsToDelete = flashcardRepository.findByCollectionNameAndAuthor(nameCollection, author);
+            Optional<FlashcardCollection> collectionToDelete = collectionRepository.findByCollectionName(nameCollection);
 
-            if (!flashcardsToDelete.isEmpty()) {
-                // Delete all flashcards from the collection created by the author
+            if (collectionToDelete.isPresent()) {
+                FlashcardCollection collection = collectionToDelete.get();
+
+                // Pobierz wszystkie fiszki z kolekcji
+                List<Flashcard> flashcardsToDelete = flashcardRepository.findByCollection(collection);
+
+                // Usuń wszystkie fiszki
                 flashcardRepository.deleteAll(flashcardsToDelete);
+
+                // Usuń kolekcję
+                collectionRepository.delete(collection);
 
                 return FlashcardInfoResponse.builder().response("Collection deleted successfully.").build();
             } else {

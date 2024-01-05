@@ -10,5 +10,10 @@ public interface FlashcardRepository extends JpaRepository<Flashcard, Integer> {
     boolean existsByTranslatedWord(String translatedWord);
     List<Flashcard> findByCategory(String category);
     List<Flashcard> findByAuthor(String author);
-    List<Flashcard> findByCollectionNameAndAuthor(String collectionName, String author);
+    //    List<Flashcard> findByCollectionNameAndAuthor(String collectionName, String author);
+    List<Flashcard> findByCollection_CollectionNameAndAuthor(String collectionName, String author);
+
+    List<Flashcard> findByCollection(FlashcardCollection collection);
+
 }
+
