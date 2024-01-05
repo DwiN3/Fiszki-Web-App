@@ -19,7 +19,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     AppComponent,
     HomeComponent,
     RegisterComponent,
-    PlaceholderDirective,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,60 @@
+@use '../../../../../../../../../assets/scss/base';
+
+.wrapper
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: base.$main-font;
+    letter-spacing: 2px;
+    color: base.$secondary-color;
+}
+
+.box
+{
+    width: 90%;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h4, h3
+    {
+        text-transform: uppercase;
+    }
+
+    div
+    {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.flashcard
+{
+    width: 100%;
+    max-width: 500px;
+    min-width: 300px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #00a6fb;
+    background: linear-gradient(0deg, #0066a1 0%, #00a6fb 70%);
+    border-radius: 10px;
+    box-shadow: 0px 3px 13px -7px rgba(66, 68, 90, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 20px;
+    position: relative;
+
+    h3
+    {
+        position: absolute;
+        top: 40px;
+    }
+}

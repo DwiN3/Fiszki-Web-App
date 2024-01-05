@@ -1,17 +1,15 @@
+import { BaseFlashcardInterface } from "src/app/shared/models/flashcard.interface";
+
 export interface GameSettingsState
 {
     learningMode : string;
     polishFirst : boolean;
-    category : string;
-    collection : string;
-    limit : number;
+    flashcards : BaseFlashcardInterface[];
 }
 
 export const initialState = 
 {
     learningMode : 'learning',
     polishFirst : true,
-    category : '',
-    collection : '',
-    limit : 5,
+    flashcards : [],
 }

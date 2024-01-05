@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { setCategory, setCollection, setLanguage, setLearningMode, setLimit } from "./game-settings.action";
+import { setCollection, setLanguage, setLearningMode } from "./game-settings.action";
 import { initialState } from "./game.state";
 
 export const gameSettingFeautureKey = 'gameSettings';
@@ -21,21 +21,7 @@ const _gameSettingsReducer = createReducer(
     on(setCollection, (state, action) => {
         return{
             ...state,
-           collection : action.collectionName,
-           category : ''
-        };
-    }),
-    on(setCategory, (state, action) => {
-        return{
-            ...state,
-           collection : '',
-           category : action.category
-        };
-    }),
-    on(setLimit, (state, action) => {
-        return{
-            ...state,
-            limit : action.limit
+            flashcards : action.collection
         }
     })
 );

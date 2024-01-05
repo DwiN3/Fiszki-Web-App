@@ -8,18 +8,12 @@ export class FlashcardService
 
     constructor(private http : HttpClient){}
 
-    // http://localhost:8080/flashcards/category/{category}
-    // {
-    //     "limit": ""
-    // }
-
     GetFlashcardsByCategory(categoryName : string, limit : number)
     {
         const token = localStorage.getItem('token');
         const headers = new HttpHeaders({
             'Authorization' : `Bearer ${token}`
         })
-        console.log(headers)
         return this.http.get<any>(this.url + 'category/' + categoryName, { headers : headers})
     }
 }

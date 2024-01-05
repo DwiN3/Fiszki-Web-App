@@ -1,4 +1,5 @@
 import { createAction, props } from "@ngrx/store";
+import { BaseFlashcardInterface } from "src/app/shared/models/flashcard.interface";
 
 export const setLearningMode = createAction(
     'setLearningMode',
@@ -9,17 +10,7 @@ export const setLanguage = createAction(
     'setLanguage'
 )
 
-export const setCategory = createAction(
-    'setCategory',
-    props<{category : string}>()
-)
-
 export const setCollection = createAction(
     'setCollection',
-    props<{collectionName : string}>()
-)
-
-export const setLimit = createAction(
-    'setLimit',
-    props<{limit : number}>()
+    props<{collection : any}>()
 )

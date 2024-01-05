@@ -1,1 +1,12 @@
-<p>learning-mode works!</p>
+<div class="wrapper">
+    <div class="box">
+        <h3>Fiszki</h3>
+        <h3>{{round + 1}} / {{flashcards.length}}</h3>
+        <div class="flashcard" (click)="RevealFlashcard()">
+            <h3 *ngIf="translatedWord">{{flashcards[round].word}}</h3>
+            <h3 *ngIf="!translatedWord">{{flashcards[round].translatedWord}}</h3>
+            <div *ngIf="translatedWord">{{flashcards[round].example}}</div>
+            <div *ngIf="!translatedWord">{{flashcards[round].translatedExample}}</div>
+        </div>
+    </div>
+</div>

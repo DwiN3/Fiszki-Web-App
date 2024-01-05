@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { FlashcardService } from 'src/app/pages/user/services/user.flashcards.service';
 import { GameSettingsState } from '../../store/game.state';
 
 @Component({
@@ -11,14 +11,13 @@ import { GameSettingsState } from '../../store/game.state';
 })
 export class GamePageComponent implements OnInit{
   
-  constructor(private store : Store<{gameSettings : GameSettingsState}>, private flashcardService : FlashcardService){}
+  constructor(private store : Store<{gameSettings : GameSettingsState}>){}
 
   gameSettings$! : Observable<GameSettingsState>
   private gameSettingsSubscription: Subscription | undefined;
 
   learningMode : boolean | null = null;
-  categoryName : string = ''
-  limit : number = 0
+  polishFirst : boolean | null = null;
 
   ngOnInit(): void 
   {
@@ -27,14 +26,10 @@ export class GamePageComponent implements OnInit{
       .subscribe(data => {
         if(data.learningMode === 'learning')
           this.learningMode = true;
-        else this.learningMode = false;
-        this.categoryName = data.category;
-        this.limit = data.limit;
-      })
-
-    this.flashcardService.GetFlashcardsByCategory(this.categoryName, this.limit)
-      .subscribe(data => {
-        console.log(data);
+        else 
+          this.learningMode = false;
+          
+        this.polishFirst = data.polishFirst;
       })
   }
 
