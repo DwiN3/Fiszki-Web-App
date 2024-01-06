@@ -259,33 +259,39 @@ public class FlashcardService {
 
     public List<FlashcardCollectionResponse> showAllCollection() {
         String author = tokenInstance.getUserName();
-        List<Flashcard> flashcardAdds = flashcardRepository.findByAuthor(author);
+        List<Flashcard> flashcards = flashcardRepository.findByAuthor(author);
+        List<FlashcardCollection> flashcardCollections = collectionRepository.findCollectionByAuthor(author);
 
         // Group flashcards by collection name
-        return flashcardAdds.stream()
-                .collect(Collectors.groupingBy(flashcard -> flashcard.getCollection().getCollectionName()))
-                .entrySet().stream()
-                .map(entry -> {
-                    String collectionName = entry.getKey();
-                    List<FlashcardReturnResponse> flashcards = entry.getValue().stream()
-                            .map(flashcard -> FlashcardReturnResponse.builder()
-                                    .id(flashcard.getId())
-                                    .category(flashcard.getCategory())
-                                    .author(flashcard.getAuthor())
-                                    .word(flashcard.getWord())
-                                    .translatedWord(flashcard.getTranslatedWord())
-                                    .example(flashcard.getExample())
-                                    .translatedExample(flashcard.getTranslatedExample())
-                                    .build())
-                            .collect(Collectors.toList());
+        Map<String, List<FlashcardReturnResponse>> groupedFlashcards = flashcards.stream()
+                .collect(Collectors.groupingBy(flashcard -> {
+                            FlashcardCollection collection = flashcard.getCollection();
+                            return (collection != null) ? collection.getCollectionName() : null;
+                        },
+                        Collectors.mapping(flashcard -> FlashcardReturnResponse.builder()
+                                .id(flashcard.getId())
+                                .category(flashcard.getCategory())
+                                .author(flashcard.getAuthor())
+                                .word(flashcard.getWord())
+                                .translatedWord(flashcard.getTranslatedWord())
+                                .example(flashcard.getExample())
+                                .translatedExample(flashcard.getTranslatedExample())
+                                .build(), Collectors.toList())));
 
-                    return FlashcardCollectionResponse.builder()
-                            .name_kit(collectionName)
-                            .flashcards(flashcards)
-                            .build();
-                })
+        // Get all collection names from flashcardCollections
+        Set<String> allCollectionNames = flashcardCollections.stream()
+                .map(FlashcardCollection::getCollectionName)
+                .collect(Collectors.toSet());
+
+        // Create FlashcardCollectionResponse for each collection (including empty ones)
+        return allCollectionNames.stream()
+                .map(collectionName -> FlashcardCollectionResponse.builder()
+                        .name_kit(collectionName)
+                        .flashcards(groupedFlashcards.getOrDefault(collectionName, Collections.emptyList()))
+                        .build())
                 .collect(Collectors.toList());
     }
+
 
 
     public List<FlashcardReturnResponse> showCollectionByName(String nameCollection) {
@@ -309,18 +315,25 @@ public class FlashcardService {
     public List<Map<String, Object>> showCollectionInfo() {
         String author = tokenInstance.getUserName();
         List<Flashcard> flashcards = flashcardRepository.findByAuthor(author);
+        List<FlashcardCollection> flashcardCollections = collectionRepository.findCollectionByAuthor(author);
 
-        return flashcards.stream()
-                .collect(Collectors.groupingBy(flashcard -> flashcard.getCollection().getCollectionName()))
-                .entrySet().stream()
-                .map(entry -> {
-                    String collectionName = entry.getKey();
-                    long flashcardsCount = entry.getValue().size();
+        Map<String, Long> flashcardsCountByCollection = flashcards.stream()
+                .collect(Collectors.groupingBy(flashcard -> {
+                    FlashcardCollection collection = flashcard.getCollection();
+                    return (collection != null) ? collection.getCollectionName() : null;
+                }, Collectors.counting()));
 
+        // Get all collection names from flashcardCollections
+        Set<String> allCollectionNames = flashcardCollections.stream()
+                .map(FlashcardCollection::getCollectionName)
+                .collect(Collectors.toSet());
+
+        // Create collection info for each collection (including empty ones)
+        return allCollectionNames.stream()
+                .map(collectionName -> {
                     Map<String, Object> collectionInfo = new HashMap<>();
                     collectionInfo.put("nameCollection", collectionName);
-                    collectionInfo.put("flashcards", flashcardsCount);
-
+                    collectionInfo.put("flashcards", flashcardsCountByCollection.getOrDefault(collectionName, 0L));
                     return collectionInfo;
                 })
                 .collect(Collectors.toList());
