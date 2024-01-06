@@ -39,12 +39,11 @@ export class UserCollectionsComponent implements OnInit{
     this.userCollectionService.GetCollections()
       .subscribe(data => {
           this.collectionStore.dispatch(setCollection({collections : data}));
+          this.store.dispatch(setCollectionQuantity({quantity : this.flashcardsCollection.length}))
           this.isLoading = false;
       }, err => {
         console.log(err)
       })
-
-    this.store.dispatch(setCollectionQuantity({quantity : this.flashcardsCollection.length}))
 
     this.collections$ = this.collectionStore.select('collections');
     this.collections$

@@ -1,8 +1,13 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, Output, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { faRemove } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { UserCollectionService } from 'src/app/pages/user/services/user-collection.service';
+import { AlertModel } from 'src/app/shared/models/alert.model';
+import { AlertComponent } from 'src/app/shared/ui/alert/alert.component';
+import { PlaceholderDirective } from 'src/app/shared/ui/alert/directive/placeholder.directive';
+import { AlertService } from 'src/app/shared/ui/alert/service/alert.service';
 import { FlashcardCollectionModel } from '../../models/flashcard-collection.model';
 import { changeCollectionQuantity } from '../../store/carousel.actions';
 import { CarouselState } from '../../store/carousel.state';
@@ -16,15 +21,16 @@ import { CollectionsState } from '../../store/collections.state';
 })
 export class AddCollectionComponent {
 
-  faRemove = faRemove;
-
   @ViewChild('form') form : NgForm | null = null;
+  @ViewChild(PlaceholderDirective, { static: true }) alertHost!: PlaceholderDirective;
+
   @Output() closeForm = new EventEmitter<boolean>();
 
+  faRemove = faRemove;
   collectionName : string = '';
   isLoading : boolean = false;
 
-  constructor(private userCollectionService : UserCollectionService, private store : Store<{collections : CollectionsState}>, private carouselStore : Store<{carousel : CarouselState}>){}
+  constructor(private userCollectionService : UserCollectionService, private store : Store<{collections : CollectionsState}>, private carouselStore : Store<{carousel : CarouselState}>, private alertService : AlertService){}
 
   CloseForm() : void
   {
@@ -45,8 +51,9 @@ export class AddCollectionComponent {
           this.carouselStore.dispatch(changeCollectionQuantity({value : 1}))
           this.isLoading = false;
       }, err => {
-        console.log(err);
         this.isLoading = false;
+        if(err.status === 400)
+          this.alertService.ShowAlert('Błąd!', 'Kolejkca o danej nazwie już istnieje', 'zmień nazwę kolekcji', this.alertHost)
       })
       
   }

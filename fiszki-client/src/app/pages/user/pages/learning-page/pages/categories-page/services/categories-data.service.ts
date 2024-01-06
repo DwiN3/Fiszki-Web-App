@@ -21,7 +21,7 @@ export class CategoriesDataService
             icon : faMasksTheater,
         },
         {
-            categoryName : 'mieszkanie',
+            categoryName : 'dom',
             icon : faHouse,
         },
         {

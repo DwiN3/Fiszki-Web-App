@@ -7,6 +7,7 @@ import { BaseUserModel } from 'src/app/shared/models/base-user.model';
 import { AccountService } from 'src/app/shared/services/user.service';
 import { AlertComponent } from 'src/app/shared/ui/alert/alert.component';
 import { PlaceholderDirective } from 'src/app/shared/ui/alert/directive/placeholder.directive';
+import { AlertService } from 'src/app/shared/ui/alert/service/alert.service';
 
 @Component({
   selector: 'app-home',
@@ -17,14 +18,14 @@ export class HomeComponent implements OnDestroy{
 
   @ViewChild('form') loginForm : NgForm | null = null;
   @ViewChild(PlaceholderDirective, { static: true }) alertHost!: PlaceholderDirective;
-  error : string | null = null;
-  subscription : Subscription | null = null;
-  userData : BaseUserModel = new BaseUserModel('', '');
-  isLoading : boolean = false;
-  alertSub : Subscription | null = null;
-  alertData : AlertModel = new AlertModel('', '', '');
 
-  constructor(private accountService : AccountService, private router : Router, private componentFactoryResolver : ComponentFactoryResolver){}
+  userData : BaseUserModel = new BaseUserModel('', '');
+  error : string | null = null;
+  
+  subscription : Subscription | null = null;
+  isLoading : boolean = false;
+
+  constructor(private accountService : AccountService, private router : Router, private alertService : AlertService){}
 
   ngAfterViewInit(): void 
   {
@@ -59,34 +60,9 @@ export class HomeComponent implements OnDestroy{
             if(error.status === 401)
               this.error = "Zły email lub hasło!";
             else
-            {
-              this.alertData.title = "Bład servera!";
-              this.alertData.details = error.message;
-              this.alertData.instructions = "Spróbuj ponownie później!";
-              this.ShowAlert();
-            }  
+              this.alertService.ShowAlert('Błąd serwera!', error.message, 'Spróbuj ponownie później!', this.alertHost);
             this.isLoading = false;
           });
-  }
-
-  private ShowAlert(): void
-  {
-    const alertCmpFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
-    
-    const hostViewContainerRef = this.alertHost?.viewContainerRef;
-    hostViewContainerRef?.clear();
-
-    const componentRef = hostViewContainerRef?.createComponent(alertCmpFactory);
-
-    componentRef.instance.title = this.alertData.title;
-    componentRef.instance.instructions = this.alertData.instructions;
-    componentRef.instance.details = this.alertData.details;
-
-    this.alertSub = componentRef.instance.close.subscribe(() => 
-    {
-      this.alertSub?.unsubscribe();
-      hostViewContainerRef.clear();
-    })
   }
 
 }

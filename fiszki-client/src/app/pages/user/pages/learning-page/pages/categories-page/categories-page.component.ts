@@ -11,6 +11,7 @@ import { BaseFlashcardInterface } from 'src/app/shared/models/flashcard.interfac
 import { Store } from '@ngrx/store';
 import { GameSettingsState } from '../../store/game.state';
 import { setCollection } from '../../store/game-settings.action';
+import { AlertService } from 'src/app/shared/ui/alert/service/alert.service';
 
 @Component({
   selector: 'app-categories-page',
@@ -21,15 +22,12 @@ export class CategoriesPageComponent {
 
   @ViewChild(PlaceholderDirective, { static: true }) alertHost!: PlaceholderDirective;
 
-  alertData : AlertModel | null = null;
-  alertSub : Subscription | null = null;
-
   categories : CategoryModel[] = [];
   flashcards : BaseFlashcardInterface[] = []
   limit : number = 10;
   isLoading : boolean = false;
 
-  constructor(private categoriesDataService : CategoriesDataService, private flashcardService : FlashcardService, private router : Router, private componentFactoryResolver : ComponentFactoryResolver, private store : Store<{gameSettings : GameSettingsState}>)
+  constructor(private categoriesDataService : CategoriesDataService, private flashcardService : FlashcardService, private router : Router, private store : Store<{gameSettings : GameSettingsState}>, private alertService : AlertService)
   {
     this.categories = categoriesDataService.categories;
   }
@@ -44,10 +42,7 @@ export class CategoriesPageComponent {
         this.flashcards = data;
         this.isLoading = false;
         if(this.flashcards.length === 0)
-        {
-          this.alertData = new AlertModel('Brak fiszek', 'Brak fiszek w danej katgorii, spróbuj poźniej', '')
-          this.ShowAlert();
-        }
+          this.alertService.ShowAlert('Brak fiszek!', 'Brak fiszek w danej katgorii, spróbuj poźniej', '', this.alertHost);
         else
         {
           this.store.dispatch(setCollection({collection : this.flashcards}))
@@ -57,34 +52,10 @@ export class CategoriesPageComponent {
           
       }, err => {
         this.isLoading = false;
-        this.alertData = new AlertModel('Błąd serwera', err.message, "Spróbuj ponownie później!")
-          this.ShowAlert();
+        this.alertService.ShowAlert('Błąd serwera!', err.message, 'Spróbuj ponownie później', this.alertHost);
       })
 
     
-  }
-  
-  private ShowAlert(): void
-  {
-    const alertCmpFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
-    
-    const hostViewContainerRef = this.alertHost?.viewContainerRef;
-    hostViewContainerRef?.clear();
-
-    const componentRef = hostViewContainerRef?.createComponent(alertCmpFactory);
-
-    if(this.alertData)
-    {
-      componentRef.instance.title = this.alertData.title;
-      componentRef.instance.instructions = this.alertData.instructions;
-      componentRef.instance.details = this.alertData.details;
-    }
-
-    this.alertSub = componentRef.instance.close.subscribe(() => 
-    {
-      this.alertSub?.unsubscribe();
-      hostViewContainerRef.clear();
-    })
   }
 
 }
