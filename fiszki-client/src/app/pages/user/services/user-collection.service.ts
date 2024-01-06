@@ -22,11 +22,17 @@ export class UserCollectionService
             );
     }
 
-    AddCollection(collectionName : string) : Observable<FlashcardCollectionModel>
+    AddCollection(collectionName : string)
     {
         const data = {collectionName : collectionName}
         return this.http.post<any>(this.url + 'add_collection', data, {headers : this.headers})
     }
+
+    DeleteCollection(collectionName : string)
+    {
+        console.log(collectionName);
+        return this.http.delete<any>(this.url + 'collection/' + collectionName, {headers : this.headers});
+    } 
 
     private mapToCollection(data : any) : FlashcardCollectionModel
     {

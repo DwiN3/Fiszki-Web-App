@@ -3,15 +3,15 @@ import { FlashcardCollectionModel } from "../models/flashcard-collection.model";
 
 export const addCollection = createAction(
     'addCollection',
-    props<{collection : any}>()
+    props<{collection : FlashcardCollectionModel}>()
 )
 
 export const deleteCollection = createAction(
     'deleteCollection',
-    props<{id : number}>()
+    props<{name : string}>()
 )
 
 export const setCollection = createAction(
     'setCollection',
-    props<{collections : any}>()
+    props<{collections : FlashcardCollectionModel[]}>()
 )

@@ -16,6 +16,7 @@
                     *ngFor="let collection of flashcardsCollection"
                     [collectionName]="collection.collectionName"
                     [flashcardsQuantity]="collection.flashcardsQuantity"
+                    (alertEvent)="OnChildError($event)"
                 />
             </div>
             <div class="alert" *ngIf="flashcardsCollection.length === 0">Brak zestawów</div>
@@ -24,3 +25,4 @@
     <div class="button" (click)="ChangeFormState(true)">Dodaj zestaw</div>
 </div>
 <app-add-collection *ngIf="formState" (closeForm)="ChangeFormState($event)"/>
+<ng-template appPlaceholder></ng-template>

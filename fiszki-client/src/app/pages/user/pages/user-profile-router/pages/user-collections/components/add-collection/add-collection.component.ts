@@ -53,7 +53,9 @@ export class AddCollectionComponent {
       }, err => {
         this.isLoading = false;
         if(err.status === 400)
-          this.alertService.ShowAlert('Błąd!', 'Kolejkca o danej nazwie już istnieje', 'zmień nazwę kolekcji', this.alertHost)
+          this.alertService.ShowAlert('Błąd!', 'Kolejkca o danej nazwie już istnieje', 'zmień nazwę kolekcji', this.alertHost);
+        else 
+          this.alertService.ShowAlert('Błąd serwera!', err.message, 'spróbuj ponownie później!', this.alertHost);
       })
       
   }

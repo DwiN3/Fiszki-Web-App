@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { UserCollectionService } from 'src/app/pages/user/services/user-collection.service';
@@ -8,6 +8,9 @@ import { decrementPage, incrementPage, setCollectionQuantity } from './store/car
 import { FlashcardCollectionModel } from './models/flashcard-collection.model';
 import { CollectionsState } from './store/collections.state';
 import { setCollection } from './store/collections.actions';
+import { AlertModel } from 'src/app/shared/models/alert.model';
+import { PlaceholderDirective } from 'src/app/shared/ui/alert/directive/placeholder.directive';
+import { AlertService } from 'src/app/shared/ui/alert/service/alert.service';
 
 @Component({
   selector: 'app-user-collections',
@@ -16,6 +19,8 @@ import { setCollection } from './store/collections.actions';
 })
 export class UserCollectionsComponent implements OnInit{
   
+  @ViewChild(PlaceholderDirective, { static: true }) alertHost!: PlaceholderDirective;
+
   faArrowLeft = faArrowLeft;
   faArrowRight = faArrowRight;
 
@@ -32,7 +37,7 @@ export class UserCollectionsComponent implements OnInit{
   formState : boolean = false;
   
 
-  constructor(private userCollectionService : UserCollectionService, private store : Store<{carousel : CarouselState}>, private collectionStore : Store<{collections : CollectionsState}>){}
+  constructor(private userCollectionService : UserCollectionService, private store : Store<{carousel : CarouselState}>, private collectionStore : Store<{collections : CollectionsState}>, private alertService : AlertService){}
 
   ngOnInit(): void {
 
@@ -78,6 +83,11 @@ export class UserCollectionsComponent implements OnInit{
   ChangeFormState(state : boolean) : void
   {
     this.formState = state;
+  }
+
+  OnChildError(errorDetails : AlertModel) : void
+  {
+    this.alertService.ShowAlert(errorDetails.title, errorDetails.details, errorDetails.instructions, this.alertHost);
   }
 
 }

@@ -5,7 +5,7 @@ export interface CollectionsState
     collections : FlashcardCollectionModel[];
 }
 
-export const initialState = 
+export const initialState : CollectionsState = 
 {
     collections : [],
 }
