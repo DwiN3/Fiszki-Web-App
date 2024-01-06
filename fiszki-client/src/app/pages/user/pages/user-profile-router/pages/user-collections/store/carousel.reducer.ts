@@ -41,7 +41,9 @@ const _carouselReducer = createReducer(
     on(changeCollectionQuantity, (state, action) => {
         return{
             ...state,
-            collectionQuantity : state.collectionQuantity + action.value
+            collectionQuantity : state.collectionQuantity + action.value,
+            pageQuantity : state.pageQuantity + action.value,
+            currentPage : state.currentPage > 0 ? state.currentPage + action.value : state.currentPage 
         }
     })
 );
