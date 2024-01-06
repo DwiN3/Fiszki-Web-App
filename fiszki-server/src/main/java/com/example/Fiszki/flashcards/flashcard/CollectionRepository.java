@@ -9,4 +9,7 @@ public interface CollectionRepository extends JpaRepository<FlashcardCollection,
     Optional<FlashcardCollection> findByCollectionName(String collectionName);
     boolean existsByCollectionNameAndAuthor(String collectionName, String author);
     List<FlashcardCollection> findByCollectionNameAndAuthor(String collectionName, String author);
+
+    List<FlashcardCollection> findCollectionByAuthor(String author);
+
 }
