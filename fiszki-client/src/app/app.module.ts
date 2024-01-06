@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from './pages/register/register.component';
-import { PlaceholderDirective } from './shared/ui/alert/directive/placeholder.directive';
 import { UserModule } from './pages/user/user.module';
 import { HomeGuard } from './pages/home/services/home-guard';
 import { SharedModule } from './shared/shared.module';

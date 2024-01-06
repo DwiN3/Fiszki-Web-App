@@ -1,22 +1,36 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { FlashcardCollectionModel } from "src/app/shared/models/flashcards-collection.model";
+import { map, Observable } from "rxjs";
+import { FlashcardCollectionModel } from "../pages/user-profile-router/pages/user-collections/models/flashcard-collection.model";
 
 @Injectable({providedIn : 'root'})
 export class UserCollectionService
 {
-    url = 'http://localhost:8080/flashcards/collections';
+    url : string = 'http://localhost:8080/flashcards/';
+    token : string | null = localStorage.getItem('token');
+    headers : HttpHeaders = new HttpHeaders({
+        'Authorization': `Bearer ${this.token}`,
+    });
 
     constructor(private http : HttpClient){}
 
-    GetCollections()
+    GetCollections() : Observable<FlashcardCollectionModel[]>
     {
-        const token = localStorage.getItem('token');
-        const headers = new HttpHeaders({
-            'Authorization': `Bearer ${token}`,
-        });
+        return this.http.get<any>(this.url + 'collections', {headers : this.headers})
+            .pipe(
+                map((data : any[]) => data.map(collection => this.mapToCollection(collection)))
+            );
+    }
 
-        return this.http.get<any>(this.url, {headers : headers});
+    AddCollection(collectionName : string) : Observable<FlashcardCollectionModel>
+    {
+        const data = {collectionName : collectionName}
+        return this.http.post<any>(this.url + 'add_collection', data, {headers : this.headers})
+    }
+
+    private mapToCollection(data : any) : FlashcardCollectionModel
+    {
+        return new FlashcardCollectionModel(data.name_kit, data.flashcards.length)
     }
 
 }

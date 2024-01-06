@@ -9,7 +9,7 @@ export interface CarouselState
 export const initialState = 
 {
     currentPage: 0,
-    collectionQuantity: 8,
+    collectionQuantity: 0,
     elementsToDisplay: 0,
     pageQuantity : 0,
 }

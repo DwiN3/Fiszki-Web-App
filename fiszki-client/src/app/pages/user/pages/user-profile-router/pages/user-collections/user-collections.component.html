@@ -1,3 +1,4 @@
+<app-loader *ngIf="isLoading"/>
 <div class="wrapper">
     <h3>Twoje Zestawy</h3>
     <div class="carousel-wrapper">
@@ -10,13 +11,16 @@
             </div>
         </div>
         <div class="carousel-box">
-            <div class="carousel" carousel>
+            <div class="carousel" carousel *ngIf="flashcardsCollection.length > 0">
                 <app-collection 
                     *ngFor="let collection of flashcardsCollection"
                     [collectionName]="collection.collectionName"
                     [flashcardsQuantity]="collection.flashcardsQuantity"
                 />
             </div>
+            <div class="alert" *ngIf="flashcardsCollection.length === 0">Brak zestawów</div>
         </div>
     </div>
+    <div class="button" (click)="ChangeFormState(true)">Dodaj zestaw</div>
 </div>
+<app-add-collection *ngIf="formState" (closeForm)="ChangeFormState($event)"/>

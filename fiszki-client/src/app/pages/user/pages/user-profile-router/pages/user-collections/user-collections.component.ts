@@ -6,7 +6,8 @@ import { CarouselState } from './store/carousel.state';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { decrementPage, incrementPage, setCollectionQuantity } from './store/carousel.actions';
 import { FlashcardCollectionModel } from './models/flashcard-collection.model';
-
+import { CollectionsState } from './store/collections.state';
+import { setCollection } from './store/collections.actions';
 
 @Component({
   selector: 'app-user-collections',
@@ -19,49 +20,37 @@ export class UserCollectionsComponent implements OnInit{
   faArrowRight = faArrowRight;
 
   carousel$! : Observable<CarouselState>;
+  collections$! : Observable<CollectionsState>;
   
   currentPage : number = 0;
   collectionQuantity : number = 0;
   pagesQuantity : number = 0;
-  flashcardsCollection : FlashcardCollectionModel[] = [
-    {
-      collectionName : 'Zestaw 1',
-      flashcardsQuantity : 10
-    },
-    {
-      collectionName : 'Zestaw 2',
-      flashcardsQuantity : 15
-    },
-    {
-      collectionName : 'Zestaw 2',
-      flashcardsQuantity : 15
-    },
-    {
-      collectionName : 'Zestaw 2',
-      flashcardsQuantity : 15
-    },
-    {
-      collectionName : 'Zestaw 2',
-      flashcardsQuantity : 15
-    },
-    {
-      collectionName : 'Zestaw 2',
-      flashcardsQuantity : 15
-    },
-  ]
+  
+  flashcardsCollection : FlashcardCollectionModel[] = []
+  
+  isLoading : boolean = true;
+  formState : boolean = false;
+  
 
-  constructor(private userCollectionService : UserCollectionService, private store : Store<{carousel : CarouselState}>){}
+  constructor(private userCollectionService : UserCollectionService, private store : Store<{carousel : CarouselState}>, private collectionStore : Store<{collections : CollectionsState}>){}
 
   ngOnInit(): void {
 
     this.userCollectionService.GetCollections()
       .subscribe(data => {
-        console.log(data)
+          this.collectionStore.dispatch(setCollection({collections : data}));
+          this.isLoading = false;
       }, err => {
         console.log(err)
       })
 
     this.store.dispatch(setCollectionQuantity({quantity : this.flashcardsCollection.length}))
+
+    this.collections$ = this.collectionStore.select('collections');
+    this.collections$
+      .subscribe(data => {
+        this.flashcardsCollection = data.collections
+      })
 
     this.carousel$ = this.store.select('carousel');
     this.carousel$
@@ -85,6 +74,11 @@ export class UserCollectionsComponent implements OnInit{
     if(this.currentPage <= 0)
       return
     this.store.dispatch(decrementPage())
+  }
+  
+  ChangeFormState(state : boolean) : void
+  {
+    this.formState = state;
   }
 
 }

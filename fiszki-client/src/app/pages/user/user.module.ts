@@ -24,6 +24,9 @@ import { CategoriesPageComponent } from './pages/learning-page/pages/categories-
 import { CategoriesItemComponent } from './pages/learning-page/pages/categories-page/components/categories-item/categories-item.component';
 import { GamePageComponent } from './pages/learning-page/pages/game-page/game-page.component';
 import { LearningModeComponent } from './pages/learning-page/pages/game-page/components/learning-mode/learning-mode.component';
+import { AddCollectionComponent } from './pages/user-profile-router/pages/user-collections/components/add-collection/add-collection.component';
+import { AddFlashcardComponent } from './pages/user-profile-router/pages/user-collections/components/add-flashcard/add-flashcard.component';
+import { collectionsFeatureKey, collectionsReducer } from "./pages/user-profile-router/pages/user-collections/store/collections.reducer";
 
 @NgModule({
     declarations:[
@@ -42,6 +45,8 @@ import { LearningModeComponent } from './pages/learning-page/pages/game-page/com
         CategoriesItemComponent,
         GamePageComponent,
         LearningModeComponent,
+        AddCollectionComponent,
+        AddFlashcardComponent,
     ],
     imports: [
         CommonModule,
@@ -49,6 +54,7 @@ import { LearningModeComponent } from './pages/learning-page/pages/game-page/com
         SharedModule,
         StoreModule.forFeature(carouselFeatureKey, carouselReducer),
         StoreModule.forFeature(gameSettingFeautureKey, gameSettingsReducer),
+        StoreModule.forFeature(collectionsFeatureKey, collectionsReducer),
         FontAwesomeModule,
         FormsModule,
     ],

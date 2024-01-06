@@ -1,0 +1,10 @@
+<div class="wrapper">
+    <div class="box">
+        <div class="icon" (click)="CloseForm()"><fa-icon [icon]="faRemove"/></div>
+        <h2>Dodaj zestaw</h2>
+        <h5>Nazwa zestawu</h5>
+        <input type="text">
+        <button type="submit" (click)="OnAdd('zestaw-2')">Dodaj</button>
+    </div>
+</div>
+<app-loader *ngIf='isLoading'/>

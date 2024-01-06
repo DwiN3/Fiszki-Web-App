@@ -101,6 +101,7 @@
     justify-content: space-between;
     position: absolute;
     transition: all ease-in-out 0.5s;
+    z-index: 1;
 }
 
 @media(max-width : base.$medium)
@@ -113,4 +114,21 @@
     .controls{
         display: none;
     }
+}
+
+.button
+{
+    margin-top: 50px;
+    @include shared-styles.background-gradient;
+    @include shared-styles.button;
+    padding: 15px 20px;
+}
+
+.alert
+{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
