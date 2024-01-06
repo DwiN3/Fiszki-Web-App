@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
-import { initialState } from "./carousel.state";
-import { setCollection } from "./collections.actions";
+import { initialState } from './collections.state'
+import { addCollection, setCollection } from "./collections.actions";
 
 export const collectionsFeatureKey = 'collections'
 
@@ -12,6 +12,12 @@ const _collectionsReducer = createReducer(
             collections : action.collections
         }
     }),
+    on(addCollection, (state, action) => {
+        return{
+            ...state,
+            collections : state.collections.concat(action.collection)
+        }
+    })
 )
 
 export function collectionsReducer(state : any, action : any){

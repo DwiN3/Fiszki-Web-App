@@ -1,6 +1,6 @@
 import { Directive, ElementRef, HostListener, OnDestroy, OnInit, Renderer2 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Subject, takeUntil } from "rxjs";
+import { distinctUntilChanged, Subject, takeUntil, tap } from "rxjs";
 import { CarouselSettingsService } from "../services/carousel-settings.service";
 import { resetPage, setElementsToDisplay } from "../store/carousel.actions";
 import { CarouselState } from "../store/carousel.state";
@@ -22,7 +22,14 @@ export class CarouselDirective implements OnInit, OnDestroy
     constructor(private el : ElementRef, private renderer : Renderer2, private store : Store<{carousel : CarouselState}>,  private carouselSettingsService :   CarouselSettingsService)
     {
         this.store.select('carousel')
-            .pipe(takeUntil(this.destroy$))
+            .pipe(
+                takeUntil(this.destroy$),
+                distinctUntilChanged((prev, curr) => prev.collectionQuantity === curr.collectionQuantity),
+                tap(data => {
+                    this.SetWidth();
+                    this.SetStyle();
+                })
+                )
             .subscribe(data => {
                 this.currentPage = data.currentPage;
                 this.elementsQuantity = data.collectionQuantity;

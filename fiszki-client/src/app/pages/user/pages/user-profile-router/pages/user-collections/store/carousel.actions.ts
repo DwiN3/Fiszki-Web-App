@@ -22,3 +22,7 @@ export const setElementsToDisplay = createAction(
     props<{value : number, pageQuantity : number}>()
 )
 
+export const changeCollectionQuantity = createAction(
+    'changeCollectionQuantity',
+    props<{value : number}>()
+)
