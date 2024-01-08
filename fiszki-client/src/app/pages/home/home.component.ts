@@ -2,10 +2,8 @@ import { Component, ComponentFactoryResolver, OnDestroy, ViewChild } from '@angu
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { distinctUntilChanged, Subscription } from 'rxjs';
-import { AlertModel } from 'src/app/shared/models/alert.model';
 import { BaseUserModel } from 'src/app/shared/models/base-user.model';
 import { AccountService } from 'src/app/shared/services/user.service';
-import { AlertComponent } from 'src/app/shared/ui/alert/alert.component';
 import { PlaceholderDirective } from 'src/app/shared/ui/alert/directive/placeholder.directive';
 import { AlertService } from 'src/app/shared/ui/alert/service/alert.service';
 
@@ -57,11 +55,11 @@ export class HomeComponent implements OnDestroy{
             localStorage.setItem('token', JSON.stringify(resData.response).replace(/"/g, ''));
             this.router.navigate(['user']);
           }, error => {
+            this.isLoading = false;
             if(error.status === 401)
               this.error = "Zły email lub hasło!";
             else
               this.alertService.ShowAlert('Błąd serwera!', error.message, 'Spróbuj ponownie później!', this.alertHost);
-            this.isLoading = false;
           });
   }
 

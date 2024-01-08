@@ -6,6 +6,8 @@ import { CategoriesPageComponent } from './pages/learning-page/pages/categories-
 import { GamePageComponent } from './pages/learning-page/pages/game-page/game-page.component';
 import { LearningPageSettingsComponent } from './pages/learning-page/pages/learning-page-settings/learning-page-settings.component';
 import { UserHomeComponent } from './pages/user-home/user-home.component';
+import { UserCollectionEditComponent } from './pages/user-profile-router/pages/user-collection-edit/user-collection-edit.component';
+import { CollectionRouterOutletComponent } from './pages/user-profile-router/pages/user-collections/components/collection-router-outlet/collection-router-outlet.component';
 import { UserCollectionsComponent } from './pages/user-profile-router/pages/user-collections/user-collections.component';
 import { UserProfileComponent } from './pages/user-profile-router/pages/user-profile/user-profile.component';
 import { UserProfileRouterComponent } from './pages/user-profile-router/user-profile-router.component';
@@ -35,7 +37,19 @@ const routes : Routes =
                     },
                     {
                         path: 'collections',
-                        component: UserCollectionsComponent,
+                        component: CollectionRouterOutletComponent,
+                        children: 
+                        [
+                            {
+                                path: '',
+                                component: UserCollectionsComponent,
+                            },
+                            {
+                                path: 'edit',
+                                component: UserCollectionEditComponent,
+                            }
+                        ]
+
                     }
                 ]
             },

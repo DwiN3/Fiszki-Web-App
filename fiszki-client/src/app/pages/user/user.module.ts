@@ -27,6 +27,10 @@ import { LearningModeComponent } from './pages/learning-page/pages/game-page/com
 import { AddCollectionComponent } from './pages/user-profile-router/pages/user-collections/components/add-collection/add-collection.component';
 import { AddFlashcardComponent } from './pages/user-profile-router/pages/user-collections/components/add-flashcard/add-flashcard.component';
 import { collectionsFeatureKey, collectionsReducer } from "./pages/user-profile-router/pages/user-collections/store/collections.reducer";
+import { UserCollectionEditComponent } from './pages/user-profile-router/pages/user-collection-edit/user-collection-edit.component';
+import { CollectionRouterOutletComponent } from './pages/user-profile-router/pages/user-collections/components/collection-router-outlet/collection-router-outlet.component';
+import { FlashcardComponent } from './pages/user-profile-router/pages/user-collections/components/flashcard/flashcard.component';
+import { FlashcardEditFormComponent } from './pages/user-profile-router/pages/user-collection-edit/components/flashcard-edit-form/flashcard-edit-form.component';
 
 @NgModule({
     declarations:[
@@ -47,6 +51,10 @@ import { collectionsFeatureKey, collectionsReducer } from "./pages/user-profile-
         LearningModeComponent,
         AddCollectionComponent,
         AddFlashcardComponent,
+        UserCollectionEditComponent,
+        CollectionRouterOutletComponent,
+        FlashcardComponent,
+        FlashcardEditFormComponent,
     ],
     imports: [
         CommonModule,

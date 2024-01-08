@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { map, Observable } from "rxjs";
+import { BaseFlashcardInterface } from "src/app/shared/models/flashcard.interface";
 import { FlashcardCollectionModel } from "../pages/user-profile-router/pages/user-collections/models/flashcard-collection.model";
 
 @Injectable({providedIn : 'root'})
@@ -12,7 +14,7 @@ export class UserCollectionService
         'Authorization': `Bearer ${this.token}`,
     });
 
-    constructor(private http : HttpClient){}
+    constructor(private http : HttpClient, private activeRoute : ActivatedRoute){}
 
     GetCollections() : Observable<FlashcardCollectionModel[]>
     {
@@ -30,13 +32,35 @@ export class UserCollectionService
 
     DeleteCollection(collectionName : string)
     {
-        console.log(collectionName);
         return this.http.delete<any>(this.url + 'collection/' + collectionName, {headers : this.headers});
     } 
+
+    GetFlashCardsByCollection(collectionName : string)
+    {
+        return this.http.get<any[]>(this.url + 'collection/' + collectionName, { headers : this.headers })
+        .pipe(
+            map(response => this.mapToFlashcard(response))
+          );
+           
+    }
 
     private mapToCollection(data : any) : FlashcardCollectionModel
     {
         return new FlashcardCollectionModel(data.name_kit, data.flashcards.length)
+    }
+
+    private mapToFlashcard(res : any[]) : BaseFlashcardInterface[]
+    {
+        return res.map(item => {
+            return{
+                id : item.id,
+                word : item.word,
+                translatedWord : item.translatedWord,
+                example : item.example,
+                translatedExample : item.translatedExample,
+                category : item.category
+            } 
+        });
     }
 
 }

@@ -15,6 +15,8 @@
     border-radius: 10px;
     cursor: pointer;
     text-transform: uppercase;
+    font-family: base.$main-font;
+    letter-spacing: 2px;
 }
 
 @mixin unactive-button

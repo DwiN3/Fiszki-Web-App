@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { faPlusCircle, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { UserCollectionService } from 'src/app/pages/user/services/user-collection.service';
 import { AlertModel } from 'src/app/shared/models/alert.model';
 import { PlaceholderDirective } from 'src/app/shared/ui/alert/directive/placeholder.directive';
-import { AlertService } from 'src/app/shared/ui/alert/service/alert.service';
 import { changeCollectionQuantity } from '../../store/carousel.actions';
 import { CarouselState } from '../../store/carousel.state';
 import { deleteCollection } from '../../store/collections.actions';
@@ -23,13 +23,12 @@ export class CollectionComponent {
     
     @ViewChild(PlaceholderDirective, { static: true }) alertHost!: PlaceholderDirective;
 
-    faPlusCircle = faPlusCircle;
     faTrash = faTrash;
     faEdit = faEdit;
 
     alertDetails : AlertModel | null = null;
 
-    constructor(private alertService : AlertService, private store : Store<{collections : CollectionsState}>, private carouselStore : Store<{carousel : CarouselState}>, private collectionService : UserCollectionService){}
+    constructor(private router : Router, private store : Store<{collections : CollectionsState}>, private carouselStore : Store<{carousel : CarouselState}>, private collectionService : UserCollectionService){}
 
     OnDelete() : void
     {
@@ -46,6 +45,11 @@ export class CollectionComponent {
     private ChildShowAlert(alertDetails : AlertModel)
     {
       this.alertEvent.emit(alertDetails);
+    }
+
+    OnEdit() : void
+    {
+      this.router.navigate(['/user/profile/collections/edit'], { queryParams: { collectionName: this.collectionName }});
     }
 
 }
