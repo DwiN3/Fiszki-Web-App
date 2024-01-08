@@ -2,10 +2,8 @@ import { Component, ComponentFactoryResolver, OnDestroy, ViewChild } from '@angu
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { distinctUntilChanged, Subscription } from 'rxjs';
-import { AlertModel } from 'src/app/shared/models/alert.model';
 import { BaseUserModel } from 'src/app/shared/models/base-user.model';
 import { AccountService } from 'src/app/shared/services/user.service';
-import { AlertComponent } from 'src/app/shared/ui/alert/alert.component';
 import { PlaceholderDirective } from 'src/app/shared/ui/alert/directive/placeholder.directive';
 import { AlertService } from 'src/app/shared/ui/alert/service/alert.service';
 

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { faPlusCircle, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Store } from '@ngrx/store';
 import { UserCollectionService } from 'src/app/pages/user/services/user-collection.service';
 import { AlertModel } from 'src/app/shared/models/alert.model';
@@ -23,7 +23,6 @@ export class CollectionComponent {
     
     @ViewChild(PlaceholderDirective, { static: true }) alertHost!: PlaceholderDirective;
 
-    faPlusCircle = faPlusCircle;
     faTrash = faTrash;
     faEdit = faEdit;
 

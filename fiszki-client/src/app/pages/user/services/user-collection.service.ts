@@ -37,12 +37,30 @@ export class UserCollectionService
 
     GetFlashCardsByCollection(collectionName : string)
     {
-        return this.http.get<any>(this.url + 'collection/' + collectionName, { headers : this.headers });
+        return this.http.get<any[]>(this.url + 'collection/' + collectionName, { headers : this.headers })
+        .pipe(
+            map(response => this.mapToFlashcard(response))
+          );
+           
     }
 
     private mapToCollection(data : any) : FlashcardCollectionModel
     {
         return new FlashcardCollectionModel(data.name_kit, data.flashcards.length)
+    }
+
+    private mapToFlashcard(res : any[]) : BaseFlashcardInterface[]
+    {
+        return res.map(item => {
+            return{
+                id : item.id,
+                word : item.word,
+                translatedWord : item.translatedWord,
+                example : item.example,
+                translatedExample : item.translatedExample,
+                category : item.category
+            } 
+        });
     }
 
 }
