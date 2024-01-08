@@ -65,6 +65,8 @@ export class FlashcardEditFormComponent implements OnInit{
     this.flashcardService.AddFlashcard(this.flashcard)
       .subscribe(data => {
         this.isLoading = false;
+        const addedFlashcard = data;
+        this.flashcardEvent.emit(addedFlashcard);
       }, err => {
         this.isLoading = false;
         if(err.status === 400)

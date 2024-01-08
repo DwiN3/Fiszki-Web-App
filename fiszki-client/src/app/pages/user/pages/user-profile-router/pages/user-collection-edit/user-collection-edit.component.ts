@@ -52,4 +52,9 @@ export class UserCollectionEditComponent {
       })
   }
 
+  OnAdd(flashcard : BaseFlashcardInterface)
+  {
+    this.collection.push(flashcard);
+  }
+
 }

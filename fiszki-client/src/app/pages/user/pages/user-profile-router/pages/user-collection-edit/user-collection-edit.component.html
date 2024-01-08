@@ -17,5 +17,6 @@
 <app-flashcard-edit-form 
     *ngIf="isFormOpen"
     (closeFormEvent)="isFormOpen=false"
+    (flashcardEvent)="OnAdd($event)"
     [collectionName]="collectionName"
 />
