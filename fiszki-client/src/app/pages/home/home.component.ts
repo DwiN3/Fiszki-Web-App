@@ -55,11 +55,11 @@ export class HomeComponent implements OnDestroy{
             localStorage.setItem('token', JSON.stringify(resData.response).replace(/"/g, ''));
             this.router.navigate(['user']);
           }, error => {
+            this.isLoading = false;
             if(error.status === 401)
               this.error = "Zły email lub hasło!";
             else
               this.alertService.ShowAlert('Błąd serwera!', error.message, 'Spróbuj ponownie później!', this.alertHost);
-            this.isLoading = false;
           });
   }
 

@@ -15,7 +15,11 @@ export class FlashcardService
 
     AddFlashcard(flashcard : FlashcardAddInterface)
     {
-        console.log(flashcard);
         return this.http.post<any>(this.url + 'add-flashcard', flashcard, { headers : this.headers })
+    }
+
+    DeleteFlashcard(id : number)
+    {
+        return this.http.delete<any>(this.url + 'delete/' + id, { headers : this.headers});
     }
 }

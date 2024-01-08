@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserCollectionService } from 'src/app/pages/user/services/user-collection.service';
 import { BaseFlashcardInterface } from 'src/app/shared/models/flashcard.interface';
+import { PlaceholderDirective } from 'src/app/shared/ui/alert/directive/placeholder.directive';
+import { AlertService } from 'src/app/shared/ui/alert/service/alert.service';
+import { FlashcardService } from './services/flashcard.service';
 
 @Component({
   selector: 'app-user-collection-edit',
@@ -10,12 +13,14 @@ import { BaseFlashcardInterface } from 'src/app/shared/models/flashcard.interfac
 })
 export class UserCollectionEditComponent {
 
+  @ViewChild(PlaceholderDirective, { static: true }) alertHost!: PlaceholderDirective;
+
   collection : BaseFlashcardInterface[] = [];
   isFormOpen : boolean = false;
   collectionName : string | null = null;
   isLoading : boolean = true;
 
-  constructor(private activeRoute : ActivatedRoute, private collectionService : UserCollectionService)
+  constructor(private activeRoute : ActivatedRoute, private collectionService : UserCollectionService, private flashcardService : FlashcardService, private alertService : AlertService)
   {
     const queryParams = this.activeRoute.snapshot.queryParamMap;
     this.collectionName = queryParams.get('collectionName');
@@ -37,6 +42,14 @@ export class UserCollectionEditComponent {
     this.isFormOpen = true;
   }
 
-  
+  OnDelete(id : number)
+  {
+    this.flashcardService.DeleteFlashcard(id)
+      .subscribe(data => {
+        this.collection = this.collection.filter(flashcard => flashcard.id !== id)
+      }, err => {
+        this.alertService.ShowAlert('Błąd serwera!', err.message, 'Spróbuj ponownie później!', this.alertHost);
+      })
+  }
 
 }

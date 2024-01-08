@@ -1,4 +1,5 @@
 <app-loader *ngIf="isLoading"/>
+<ng-template appPlaceholder></ng-template>
 <div class="wrapper">
     <div class="container">
         <div class="button" (click)="OpenForm()">Dodaj fiszkę</div>
@@ -7,6 +8,7 @@
             <div *ngIf="collection.length > 0">
                 <app-flashcard *ngFor="let flashcard of collection; index as i"
                     [flashcard]="flashcard"
+                    (onDeleteEvent)="OnDelete($event)"
                 />
             </div>
         </div>

@@ -15,6 +15,7 @@ import { BaseFlashcardInterface } from 'src/app/shared/models/flashcard.interfac
 })
 export class FlashcardEditFormComponent implements OnInit{
 
+  @ViewChild(PlaceholderDirective, { static: true }) alertHost!: PlaceholderDirective;
   @ViewChild('form') form : NgForm | null = null;
   faCross = faRemove;
 
@@ -65,8 +66,11 @@ export class FlashcardEditFormComponent implements OnInit{
       .subscribe(data => {
         this.isLoading = false;
       }, err => {
-        console.log(err);
         this.isLoading = false;
+        if(err.status === 400)
+          this.alertService.ShowAlert('Błąd!', 'Podana fiszka już jest w zestawie!', '', this.alertHost);
+          else
+          this.alertService.ShowAlert('Błąd serwera!', err.message, 'Spróbuj ponownie później!', this.alertHost);
       })
   }
 

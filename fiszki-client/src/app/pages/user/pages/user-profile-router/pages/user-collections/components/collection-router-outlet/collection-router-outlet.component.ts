@@ -13,7 +13,6 @@ export class CollectionRouterOutletComponent {
     this.route.queryParams
     .subscribe(params => {
       const collectionName = params['collectionName'];
-      console.log(collectionName);
     });
   }
 
