@@ -20,55 +20,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
-
-//@Configuration
-//@EnableWebSecurity
-//@RequiredArgsConstructor
-//public class SecurityConfig {
-//
-//    private final JwtAuthenticationFilter jwtAuthFilter;
-//    private final AuthenticationProvider authenticationProvider;
-//
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer()
-//    {
-//            return new WebMvcConfigurer()
-//            {
-//                public void addCorsMappings(final CorsRegistry registry)
-//                {
-//                    registry
-//                            .addMapping("/**")
-//                            .allowedOrigins("http://localhost:4200")
-//                            .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
-//                            .allowedHeaders("*")
-//                            .allowCredentials(true)
-//                            .maxAge(3600);
-//                }
-//            };
-//    }
-//
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-//
-//        //                        .loginPage("/login")
-//        httpSecurity
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests((requests) -> requests
-//                        .requestMatchers(new AntPathRequestMatcher("/flashcards/auth/**")).permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .sessionManagement((sessionManagement) -> sessionManagement
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                )
-//                .authenticationProvider(authenticationProvider)
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-////                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
-//
-//
-//        return httpSecurity.build();
-//    }
-//}
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -76,21 +27,6 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurer() {
-//            public void addCorsMappings(final CorsRegistry registry) {
-//                registry
-//                        .addMapping("/**")
-//                        .allowedOrigins("http://localhost:4200")
-//                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-//                        .allowedHeaders("*")
-//                        .allowCredentials(true)
-//                        .maxAge(3600);
-//            }
-//        };
-//    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

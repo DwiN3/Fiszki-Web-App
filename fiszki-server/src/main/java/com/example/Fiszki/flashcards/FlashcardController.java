@@ -26,9 +26,9 @@ public class FlashcardController {
     private final FlashcardService flashcardService;
 
     @PostMapping("/add-flashcard")
-    public ResponseEntity<FlashcardInfoResponse> addFlashcard(@RequestBody FlashcardAddRequest request) {
+    public ResponseEntity<?> addFlashcard(@RequestBody FlashcardAddRequest request) {
         try {
-            FlashcardInfoResponse response = flashcardService.addFlashcard(request);
+            FlashcardReturnResponse response = flashcardService.addFlashcard(request);
             return ResponseEntity.ok(response);
         } catch (OtherException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FlashcardInfoResponse.builder().response(e.getMessage()).build());

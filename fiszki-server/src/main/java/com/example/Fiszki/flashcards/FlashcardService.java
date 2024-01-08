@@ -30,7 +30,7 @@ public class FlashcardService {
         this.collectionRepository = collectionRepository;
     }
 
-    public FlashcardInfoResponse addFlashcard(FlashcardAddRequest request) throws OtherException {
+    public FlashcardReturnResponse addFlashcard(FlashcardAddRequest request) throws OtherException {
         try {
             // Sprawdź, czy wszystkie wymagane pola są ustawione
             if (isNullOrEmpty(request.getCollectionName()) ||
@@ -40,14 +40,24 @@ public class FlashcardService {
                 throw new OtherException("All fields must be filled");
             }
 
-            // Sprawdź, czy istnieje fiszka o podanym słowie
-            if (flashcardRepository.existsByWord(request.getWord())) {
-                throw new OtherException("Flashcard with the given word already exists");
+//            // Sprawdź, czy istnieje fiszka o podanym słowie
+//            if (flashcardRepository.existsByWord(request.getWord())) {
+//                throw new OtherException("Flashcard with the given word already exists");
+//            }
+//
+//            // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie
+//            if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
+//                throw new OtherException("Flashcard with the given translated word already exists");
+//            }
+
+            // Sprawdź, czy istnieje fiszka o podanym słowie w konkretnej kolekcji
+            if (flashcardRepository.existsByWordAndCollection_CollectionName(request.getWord(), request.getCollectionName())) {
+                throw new OtherException("Flashcard with the given word already exists in this collection");
             }
 
-            // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie
-            if (flashcardRepository.existsByTranslatedWord(request.getTranslatedWord())) {
-                throw new OtherException("Flashcard with the given translated word already exists");
+            // Sprawdź, czy istnieje fiszka o podanym przetłumaczonym słowie w konkretnej kolekcji
+            if (flashcardRepository.existsByTranslatedWordAndCollection_CollectionName(request.getTranslatedWord(), request.getCollectionName())) {
+                throw new OtherException("Flashcard with the given translated word already exists in this collection");
             }
 
             // Sprawdź, czy w polach collectionName, language, category, word i translatedWord występuje tylko jedno słowo
@@ -82,7 +92,17 @@ public class FlashcardService {
 
             flashcardRepository.save(flashcard);
 
-            return FlashcardInfoResponse.builder().response("Flashcard added successfully").build();
+            FlashcardReturnResponse flashcardReturnResponse = FlashcardReturnResponse.builder()
+                    .id(flashcard.getId())
+                    .category(flashcard.getCategory())
+                    .author(flashcard.getAuthor())
+                    .word(flashcard.getWord())
+                    .translatedWord(flashcard.getTranslatedWord())
+                    .example(flashcard.getExample())
+                    .translatedExample(flashcard.getTranslatedExample())
+                    .build();
+
+            return flashcardReturnResponse;
         } catch (Exception e) {
             throw new OtherException(e.getMessage());
         }
