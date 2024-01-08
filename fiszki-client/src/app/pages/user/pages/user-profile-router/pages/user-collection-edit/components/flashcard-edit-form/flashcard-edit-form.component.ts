@@ -1,7 +1,11 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { faRemove } from '@fortawesome/free-solid-svg-icons';
 import { CategoriesDataService } from 'src/app/pages/user/pages/learning-page/pages/categories-page/services/categories-data.service';
+import { FlashcardAddInterface } from 'src/app/shared/models/flashcard-add.interface';
+import { FlashcardService } from '../../services/flashcard.service';
+import { PlaceholderDirective } from 'src/app/shared/ui/alert/directive/placeholder.directive';
+import { AlertService } from 'src/app/shared/ui/alert/service/alert.service';
 import { BaseFlashcardInterface } from 'src/app/shared/models/flashcard.interface';
 
 @Component({
@@ -9,18 +13,22 @@ import { BaseFlashcardInterface } from 'src/app/shared/models/flashcard.interfac
   templateUrl: './flashcard-edit-form.component.html',
   styleUrls: ['./flashcard-edit-form.component.scss']
 })
-export class FlashcardEditFormComponent {
+export class FlashcardEditFormComponent implements OnInit{
 
   @ViewChild('form') form : NgForm | null = null;
   faCross = faRemove;
 
   @Output() closeFormEvent = new EventEmitter<boolean>();
+  @Output() flashcardEvent = new EventEmitter<BaseFlashcardInterface>();
+  @Input() collectionName : string | null = '';
+  
 
+  isLoading : boolean = false;
   options : string[] = [];
   selectedCategory: string = 'sport';
-  flashcard : BaseFlashcardInterface; 
+  flashcard : FlashcardAddInterface; 
   
-  constructor(private categoriesData : CategoriesDataService)
+  constructor(private categoriesData : CategoriesDataService, private flashcardService : FlashcardService, private alertService : AlertService)
   {
     this.flashcard = 
     {
@@ -29,12 +37,20 @@ export class FlashcardEditFormComponent {
       translatedWord: '',
       example: '',
       translatedExample: '',
-      category: ''
+      category: '',
+      collectionName: '',
     };
-    
+
     categoriesData.categories.forEach(element => {
         this.options.push(element.categoryName);
     });
+
+  }
+
+  ngOnInit(): void 
+  {
+    if(this.collectionName)
+    this.flashcard.collectionName = this.collectionName;
   }
 
   Submit() : void 
@@ -42,8 +58,16 @@ export class FlashcardEditFormComponent {
     if(this.form?.valid === false)
       return
 
+    this.isLoading = true;
     this.flashcard.category = this.selectedCategory;
-    console.log(this.flashcard);
+
+    this.flashcardService.AddFlashcard(this.flashcard)
+      .subscribe(data => {
+        this.isLoading = false;
+      }, err => {
+        console.log(err);
+        this.isLoading = false;
+      })
   }
 
   CloseForm() : void

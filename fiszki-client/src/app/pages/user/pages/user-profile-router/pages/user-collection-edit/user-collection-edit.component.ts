@@ -12,18 +12,21 @@ export class UserCollectionEditComponent {
 
   collection : BaseFlashcardInterface[] = [];
   isFormOpen : boolean = false;
+  collectionName : string | null = null;
+  isLoading : boolean = true;
 
   constructor(private activeRoute : ActivatedRoute, private collectionService : UserCollectionService)
   {
     const queryParams = this.activeRoute.snapshot.queryParamMap;
-    let collectionName = queryParams.get('collectionName');
+    this.collectionName = queryParams.get('collectionName');
+
+    if(this.collectionName === null)
+      this.collectionName = '';
     
-    if(collectionName === null)
-      collectionName = '';
-    
-    this.collectionService.GetFlashCardsByCollection(collectionName)
+    this.collectionService.GetFlashCardsByCollection(this.collectionName)
       .subscribe(data => {
         this.collection = data;
+        this.isLoading = false;
       }, err => {
         console.log(err);
       })

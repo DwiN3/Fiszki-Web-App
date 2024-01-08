@@ -5,6 +5,7 @@
     width: 250px;
     height: 250px;
     position: relative;
+    margin: 0 10px;
 }
 
 .flashcard
@@ -20,6 +21,7 @@
     position: absolute;
     transform-style: preserve-3d;
     transition: all 0.5s ease;
+    border-radius: 5px;
 }
 
 .flashcard.flipped
@@ -52,6 +54,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .body

@@ -1,4 +1,5 @@
 <div class="wrapper">
+    <ng-template appPlaceholder></ng-template>
     <div class="box">
         <div class="cross" (click)="CloseForm()"><fa-icon [icon]="faCross"></fa-icon></div>
         <h3>Dodaj Fiszkę</h3>
@@ -65,3 +66,4 @@
         </form>
     </div>
 </div>
+<app-loader *ngIf="isLoading"/>
