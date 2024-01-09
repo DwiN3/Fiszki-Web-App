@@ -10,7 +10,9 @@ import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 export class FlashcardComponent
 {
   @Output() onDeleteEvent = new EventEmitter<number>();
-  @Input() flashcard : BaseFlashcardInterface | null = null; 
+  @Output() onEditEvent = new EventEmitter<number>();
+  @Input() flashcard : BaseFlashcardInterface | null = null;
+
   isFlipped: boolean = false;
 
   faTrash = faTrash;
@@ -24,6 +26,11 @@ export class FlashcardComponent
   OnDelete(id : number) : void
   {
     this.onDeleteEvent.emit(id);
+  }
+
+  OnEdit(id : number) : void
+  {
+    this.onEditEvent.emit(id);
   }
 
 }

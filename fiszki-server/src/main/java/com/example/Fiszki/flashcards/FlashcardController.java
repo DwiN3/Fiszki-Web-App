@@ -37,7 +37,7 @@ public class FlashcardController {
         }
     }
 
-    @PostMapping("/edit/{flashcardsId}")
+    @PutMapping("/edit/{flashcardsId}")
     public ResponseEntity<FlashcardInfoResponse> editFlashcard(@PathVariable Integer flashcardsId, @RequestBody FlashcardAddRequest request) {
         try {
             FlashcardInfoResponse response = flashcardService.editFlashcard(flashcardsId, request);

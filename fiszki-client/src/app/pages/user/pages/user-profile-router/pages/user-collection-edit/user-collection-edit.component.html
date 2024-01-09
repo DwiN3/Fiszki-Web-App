@@ -9,6 +9,7 @@
                 <app-flashcard *ngFor="let flashcard of collection; index as i"
                     [flashcard]="flashcard"
                     (onDeleteEvent)="OnDelete($event)"
+                    (onEditEvent)="OnEdit($event)"
                 />
             </div>
         </div>
@@ -18,5 +19,7 @@
     *ngIf="isFormOpen"
     (closeFormEvent)="isFormOpen=false"
     (flashcardEvent)="OnAdd($event)"
+    [flashcard]="flashcard"
+    [editMode]="editMode"
     [collectionName]="collectionName"
 />

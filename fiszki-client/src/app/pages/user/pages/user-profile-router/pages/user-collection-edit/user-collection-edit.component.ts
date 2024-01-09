@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserCollectionService } from 'src/app/pages/user/services/user-collection.service';
+import { FlashcardAddInterface } from 'src/app/shared/models/flashcard-add.interface';
 import { BaseFlashcardInterface } from 'src/app/shared/models/flashcard.interface';
 import { PlaceholderDirective } from 'src/app/shared/ui/alert/directive/placeholder.directive';
 import { AlertService } from 'src/app/shared/ui/alert/service/alert.service';
@@ -17,16 +18,28 @@ export class UserCollectionEditComponent {
 
   collection : BaseFlashcardInterface[] = [];
   isFormOpen : boolean = false;
-  collectionName : string | null = null;
   isLoading : boolean = true;
+  flashcard : FlashcardAddInterface;
+  editMode : boolean = false;
+  collectionName : string | null = null;
 
   constructor(private activeRoute : ActivatedRoute, private collectionService : UserCollectionService, private flashcardService : FlashcardService, private alertService : AlertService)
   {
     const queryParams = this.activeRoute.snapshot.queryParamMap;
-    this.collectionName = queryParams.get('collectionName');
+     this.collectionName = queryParams.get('collectionName');
 
     if(this.collectionName === null)
       this.collectionName = '';
+
+      this.flashcard = {
+        id : null,
+        word: '',
+        translatedWord: '',
+        example: '',
+        translatedExample: '',
+        category: '',
+        collectionName: this.collectionName,
+      };
     
     this.collectionService.GetFlashCardsByCollection(this.collectionName)
       .subscribe(data => {
@@ -39,6 +52,8 @@ export class UserCollectionEditComponent {
 
   OpenForm() : void
   {
+    this.flashcard = this.resetFlashcard();
+    this.editMode = false;
     this.isFormOpen = true;
   }
 
@@ -55,6 +70,41 @@ export class UserCollectionEditComponent {
   OnAdd(flashcard : BaseFlashcardInterface)
   {
     this.collection.push(flashcard);
+  }
+
+  OnEdit(id : number)
+  {
+    this.isLoading = true;
+    this.flashcardService.GetFlashcard(id)
+      .subscribe(data => {
+        this.flashcard = data;
+        this.editMode = true;
+        this.isFormOpen = true;
+      }, err => {
+        this.alertService.ShowAlert('Błąd serwera!', err.message, 'Spróbuj ponownie później!', this.alertHost);
+      }, () => {
+        this.isLoading = false;
+      })
+      
+  }
+
+  private resetFlashcard() : FlashcardAddInterface
+  {
+    
+      const flashcard = {
+        id : null,
+        word: '',
+        translatedWord: '',
+        example: '',
+        translatedExample: '',
+        category: '',
+        collectionName: '',
+      };
+
+      if(this.collectionName)
+        flashcard.collectionName = this.collectionName;
+
+      return flashcard 
   }
 
 }
