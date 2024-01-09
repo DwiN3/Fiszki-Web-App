@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-logo',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./logo.component.scss']
 })
 export class LogoComponent {
+
+  constructor(private router : Router){}
+
+  Navigate() : void
+  {
+    this.router.navigate(['user']);
+  }
 
 }

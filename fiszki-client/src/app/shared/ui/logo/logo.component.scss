@@ -3,6 +3,7 @@
 .box
 {
     @include shared-styles.logo;
+    cursor: pointer;
 }
 
 .flags
