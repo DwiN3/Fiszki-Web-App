@@ -19,6 +19,7 @@ export class LearningModeComponent implements OnInit, OnDestroy{
   translatedWord : boolean = false;
   changeFlashcard : boolean = false;
   round : number = 0;
+  summary : boolean = false;
 
   constructor(private store : Store<{gameSettings : GameSettingsState}>, private router : Router){}
 
@@ -47,7 +48,7 @@ export class LearningModeComponent implements OnInit, OnDestroy{
   {
 
     if(this.round + 1 === this.flashcards.length && this.changeFlashcard === true)
-      return
+      this.summary = true;
 
     this.translatedWord = !this.translatedWord;
     
@@ -59,6 +60,12 @@ export class LearningModeComponent implements OnInit, OnDestroy{
     }
 
     this.changeFlashcard = true;
+  }
+
+  PlayAgain() : void
+  {
+    this.round = 0;
+    this.summary = false;
   }
 
 }
