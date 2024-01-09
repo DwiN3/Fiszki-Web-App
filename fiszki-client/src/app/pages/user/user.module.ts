@@ -31,6 +31,8 @@ import { CollectionRouterOutletComponent } from './pages/user-profile-router/pag
 import { FlashcardComponent } from './pages/user-profile-router/pages/user-collections/components/flashcard/flashcard.component';
 import { FlashcardEditFormComponent } from './pages/user-profile-router/pages/user-collection-edit/components/flashcard-edit-form/flashcard-edit-form.component';
 import { SummaryBoxComponent } from './pages/learning-page/pages/game-page/components/summary-box/summary-box.component';
+import { CollectionPageComponent } from './pages/learning-page/pages/collection-page/collection-page.component';
+import { CollectionItemComponent } from "./pages/learning-page/pages/collection-page/components/collection-item/collection-item.component";
 
 @NgModule({
     declarations:[
@@ -55,6 +57,8 @@ import { SummaryBoxComponent } from './pages/learning-page/pages/game-page/compo
         FlashcardComponent,
         FlashcardEditFormComponent,
         SummaryBoxComponent,
+        CollectionPageComponent,
+        CollectionItemComponent,
     ],
     imports: [
         CommonModule,
