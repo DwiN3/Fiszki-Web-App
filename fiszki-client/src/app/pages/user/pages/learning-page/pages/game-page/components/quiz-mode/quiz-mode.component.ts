@@ -20,6 +20,7 @@ export class QuizModeComponent implements OnInit, OnDestroy{
   round : number = 0;
   quiz : QuizItemInterface[] = [];
   polishFirst : boolean = false;
+  points : number = 0;
 
   constructor(private store : Store<{gameSettings : GameSettingsState}>, private router : Router){}
 
@@ -33,11 +34,11 @@ export class QuizModeComponent implements OnInit, OnDestroy{
         this.polishFirst = data.polishFirst;
       })
 
-      // if(this.flashcards.length < 4)
-      // {
-      //   this.router.navigate(['/user/learning']);
-      //   return
-      // }
+      if(this.flashcards.length < 4)
+      {
+        this.router.navigate(['/user/learning']);
+        return
+      }
 
       this.CreateQuiz(this.flashcards);
       console.log(this.quiz);
