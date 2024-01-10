@@ -33,6 +33,7 @@ import { FlashcardEditFormComponent } from './pages/user-profile-router/pages/us
 import { SummaryBoxComponent } from './pages/learning-page/pages/game-page/components/summary-box/summary-box.component';
 import { CollectionPageComponent } from './pages/learning-page/pages/collection-page/collection-page.component';
 import { CollectionItemComponent } from "./pages/learning-page/pages/collection-page/components/collection-item/collection-item.component";
+import { QuizModeComponent } from './pages/learning-page/pages/game-page/components/quiz-mode/quiz-mode.component';
 
 @NgModule({
     declarations:[
@@ -59,6 +60,7 @@ import { CollectionItemComponent } from "./pages/learning-page/pages/collection-
         SummaryBoxComponent,
         CollectionPageComponent,
         CollectionItemComponent,
+        QuizModeComponent,
     ],
     imports: [
         CommonModule,

@@ -1,0 +1,17 @@
+<div class="wrapper">
+    <div class="box">
+        <h3>Fiszki</h3>
+        <h3>{{round + 1}} / {{flashcards.length}}</h3>
+        <div class="timer">
+            <div></div>
+        </div>
+        <div class="game-board">
+            <h3>{{quiz[round].question}}</h3>
+            <div class="wariants">
+                <div *ngFor="let wariant of quiz[round].wariants">
+                    {{wariant}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
