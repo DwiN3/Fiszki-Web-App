@@ -8,7 +8,7 @@
         <div class="game-board">
             <h3>{{quiz[round].question}}</h3>
             <div class="wariants">
-                <div *ngFor="let wariant of quiz[round].wariants" (click)="ResetTimers()">
+                <div *ngFor="let wariant of quiz[round].wariants" (click)="ChooseWariant(wariant)" #wariant>
                     {{wariant}}
                 </div>
             </div>

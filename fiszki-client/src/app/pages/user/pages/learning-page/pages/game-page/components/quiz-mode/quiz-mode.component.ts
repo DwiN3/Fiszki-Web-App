@@ -1,8 +1,7 @@
-import { ThisReceiver } from '@angular/compiler';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ignoreElements, Observable, Subscription, timer } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { BaseFlashcardInterface } from 'src/app/shared/models/flashcard.interface';
 import { GameSettingsState } from '../../../../store/game.state';
 import { QuizItemInterface } from './models/quiz-item.model';
@@ -15,6 +14,8 @@ import { CreateQuizService } from './service/create-quiz-service';
 })
 export class QuizModeComponent implements OnInit, OnDestroy{
   
+  @ViewChild('wariant', { static: true }) wariant: ElementRef | undefined;
+
   gameSettings$! : Observable<GameSettingsState>
   private gameSettingsSubscription: Subscription | undefined;
 
@@ -61,6 +62,22 @@ export class QuizModeComponent implements OnInit, OnDestroy{
     }
   }
 
+  ChooseWariant(answer : string) : void
+  {
+    if(this.isClicked)
+      return;
+
+    console.log(this.wariant);
+
+    if(answer === this.quiz[this.round].correctAnswer)
+    {
+      this.points += 10;
+    }
+  
+    this.isClicked = true;
+    this.ResetTimers();
+  }
+
   private SetTimer(): void 
   {
     this.timer = setInterval(() => {
@@ -91,7 +108,7 @@ export class QuizModeComponent implements OnInit, OnDestroy{
     }, 10)
   }
 
-  ResetTimers() : void
+  private ResetTimers() : void
   {
     clearInterval(this.timer);
     clearInterval(this.timerWidthInterval);
@@ -103,15 +120,10 @@ export class QuizModeComponent implements OnInit, OnDestroy{
         this.round++;
         this.SetWidthTimer();
         this.SetTimer();
-      }, 1000)
+        this.isClicked = false;
+      }, 2000)
     }
 
-  }
-
-  private ResetInterval() : void
-  {
-    clearInterval(this.timer);
-    this.SetTimer();
   }
 
 }
