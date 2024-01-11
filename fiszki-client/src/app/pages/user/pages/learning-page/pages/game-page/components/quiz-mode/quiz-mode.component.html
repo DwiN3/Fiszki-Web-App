@@ -1,14 +1,14 @@
 <div class="wrapper">
     <div class="box">
-        <h3>Fiszki</h3>
-        <h3>{{round + 1}} / {{flashcards.length}}</h3>
+        <h3>Pozostałe Fiszki</h3>
+        <h3>{{this.quiz.length - round - 1}}</h3>
         <div class="timer">
-            <div></div>
+            <div [ngStyle]="{'width.px' : timerWidth, 'background-color': timerWidth >= 300 ? 'red' : '#00a6fb'}"></div>
         </div>
         <div class="game-board">
             <h3>{{quiz[round].question}}</h3>
             <div class="wariants">
-                <div *ngFor="let wariant of quiz[round].wariants">
+                <div *ngFor="let wariant of quiz[round].wariants" (click)="ResetTimers()">
                     {{wariant}}
                 </div>
             </div>

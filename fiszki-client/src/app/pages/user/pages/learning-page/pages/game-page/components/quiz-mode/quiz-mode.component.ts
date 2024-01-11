@@ -1,10 +1,12 @@
+import { ThisReceiver } from '@angular/compiler';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { ignoreElements, Observable, Subscription, timer } from 'rxjs';
 import { BaseFlashcardInterface } from 'src/app/shared/models/flashcard.interface';
 import { GameSettingsState } from '../../../../store/game.state';
 import { QuizItemInterface } from './models/quiz-item.model';
+import { CreateQuizService } from './service/create-quiz-service';
 
 @Component({
   selector: 'app-quiz-mode',
@@ -22,7 +24,13 @@ export class QuizModeComponent implements OnInit, OnDestroy{
   polishFirst : boolean = false;
   points : number = 0;
 
-  constructor(private store : Store<{gameSettings : GameSettingsState}>, private router : Router){}
+  timer : any | null = null;
+  intervalValue : number = 4000;
+  isClicked : boolean = false;
+  timerWidthInterval : any | null = null;
+  timerWidth : number = 0;
+
+  constructor(private store : Store<{gameSettings : GameSettingsState}>, private router : Router, private quizService : CreateQuizService){}
 
   ngOnInit(): void 
   {
@@ -40,9 +48,10 @@ export class QuizModeComponent implements OnInit, OnDestroy{
         return
       }
 
-      this.CreateQuiz(this.flashcards);
-      console.log(this.quiz);
-
+      this.quiz = this.quizService.CreateQuiz(this.flashcards, this.polishFirst);
+      
+      this.SetTimer();
+      this.SetWidthTimer();
   }
 
   ngOnDestroy() : void 
@@ -52,67 +61,57 @@ export class QuizModeComponent implements OnInit, OnDestroy{
     }
   }
 
-  private CreateQuiz(flashcards : BaseFlashcardInterface[]) : void
+  private SetTimer(): void 
   {
-    flashcards.forEach(flashcard => {
-      const quizItem : QuizItemInterface[] = [];
+    this.timer = setInterval(() => {
+
+      if (this.round + 1 === this.quiz.length) {
+        clearInterval(this.timer);
+        clearInterval(this.timerWidthInterval);
+        return;
+      }
       
-      const question = this.polishFirst === true ? flashcard.word : flashcard.translatedWord;
-      const correctAnswer = this.polishFirst === true ? flashcard.translatedWord : flashcard.word;
-      const wariants = this.CreateWariants(flashcards, correctAnswer);
+      this.round++;
+      this.timerWidth = 0;
 
-      const item : QuizItemInterface = {
-        question : question,
-        correctAnswer : correctAnswer,
-        wariants : this.ShuffleArray(wariants)
-      }
+      this.SetWidthTimer();
 
-      this.quiz.push(item);
-    })
+    }, this.intervalValue);
   }
 
-  private CreateWariants(flashcards : BaseFlashcardInterface[], correctAnswer : string) : string[]
+  private SetWidthTimer() : void
   {
-    const wariants : string [] = [correctAnswer];
-    for(let i = 0; i < 3; i++)
-    {
-      let randomIndex;
-      let randomWord;
-      if(this.polishFirst === true)
+    this.timerWidthInterval = setInterval(() => {
+      if(this.timerWidth >= 392 || this.round === this.quiz.length)
       {
-          randomIndex = Math.floor(Math.random() * flashcards.length);
-          randomWord = flashcards[randomIndex].translatedWord;
-
-          do
-          {
-              randomIndex = Math.floor(Math.random() * flashcards.length);
-              randomWord = flashcards[randomIndex].translatedWord;
-          } while(correctAnswer.includes(randomWord) || wariants.includes    (randomWord))
+        clearInterval(this.timerWidthInterval);
+        return
       }
-      else
-      {
-          randomIndex = Math.floor(Math.random() * flashcards.length);
-          randomWord = flashcards[randomIndex].word;
-
-          do
-          {
-              randomIndex = Math.floor(Math.random() * flashcards.length);
-              randomWord = flashcards[randomIndex].word;
-          } while(correctAnswer.includes(randomWord) || wariants.includes(randomWord))  
-      }
-      wariants.push(randomWord);
-    }
-    return wariants;
+      this.timerWidth += 1;
+    }, 10)
   }
 
-  private ShuffleArray(wariants : string[]) : string[]
+  ResetTimers() : void
   {
-    for(let i = wariants.length - 1; i > 0; i--)
+    clearInterval(this.timer);
+    clearInterval(this.timerWidthInterval);
+
+    if(this.quiz.length > this.round + 1)
     {
-      let j = Math.floor(Math.random() * (i + 1));
-      [wariants[i], wariants[j]] = [wariants[j], wariants[i]];
+      setTimeout(() => {
+        this.timerWidth = 0;
+        this.round++;
+        this.SetWidthTimer();
+        this.SetTimer();
+      }, 1000)
     }
-    return wariants;
+
+  }
+
+  private ResetInterval() : void
+  {
+    clearInterval(this.timer);
+    this.SetTimer();
   }
 
 }
