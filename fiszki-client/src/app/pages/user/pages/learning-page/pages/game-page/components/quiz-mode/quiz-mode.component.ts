@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ import { CreateQuizService } from './service/create-quiz-service';
 })
 export class QuizModeComponent implements OnInit, OnDestroy{
   
-  @ViewChild('wariant', { static: true }) wariant: ElementRef | undefined;
+  @ViewChild('wariantRef') wariantRef : ElementRef | undefined;
 
   gameSettings$! : Observable<GameSettingsState>
   private gameSettingsSubscription: Subscription | undefined;
@@ -31,7 +31,7 @@ export class QuizModeComponent implements OnInit, OnDestroy{
   timerWidthInterval : any | null = null;
   timerWidth : number = 0;
 
-  constructor(private store : Store<{gameSettings : GameSettingsState}>, private router : Router, private quizService : CreateQuizService){}
+  constructor(private store : Store<{gameSettings : GameSettingsState}>, private router : Router, private quizService : CreateQuizService, private renderer: Renderer2){}
 
   ngOnInit(): void 
   {
@@ -64,18 +64,26 @@ export class QuizModeComponent implements OnInit, OnDestroy{
 
   ChooseWariant(answer : string) : void
   {
+    const indeks = this.quiz[this.round].wariants.findIndex(element => element === answer);
+    console.log(indeks);
+
     if(this.isClicked)
       return;
 
-    console.log(this.wariant);
-
     if(answer === this.quiz[this.round].correctAnswer)
     {
+      if(this.wariantRef)
+        this.wariantRef.nativeElement.children[indeks].style.background = 'linear-gradient(0deg, #20a100 0%, #2afb00 70%)';
       this.points += 10;
+    }
+    else
+    {
+      if(this.wariantRef)
+        this.wariantRef.nativeElement.children[indeks].style.background = 'linear-gradient(0deg, #a10000 0%, #fb0000 70%)';
     }
   
     this.isClicked = true;
-    this.ResetTimers();
+    this.ResetTimers(indeks);
   }
 
   private SetTimer(): void 
@@ -108,7 +116,7 @@ export class QuizModeComponent implements OnInit, OnDestroy{
     }, 10)
   }
 
-  private ResetTimers() : void
+  private ResetTimers(indeks : number) : void
   {
     clearInterval(this.timer);
     clearInterval(this.timerWidthInterval);
@@ -121,6 +129,8 @@ export class QuizModeComponent implements OnInit, OnDestroy{
         this.SetWidthTimer();
         this.SetTimer();
         this.isClicked = false;
+        if(this.wariantRef)
+          this.wariantRef.nativeElement.children[indeks].style.background = '';
       }, 2000)
     }
 
