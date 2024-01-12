@@ -65,8 +65,7 @@ export class QuizModeComponent implements OnInit, OnDestroy{
   ChooseWariant(answer : string) : void
   {
     const indeks = this.quiz[this.round].wariants.findIndex(element => element === answer);
-    console.log(indeks);
-
+ 
     if(this.isClicked)
       return;
 
