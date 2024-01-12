@@ -7,6 +7,6 @@
             <div *ngIf="levelInfo" [lvlStatus]="levelInfo.points" [pointsRequired]="levelInfo.nextLevelPoints"></div>
             <p *ngIf="levelInfo">{{levelInfo.points}}/{{levelInfo.nextLevelPoints}}</p>
         </div>
-        <div class="item"><a [routerLink]="['password-change']">Zmień hasło</a></div>
+        <div class="item"><a [routerLink]="['change-password']">Zmień hasło</a></div>
     </div>
 </div>
