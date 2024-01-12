@@ -131,7 +131,7 @@ export class QuizModeComponent implements OnInit, OnDestroy{
         this.isClicked = false;
         if(this.wariantRef)
           this.wariantRef.nativeElement.children[indeks].style.background = '';
-      }, 2000)
+      }, 1000)
     }
 
   }

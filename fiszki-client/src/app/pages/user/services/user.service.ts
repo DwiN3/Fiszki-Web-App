@@ -29,4 +29,13 @@ export class UserService
         return this.http.get<UserLevelModel>(this.url + 'level', {headers : headers});
     }
 
+    AddResult(points : number)
+    {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+            'Authorization' : `Bearer ${token}`
+        })
+        return this.http.put<any>(this.url + 'points', {points : points}, {headers : headers});
+    }
+
 }

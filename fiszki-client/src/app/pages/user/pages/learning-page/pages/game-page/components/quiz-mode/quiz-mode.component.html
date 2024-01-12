@@ -15,3 +15,6 @@
         <h3 class="points">Punkty : {{points}}</h3>
     </div>
 </div>
+<app-quiz-summary *ngIf="round === quiz.length - 1 && isClicked"
+    [scoredPoints]="points"
+/>

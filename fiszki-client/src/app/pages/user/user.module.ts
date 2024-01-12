@@ -34,6 +34,7 @@ import { SummaryBoxComponent } from './pages/learning-page/pages/game-page/compo
 import { CollectionPageComponent } from './pages/learning-page/pages/collection-page/collection-page.component';
 import { CollectionItemComponent } from "./pages/learning-page/pages/collection-page/components/collection-item/collection-item.component";
 import { QuizModeComponent } from './pages/learning-page/pages/game-page/components/quiz-mode/quiz-mode.component';
+import { QuizSummaryComponent } from './pages/learning-page/pages/game-page/components/quiz-mode/quiz-summary/quiz-summary.component';
 
 @NgModule({
     declarations:[
@@ -61,6 +62,7 @@ import { QuizModeComponent } from './pages/learning-page/pages/game-page/compone
         CollectionPageComponent,
         CollectionItemComponent,
         QuizModeComponent,
+        QuizSummaryComponent,
     ],
     imports: [
         CommonModule,
