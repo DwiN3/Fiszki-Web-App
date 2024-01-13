@@ -88,10 +88,11 @@ export class QuizModeComponent implements OnInit, OnDestroy{
   private SetTimer(): void 
   {
     this.timer = setInterval(() => {
-
+        
       if (this.round + 1 === this.quiz.length) {
         clearInterval(this.timer);
         clearInterval(this.timerWidthInterval);
+        this.isClicked = true;
         return;
       }
       
