@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/shared/services/auth-guard.service';
+import { ErrorPageComponent } from '../error-page/error-page.component';
 import { LearningPageComponent } from './pages/learning-page/learning-page.component';
 import { CategoriesPageComponent } from './pages/learning-page/pages/categories-page/categories-page.component';
 import { CollectionPageComponent } from './pages/learning-page/pages/collection-page/collection-page.component';
@@ -82,7 +83,8 @@ const routes : Routes =
                         component: CollectionPageComponent,
                     },
                 ]
-            }
+            },
+            { path : '**', component : ErrorPageComponent},
         ] 
     },
     

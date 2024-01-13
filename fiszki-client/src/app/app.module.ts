@@ -13,6 +13,7 @@ import { SharedModule } from './shared/shared.module';
 import { StoreModule } from '@ngrx/store';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PasswordResetComponent } from './pages/password-reset/password-reset.component';
+import { ErrorPageComponent } from './pages/error-page/error-page.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { PasswordResetComponent } from './pages/password-reset/password-reset.co
     HomeComponent,
     RegisterComponent,
     PasswordResetComponent,
+    ErrorPageComponent,
   ],
   imports: [
     BrowserModule,
