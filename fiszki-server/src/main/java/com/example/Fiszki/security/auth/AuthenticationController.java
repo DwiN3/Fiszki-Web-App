@@ -91,7 +91,7 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/change-password")
+    @PutMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
         try {
             UserInfoResponse response = authenticationService.changePassword(request);

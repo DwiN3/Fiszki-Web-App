@@ -1,5 +1,6 @@
 import { Component, ComponentFactoryResolver, OnDestroy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { distinctUntilChanged, Subscription } from 'rxjs';
 import { BaseUserModel } from 'src/app/shared/models/base-user.model';
@@ -23,7 +24,10 @@ export class HomeComponent implements OnDestroy{
   subscription : Subscription | null = null;
   isLoading : boolean = false;
 
-  constructor(private accountService : AccountService, private router : Router, private alertService : AlertService){}
+  constructor(private accountService : AccountService, private router : Router, private alertService : AlertService, private title : Title)
+  {
+    this.title.setTitle('Fiszki  |  Logowanie');
+  }
 
   ngAfterViewInit(): void 
   {

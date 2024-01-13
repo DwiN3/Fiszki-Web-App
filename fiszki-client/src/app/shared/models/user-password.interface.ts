@@ -1,6 +1,6 @@
 export interface UserPasswordInterface
 {
     email : string;
-    newPassword : string;
-    reNewPassword : string;
+    new_password : string;
+    re_new_password : string;
 }
