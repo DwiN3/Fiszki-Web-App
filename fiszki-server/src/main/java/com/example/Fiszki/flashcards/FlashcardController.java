@@ -86,7 +86,7 @@ public class FlashcardController {
         }
     }
 
-    @GetMapping("/category-limit/{category}")
+    @PostMapping("/category-limit/{category}")
     public ResponseEntity<?> showFlashcardsByCategoryWithLimit(@RequestBody FlashcardCategoryLimitRequest request, @PathVariable String category) {
         try {
             List<FlashcardReturnResponse> response = flashcardService.showFlashcardsByCategoryWithLimit(request, category);
