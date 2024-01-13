@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { HomeGuard } from './pages/home/services/home-guard';
+import { PasswordResetComponent } from './pages/password-reset/password-reset.component';
 import { RegisterComponent } from './pages/register/register.component';
 
 const routes : Routes = 
 [
   { path: '', component : HomeComponent, canActivate : [HomeGuard] },
-  { path : 'register', component : RegisterComponent, canActivate : [HomeGuard] },
-  { path : 'user', redirectTo: '/user', pathMatch: 'full'}
+  { path : 'register', component : RegisterComponent, canActivate : [HomeGuard]},
+  { path : 'password-reset', component : PasswordResetComponent, canActivate : [HomeGuard]},
+  { path : 'user', redirectTo: '/user', pathMatch: 'full'},
 ];
 
 @NgModule({

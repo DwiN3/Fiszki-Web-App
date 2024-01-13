@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { UserPasswordInterface } from "src/app/shared/models/user-password.interface";
 import { UserLevelModel } from "../models/user-level.model";
 import { UserPasswordExtendInterface } from "../pages/user-profile-router/pages/user-change-password/models/user-password-extend";
 
@@ -42,6 +43,11 @@ export class UserService
     ChangePassword(data : UserPasswordExtendInterface)
     {
         return this.http.put<any>(this.url + 'change-password', data);
+    }
+
+    ResetPassword(data : UserPasswordInterface)
+    {
+        return this.http.put<any>(this.url + 'process-password-change', data)
     }
 
 }

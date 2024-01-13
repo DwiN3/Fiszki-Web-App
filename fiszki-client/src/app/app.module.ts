@@ -12,12 +12,14 @@ import { HomeGuard } from './pages/home/services/home-guard';
 import { SharedModule } from './shared/shared.module';
 import { StoreModule } from '@ngrx/store';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PasswordResetComponent } from './pages/password-reset/password-reset.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     RegisterComponent,
+    PasswordResetComponent,
   ],
   imports: [
     BrowserModule,

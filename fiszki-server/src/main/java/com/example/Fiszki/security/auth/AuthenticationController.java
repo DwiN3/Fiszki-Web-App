@@ -106,7 +106,7 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/process-password-change")
+    @PutMapping("/process-password-change")
     public ResponseEntity<UserInfoResponse> processPasswordChange(@RequestBody ChangePasswordFromLinkRequest request) {
         try {
             UserInfoResponse response = authenticationService.changePasswordLink(request);
