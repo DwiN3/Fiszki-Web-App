@@ -10,6 +10,7 @@
     font-family: base.$main-font;
     letter-spacing: 2px;
     color: base.$secondary-color;
+    padding: 100px 0px;
 }
 
 .container
@@ -19,7 +20,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 50px;
 
     h3
     {

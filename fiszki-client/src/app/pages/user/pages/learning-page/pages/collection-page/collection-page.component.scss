@@ -3,7 +3,6 @@
 .wrapper
 {
     width: 100%;
-    margin-top: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,6 +11,7 @@
     letter-spacing: 2px;
     text-transform: uppercase;
     color: #00446b;
+    padding: 100px 0px;
 }
 
 .box
@@ -24,7 +24,6 @@
 
 .limit
 {
-    margin-bottom: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;

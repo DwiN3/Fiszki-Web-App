@@ -9,12 +9,12 @@
     font-family: base.$main-font;
     letter-spacing: 2px;
     color: base.$secondary-color;
+    padding: 100px 0px;
 }
 
 .box
 {
     width: 90%;
-    margin-top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
