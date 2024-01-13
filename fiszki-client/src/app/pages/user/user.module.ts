@@ -36,6 +36,7 @@ import { CollectionItemComponent } from "./pages/learning-page/pages/collection-
 import { QuizModeComponent } from './pages/learning-page/pages/game-page/components/quiz-mode/quiz-mode.component';
 import { QuizSummaryComponent } from './pages/learning-page/pages/game-page/components/quiz-mode/quiz-summary/quiz-summary.component';
 import { UserChangePasswordComponent } from './pages/user-profile-router/pages/user-change-password/user-change-password.component';
+import { FooterComponent } from './core/footer/footer.component';
 
 @NgModule({
     declarations:[
@@ -65,6 +66,7 @@ import { UserChangePasswordComponent } from './pages/user-profile-router/pages/u
         QuizModeComponent,
         QuizSummaryComponent,
         UserChangePasswordComponent,
+        FooterComponent,
     ],
     imports: [
         CommonModule,
