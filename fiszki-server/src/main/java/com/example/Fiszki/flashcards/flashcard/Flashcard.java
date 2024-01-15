@@ -19,8 +19,6 @@ public class Flashcard {
     private Integer id;
     private String author;
 
-//    private String collectionName;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "collection_id")
     private FlashcardCollection collection;

@@ -16,7 +16,6 @@ public class FlashcardCollection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String collectionName;
     private String author;
 

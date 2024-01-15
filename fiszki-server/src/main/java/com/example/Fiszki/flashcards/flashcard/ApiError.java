@@ -8,7 +8,7 @@ public class ApiError {
     private int status;
     private LocalDateTime timestamp;
     private String message;
-    private String path;  // Możesz dostosować to pole do swoich potrzeb
+    private String path;
 
     public ApiError(HttpStatus status, String message, String path) {
         this.status = status.value();
