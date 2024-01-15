@@ -13,23 +13,48 @@ import com.example.Fiszki.flashcards.response.FlashcardInfoResponse;
 import com.example.Fiszki.flashcards.response.FlashcardReturnResponse;
 import com.example.Fiszki.security.auth.response.OtherException;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+/**
+ * Service class for handling flashcard-related operations.
+ */
 @Service
 public class FlashcardService {
 
+    /**
+     * The repository for flashcard entities.
+     */
     private final FlashcardRepository flashcardRepository;
+
+    /**
+     * The repository for flashcard collection entities.
+     */
     private final CollectionRepository collectionRepository;
+
+    /**
+     * TokenInstance for managing authentication tokens.
+     */
     private TokenInstance tokenInstance = TokenInstance.getInstance();
 
+    /**
+     * Constructor for FlashcardService.
+     *
+     * @param flashcardRepository   The repository for flashcard entities.
+     * @param collectionRepository  The repository for flashcard collection entities.
+     */
     public FlashcardService(FlashcardRepository flashcardRepository, CollectionRepository collectionRepository) {
         this.flashcardRepository = flashcardRepository;
         this.collectionRepository = collectionRepository;
     }
 
+    /**
+     * Adds a new flashcard based on the provided request.
+     *
+     * @param request The request containing flashcard information.
+     * @return The added flashcard details.
+     * @throws OtherException If an error occurs during the operation.
+     */
     public FlashcardReturnResponse addFlashcard(FlashcardAddRequest request) throws OtherException {
         try {
             if (isNullOrEmpty(request.getCollectionName()) ||
@@ -92,6 +117,13 @@ public class FlashcardService {
         }
     }
 
+    /**
+     * Adds a new flashcard collection based on the provided request.
+     *
+     * @param request The request containing the collection name.
+     * @return Response indicating the success of the operation.
+     * @throws OtherException If an error occurs during the operation.
+     */
     public FlashcardInfoResponse addCollection(CollectionAddRequest request) throws OtherException {
         try {
             if (isNullOrEmpty(request.getCollectionName())) {
@@ -114,6 +146,14 @@ public class FlashcardService {
         }
     }
 
+    /**
+     * Edits an existing flashcard based on the provided ID and request.
+     *
+     * @param flashcardId The ID of the flashcard to be edited.
+     * @param request     The request containing updated flashcard information.
+     * @return Response indicating the success of the operation.
+     * @throws OtherException If an error occurs during the operation.
+     */
     public FlashcardInfoResponse editFlashcard(Integer flashcardId, FlashcardAddRequest request) throws OtherException {
         try {
             if (!isSingleWord(request.getCollectionName())) {
@@ -164,16 +204,34 @@ public class FlashcardService {
         }
     }
 
-
+    /**
+     * Checks if the given string is either null or empty after trimming.
+     *
+     * @param str The string to be checked.
+     * @return True if the string is null or empty after trimming, false otherwise.
+     */
     private boolean isNullOrEmpty(String str) {
         return str == null || str.trim().isEmpty();
     }
 
+    /**
+     * Checks if the given string contains a single word (no whitespace).
+     *
+     * @param str The string to be checked.
+     * @return True if the string contains a single word, false otherwise.
+     */
     private boolean isSingleWord(String str) {
         return str != null && str.trim().split("\\s+").length == 1;
     }
 
 
+
+    /**
+     * Retrieves and returns a flashcard by its ID.
+     *
+     * @param flashcardId The ID of the flashcard to be retrieved.
+     * @return The flashcard details if found, otherwise null.
+     */
     public FlashcardReturnResponse showFlashcardById(Integer flashcardId) {
         Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
 
@@ -193,6 +251,13 @@ public class FlashcardService {
         }
     }
 
+    /**
+     * Deletes a flashcard by its ID.
+     *
+     * @param flashcardId The ID of the flashcard to be deleted.
+     * @return Response indicating the success of the operation.
+     * @throws OtherException If an error occurs during the operation.
+     */
     public FlashcardInfoResponse deleteFlashcardById(Integer flashcardId) throws OtherException {
         try {
             Optional<Flashcard> flashcardOptional = flashcardRepository.findById(flashcardId);
@@ -208,6 +273,12 @@ public class FlashcardService {
         }
     }
 
+    /**
+     * Shows a list of flashcards based on the provided category.
+     *
+     * @param category The category of flashcards to retrieve.
+     * @return List of flashcards in the specified category.
+     */
     public List<FlashcardReturnResponse> showFlashcardsByCategory(String category) {
         List<Flashcard> flashcards = flashcardRepository.findByCategory(category);
 
@@ -224,6 +295,13 @@ public class FlashcardService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Shows a limited number of flashcards based on the provided category and limit.
+     *
+     * @param request  The request containing the limit.
+     * @param category The category of flashcards to retrieve.
+     * @return List of flashcards in the specified category with the given limit.
+     */
     public List<FlashcardReturnResponse> showFlashcardsByCategoryWithLimit(FlashcardCategoryLimitRequest request, String category) {
         List<Flashcard> flashcards = flashcardRepository.findByCategory(category);
         Collections.shuffle(flashcards);
@@ -246,6 +324,11 @@ public class FlashcardService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Shows all flashcard collections along with their flashcards.
+     *
+     * @return List of flashcard collections with associated flashcards.
+     */
     public List<FlashcardCollectionResponse> showAllCollection() {
         String author = tokenInstance.getUserName();
         List<Flashcard> flashcards = flashcardRepository.findByAuthor(author);
@@ -279,7 +362,12 @@ public class FlashcardService {
     }
 
 
-
+    /**
+     * Shows flashcards from a specific collection based on the collection name.
+     *
+     * @param nameCollection The name of the flashcard collection.
+     * @return List of flashcards in the specified collection.
+     */
     public List<FlashcardReturnResponse> showCollectionByName(String nameCollection) {
         String author = tokenInstance.getUserName();
         List<Flashcard> flashcards = flashcardRepository.findByCollection_CollectionNameAndAuthor(nameCollection, author);
@@ -297,7 +385,11 @@ public class FlashcardService {
                 .collect(Collectors.toList());
     }
 
-
+    /**
+     * Shows information about all flashcard collections, including the number of flashcards in each collection.
+     *
+     * @return List of maps containing collection names and corresponding flashcard counts.
+     */
     public List<Map<String, Object>> showCollectionInfo() {
         String author = tokenInstance.getUserName();
         List<Flashcard> flashcards = flashcardRepository.findByAuthor(author);
@@ -323,6 +415,13 @@ public class FlashcardService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Deletes a flashcard collection by its name.
+     *
+     * @param nameCollection The name of the flashcard collection to be deleted.
+     * @return Response indicating the success of the operation.
+     * @throws OtherException If an error occurs during the operation.
+     */
     public FlashcardInfoResponse deleteCollectionByName(String nameCollection) throws OtherException {
         try {
             String loggedInUsername = tokenInstance.getUserName();
@@ -344,5 +443,4 @@ public class FlashcardService {
             throw new OtherException(e.getMessage());
         }
     }
-
 }
